@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+
+# Environnement virtuel
+venv/
+env/
+
+# Fichiers sensibles
+.env
+
+# Base de données
+db.sqlite3
+
+# Migrations (optionnel ⚠️)
+**/migrations/
+!**/migrations/__init__.py
+
+# Fichiers statiques
+staticfiles/
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
