@@ -42,6 +42,8 @@ INSTALLED_APPS = [
 
     'demande.apps.DemandeConfig',
     'employe.apps.EmployeConfig',
+    'dashboard.apps.DashboardConfig',
+    'base.apps.BaseConfig',
 ]
 
 MIDDLEWARE = [
@@ -128,3 +130,5 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static/',
 ]
+
+AUTH_USER_MODEL = 'employe.Utilisateur'
