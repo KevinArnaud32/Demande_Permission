@@ -5,11 +5,11 @@ from employe.models.employe_model import Employe
 
 class Demande(DateTime):
     STATUT_CHOICE = [
-        ("en attente", "En Attente"),
+        ("en_attente", "En Attente"),
         ("accepte", "Accepté"),
         ("refuse", "Refusé"),
     ]
-    employe = models.ForeignKey(Employe, on_delete=models.CASCADE, related_name="demande")
+    employe = models.ForeignKey(Employe, on_delete=models.CASCADE)
     statut = models.CharField(max_length=255, choices=STATUT_CHOICE, default="en_attente")
 
     def __str__(self):
@@ -18,4 +18,3 @@ class Demande(DateTime):
     class Meta:
         verbose_name = "Demande"
         verbose_name_plural = "Demandes"
-        abstract = True
