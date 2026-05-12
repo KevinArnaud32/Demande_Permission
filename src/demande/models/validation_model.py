@@ -6,14 +6,13 @@ from employe.models.employe_model import Employe
 
 class Validation(DateTime):
     DECISION_CHOICE = [
-        ("en_attente", "en attente"),
         ("accepte", "Accepté"),
         ("refuse", "Refusé")
     ]
 
     demande_id = models.ForeignKey(Demande, on_delete=models.CASCADE, related_name="validation")
     validateur_id = models.ForeignKey(Employe, on_delete=models.CASCADE, related_name="validation_effectuees")
-    decision = models.CharField(max_length=10, choices=DECISION_CHOICE, default="en_attente")
+    decision = models.CharField(max_length=10, choices=DECISION_CHOICE)
     commentaire = models.CharField(max_length=255)
 
     class Meta:

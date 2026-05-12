@@ -16,7 +16,7 @@ class ReposMaladie(Demande):
         verbose_name_plural = "Repos maladies"
 
     def save(self,*args, **kwargs):
-        self.date_fin = (self.nombre_jours + timedelta(days=self.nombre_jours))
+        self.date_fin = (self.date_debut + timedelta(days=self.nombre_jours))
 
         super().save(*args, **kwargs)
 

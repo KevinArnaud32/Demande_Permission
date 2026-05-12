@@ -1,0 +1,83 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Nouvelle permission
+{% endblock %}
+
+{% block content %}
+
+<div class="custom-card">
+
+    <fieldset class="scheduler-border">
+
+        <legend class="scheduler-border">
+            Nouvelle permission
+        </legend>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label>
+                        Motif
+                    </label>
+
+                    <input
+                        type="text"
+                        class="form-control"
+                        name="motif"
+                    >
+
+                </div>
+
+                <div class="col-md-6 mb-3">
+
+                    <label>
+                        Heure sortie
+                    </label>
+
+                    <input
+                        type="datetime-local"
+                        class="form-control"
+                        name="heure_sortie"
+                    >
+
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-6 mb-3">
+
+                    <label>
+                        Durée (minutes)
+                    </label>
+
+                    <input
+                        type="number"
+                        class="form-control"
+                        name="nombre_minute"
+                    >
+
+                </div>
+
+            </div>
+
+            <button class="btn btn-primary">
+
+                Enregistrer
+
+            </button>
+
+        </form>
+
+    </fieldset>
+
+</div>
+
+{% endblock %}

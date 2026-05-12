@@ -4,7 +4,7 @@ from demande.models.demande_model import Demande
 
 
 class Permission(Demande):
-    motif = models.CharField(max_length=255)
+    motif = models.TextField()
     heure_sortie = models.DateTimeField()
     nombre_minute = models.PositiveIntegerField()
     heure_retour = models.DateTimeField(null=True, blank=True)

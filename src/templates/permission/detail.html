@@ -1,0 +1,50 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Détail permission
+{% endblock %}
+
+{% block content %}
+
+<div class="custom-card">
+
+    <fieldset class="scheduler-border">
+
+        <legend class="scheduler-border">
+            Détail permission
+        </legend>
+
+        <table class="table">
+
+            <tr>
+                <th>Employé</th>
+                <td>{{ permission.employe }}</td>
+            </tr>
+
+            <tr>
+                <th>Motif</th>
+                <td>{{ permission.motif }}</td>
+            </tr>
+
+            <tr>
+                <th>Heure sortie</th>
+                <td>{{ permission.heure_sortie }}</td>
+            </tr>
+
+            <tr>
+                <th>Heure retour</th>
+                <td>{{ permission.heure_retour }}</td>
+            </tr>
+
+            <tr>
+                <th>Statut</th>
+                <td>{{ permission.statut }}</td>
+            </tr>
+
+        </table>
+
+    </fieldset>
+
+</div>
+
+{% endblock %}

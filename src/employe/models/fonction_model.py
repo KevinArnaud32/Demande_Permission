@@ -3,8 +3,7 @@ from base.helpers.date_time_model import DateTime
 
 
 class Fonction(DateTime):
-    nom_fonction = models.CharField(max_length=255)
-    description = models.CharField(max_length=255, null=True)
+    nom_fonction = models.CharField(max_length=100)
 
     def __str__(self):
         return self.nom_fonction

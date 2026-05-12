@@ -1,0 +1,117 @@
+body{
+    margin:0;
+    padding:0;
+    background-color:#f4f6f9;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.wrapper{
+    display:flex;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+    width:260px;
+    height:100vh;
+    background-color:#033d88;
+    position:fixed;
+    left:0;
+    top:0;
+    overflow-y:auto;
+}
+
+.sidebar-header{
+    color:white;
+    text-align:center;
+    padding:25px;
+    font-size:24px;
+    font-weight:bold;
+    border-bottom:1px solid rgba(255,255,255,0.2);
+}
+
+.sidebar-menu{
+    list-style:none;
+    padding:0;
+    margin:0;
+}
+
+.sidebar-menu li{
+    border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-menu li a{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:white;
+    text-decoration:none;
+    padding:18px 20px;
+    transition:0.3s;
+}
+
+.sidebar-menu li a:hover{
+    background-color:#0d4ea6;
+    padding-left:25px;
+}
+
+/* MAIN */
+
+.main{
+    margin-left:260px;
+    width:100%;
+}
+
+/* TOPBAR */
+
+.topbar{
+    background-color:white;
+    padding:18px 30px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* CONTENT */
+
+.content{
+    padding:30px;
+}
+
+/* CARD */
+
+.custom-card{
+    background-color:white;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,0.1);
+    padding:25px;
+}
+
+/* FIELDSET */
+
+fieldset.scheduler-border{
+    border:2px solid #033d88 !important;
+    padding:20px;
+    border-radius:8px;
+    margin-bottom:20px;
+}
+
+legend.scheduler-border{
+    width:auto;
+    padding:0 10px;
+    font-size:18px;
+    font-weight:bold;
+    color:#033d88;
+}
+
+/* TABLE */
+
+.table thead{
+    background-color:#aabcc6;
+    color:#033d88;
+}
+
+.table tbody tr:hover{
+    background-color:#f1f5f9;
+}

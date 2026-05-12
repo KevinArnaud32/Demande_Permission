@@ -1,0 +1,110 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Permissions
+{% endblock %}
+
+{% block content %}
+
+<div class="custom-card">
+
+    <div class="d-flex justify-content-between mb-4">
+
+        <h4>
+            Liste des permissions
+        </h4>
+
+        <a href="#" class="btn btn-primary">
+            Nouvelle permission
+        </a>
+
+    </div>
+
+    <table class="table table-striped">
+
+        <thead>
+
+            <tr>
+                <th>Employé</th>
+                <th>Motif</th>
+                <th>Heure sortie</th>
+                <th>Heure retour</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for permission in permissions %}
+
+            <tr>
+
+                <td>
+                    {{ permission.employe }}
+                </td>
+
+                <td>
+                    {{ permission.motif }}
+                </td>
+
+                <td>
+                    {{ permission.heure_sortie }}
+                </td>
+
+                <td>
+                    {{ permission.heure_retour }}
+                </td>
+
+                <td>
+
+                    {% if permission.statut == 'accepte' %}
+
+                    <span class="badge bg-success">
+                        Accepté
+                    </span>
+
+                    {% elif permission.statut == 'refuse' %}
+
+                    <span class="badge bg-danger">
+                        Refusé
+                    </span>
+
+                    {% else %}
+
+                    <span class="badge bg-warning text-dark">
+                        En attente
+                    </span>
+
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    <a href="#" class="btn btn-info btn-sm">
+                        Voir
+                    </a>
+
+                    <a href="#" class="btn btn-warning btn-sm">
+                        Modifier
+                    </a>
+
+                    <a href="#" class="btn btn-danger btn-sm">
+                        Supprimer
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{% endblock %}
