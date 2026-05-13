@@ -1,7 +1,6 @@
 from django.db import models
 from base.helpers.date_time_model import DateTime
-from demande.models.demande_model import Demande
-from employe.models.employe_model import Employe
+from employe.models.utilisateur_model import Utilisateur
 
 
 class Validation(DateTime):
@@ -10,8 +9,15 @@ class Validation(DateTime):
         ("refuse", "Refusé")
     ]
 
-    demande_id = models.ForeignKey(Demande, on_delete=models.CASCADE, related_name="validation")
-    validateur_id = models.ForeignKey(Employe, on_delete=models.CASCADE, related_name="validation_effectuees")
+    TYPE_DEMANDE_CHOICES = [
+        ('permission', 'Permission'),
+        ('conge', 'Congé'),
+        ('repos_maladie', 'Repos maladie'),
+    ]
+
+    validateur_id = models.ForeignKey(Utilisateur, on_delete=models.CASCADE, related_name="validation_effectuees")
+    type_demande = models.CharField(max_length=255, choices=TYPE_DEMANDE_CHOICES)
+    demande_id = models.PositiveIntegerField()
     decision = models.CharField(max_length=10, choices=DECISION_CHOICE)
     commentaire = models.CharField(max_length=255)
 

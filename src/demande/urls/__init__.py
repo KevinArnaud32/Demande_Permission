@@ -1,0 +1,1 @@
+from . import permission_url, conge_url, repos_maladie_url
