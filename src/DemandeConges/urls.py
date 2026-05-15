@@ -21,6 +21,7 @@ from django.urls import path, include
 from dashboard.views import dashboard
 from django.conf import settings
 from django.conf.urls.static import static
+import authentification
 
 
 urlpatterns = [
@@ -29,6 +30,8 @@ urlpatterns = [
     path('permission/', include('demande.urls.permission_url')),
     path('conges/', include('demande.urls.conge_url')),
     path('repos_maladie/',include('demande.urls.repos_maladie_url')),
+    path('validaion/', include('demande.urls.validation_url')),
+    path('auth/',include('authentification.urls')),
 ]
 
 urlpatterns += static(
