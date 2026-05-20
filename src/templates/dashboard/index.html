@@ -1,0 +1,369 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Dashboard RH
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- ================= CARDS ================= -->
+
+    <div class="row g-4 mb-4">
+
+        <!-- EMPLOYES -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6 class="text-muted">
+
+                                Employés
+
+                            </h6>
+
+                            <h2 class="fw-bold">
+
+                                {{ total_employes }}
+
+                            </h2>
+
+                        </div>
+
+                        <div class="fs-1 text-primary">
+
+                            <i class="bi bi-people-fill"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- PERMISSIONS -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6 class="text-muted">
+
+                                Permissions
+
+                            </h6>
+
+                            <h2 class="fw-bold">
+
+                                {{ total_permissions }}
+
+                            </h2>
+
+                        </div>
+
+                        <div class="fs-1 text-success">
+
+                            <i class="bi bi-person-check-fill"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- CONGES -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6 class="text-muted">
+
+                                Congés
+
+                            </h6>
+
+                            <h2 class="fw-bold">
+
+                                {{ total_conges }}
+
+                            </h2>
+
+                        </div>
+
+                        <div class="fs-1 text-warning">
+
+                            <i class="bi bi-calendar-check-fill"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- REPOS -->
+
+        <div class="col-xl-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between">
+
+                        <div>
+
+                            <h6 class="text-muted">
+
+                                Repos maladie
+
+                            </h6>
+
+                            <h2 class="fw-bold">
+
+                                {{ total_repos }}
+
+                            </h2>
+
+                        </div>
+
+                        <div class="fs-1 text-danger">
+
+                            <i class="bi bi-heart-pulse-fill"></i>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= DEMANDES EN ATTENTE ================= -->
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-4">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body">
+
+                    <h5 class="mb-3">
+
+                        Permissions en attente
+
+                    </h5>
+
+                    <h1 class="fw-bold text-primary">
+
+                        {{ permissions_attente }}
+
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body">
+
+                    <h5 class="mb-3">
+
+                        Congés en attente
+
+                    </h5>
+
+                    <h1 class="fw-bold text-warning">
+
+                        {{ conges_attente }}
+
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-4">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body">
+
+                    <h5 class="mb-3">
+
+                        Repos maladie en attente
+
+                    </h5>
+
+                    <h1 class="fw-bold text-danger">
+
+                        {{ repos_attente }}
+
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ================= TABLE ================= -->
+
+    <div class="card border-0 shadow-sm rounded-4">
+
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <h4>
+
+                    Dernières permissions
+
+                </h4>
+
+            </div>
+
+            <table class="table align-middle table-hover">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th>Employé</th>
+
+                        <th>Motif</th>
+
+                        <th>Heure sortie</th>
+
+                        <th>Statut</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for permission in latest_permissions %}
+
+                    <tr>
+
+                        <td>
+
+                            {{ permission.employe }}
+
+                        </td>
+
+                        <td>
+
+                            {{ permission.motif }}
+
+                        </td>
+
+                        <td>
+
+                            {{ permission.heure_sortie }}
+
+                        </td>
+
+                        <td>
+
+                            {% if permission.statut == 'accepte' %}
+
+                            <span class="badge bg-success">
+
+                                Accepté
+
+                            </span>
+
+                            {% elif permission.statut == 'refuse' %}
+
+                            <span class="badge bg-danger">
+
+                                Refusé
+
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge bg-warning text-dark">
+
+                                En attente
+
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="4">
+
+                            Aucune permission disponible
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
