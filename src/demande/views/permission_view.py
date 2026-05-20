@@ -1,9 +1,29 @@
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from demande.models.permission_model import Permission
+from demande.forms.permission_form import PermissionForm
 
+@login_required
 def permission_list(request):
 
-    permissions = Permission.objects.all().order_by('-id')
+    user = request.user
+
+    if user.role == 'employe':
+
+        permissions = Permission.objects.filter(
+            employe=user.employe
+        )
+
+    elif user.role == 'manager':
+
+        permissions = Permission.objects.filter(
+            employe__superieur=user.employe
+        )
+
+    else:
+
+        permissions = Permission.objects.all().order_by('-id')
 
     context = {
         'permissions': permissions
@@ -12,25 +32,29 @@ def permission_list(request):
     return render(request,'permission/index.html',context)
 
 
+@login_required
 def permission_create(request):
 
+    permission_form = PermissionForm()
+
     if request.method == 'POST':
-        motif = request.POST.get('motif')
-        heure_sortie = request.POST.get('heure_sortie')
-        nombre_minute = request.POST.get('nombre_minute')
+        permission_form = PermissionForm(request.POST)
 
-        Permission.objects.create(
-            employe=request.user.employe,
-            motif=motif,
-            heure_sortie=heure_sortie,
-            nombre_minute=nombre_minute
-        )
+        if permission_form.is_valid():
+            permission = permission_form.save(commit=False)
+            permission.employe = request.user.employe
+            permission.save()
 
-        return redirect('permission_list')
-
-    return render(request, 'permission/create.html')
+            return redirect('permission_list')
 
 
+    context = {
+        'permission_form': permission_form
+    }
+
+    return render(request, 'permission/create.html', context)
+
+@login_required
 def permission_detail(request, pk):
 
     permission = get_object_or_404(
@@ -48,7 +72,7 @@ def permission_detail(request, pk):
         context
     )
 
-
+@login_required
 def permission_update(request, pk):
 
     permission = get_object_or_404(
@@ -56,24 +80,19 @@ def permission_update(request, pk):
         pk=pk
     )
 
+    permission_form = PermissionForm(instance=permission)
+
     if request.method == 'POST':
 
-        permission.motif = request.POST.get('motif')
+        permission_form = PermissionForm(request.POST, instance=permission)
 
-        permission.heure_sortie = request.POST.get(
-            'heure_sortie'
-        )
+        if permission_form.is_valid():
+            permission_form.save()
 
-        permission.nombre_minute = request.POST.get(
-            'nombre_minute'
-        )
-
-        permission.save()
-
-        return redirect('permission_list')
+            return redirect('permission_list')
 
     context = {
-        'permission': permission
+        'permission_form': permission_form
     }
 
     return render(
@@ -83,7 +102,7 @@ def permission_update(request, pk):
     )
 
 
-
+@login_required
 def permission_delete(request, pk):
 
     permission = get_object_or_404(
@@ -91,6 +110,20 @@ def permission_delete(request, pk):
         pk=pk
     )
 
-    permission.delete()
+    if request.method == 'POST':
 
-    return redirect('permission_list')
+        permission.delete()
+
+        return redirect(
+            'permission_list'
+        )
+
+    context = {
+        'permission': permission
+    }
+
+    return render(
+        request,
+        'permission/delete.html',
+        context
+    )

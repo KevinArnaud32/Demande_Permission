@@ -95,6 +95,22 @@ Permissions
                         Supprimer
                     </a>
 
+                    <a href="{% url 'validation_permission' permission.id %}" class="btn btn-success btn-sm" >
+                        Valider
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+
+                <td colspan="6">
+
+                    Aucune permission trouvée
+
                 </td>
 
             </tr>

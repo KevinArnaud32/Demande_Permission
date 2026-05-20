@@ -6,44 +6,128 @@ Détail permission
 
 {% block content %}
 
-<div class="custom-card">
+<div class="container-fluid">
 
-    <fieldset class="scheduler-border">
+    <div class="card border-0 shadow-sm rounded-4">
 
-        <legend class="scheduler-border">
-            Détail permission
-        </legend>
+        <div class="card-body p-4">
 
-        <table class="table">
+            <div class="d-flex justify-content-between mb-4">
 
-            <tr>
-                <th>Employé</th>
-                <td>{{ permission.employe }}</td>
-            </tr>
+                <h3>
+                    Détail permission
+                </h3>
 
-            <tr>
-                <th>Motif</th>
-                <td>{{ permission.motif }}</td>
-            </tr>
+                <a
+                    href="{% url 'permission_list' %}"
+                    class="btn btn-secondary"
+                >
 
-            <tr>
-                <th>Heure sortie</th>
-                <td>{{ permission.heure_sortie }}</td>
-            </tr>
+                    Retour
 
-            <tr>
-                <th>Heure retour</th>
-                <td>{{ permission.heure_retour }}</td>
-            </tr>
+                </a>
 
-            <tr>
-                <th>Statut</th>
-                <td>{{ permission.statut }}</td>
-            </tr>
+            </div>
 
-        </table>
+            <div class="row g-4">
 
-    </fieldset>
+                <div class="col-md-6">
+
+                    <label class="fw-bold">
+                        Employé
+                    </label>
+
+                    <p>
+                        {{ permission.employe }}
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="fw-bold">
+                        Motif
+                    </label>
+
+                    <p>
+                        {{ permission.motif }}
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="fw-bold">
+                        Heure sortie
+                    </label>
+
+                    <p>
+                        {{ permission.heure_sortie }}
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="fw-bold">
+                        Heure retour
+                    </label>
+
+                    <p>
+                        {{ permission.heure_retour }}
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="fw-bold">
+                        Nombre minutes
+                    </label>
+
+                    <p>
+                        {{ permission.nombre_minute }}
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="fw-bold">
+                        Statut
+                    </label>
+
+                    <p>
+
+                        {% if permission.statut == 'accepte' %}
+
+                        <span class="badge bg-success">
+                            Accepté
+                        </span>
+
+                        {% elif permission.statut == 'refuse' %}
+
+                        <span class="badge bg-danger">
+                            Refusé
+                        </span>
+
+                        {% else %}
+
+                        <span class="badge bg-warning text-dark">
+                            En attente
+                        </span>
+
+                        {% endif %}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 

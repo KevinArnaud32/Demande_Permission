@@ -1,0 +1,80 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Modifier permission
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="card border-0 shadow-sm rounded-4">
+
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between mb-4">
+
+                <h3>
+                    Modifier permission
+                </h3>
+
+                <a
+                    href="{% url 'permission_list' %}"
+                    class="btn btn-secondary"
+                >
+
+                    Retour
+
+                </a>
+
+            </div>
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Motif
+                    </label>
+
+                    {{ form.motif }}
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Heure sortie
+                    </label>
+
+                    {{ form.heure_sortie }}
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+                        Nombre minutes
+                    </label>
+
+                    {{ form.nombre_minute }}
+
+                </div>
+
+                <button class="btn btn-warning">
+
+                    Modifier
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

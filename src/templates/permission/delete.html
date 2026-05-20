@@ -1,0 +1,54 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Supprimer permission
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="card border-0 shadow-sm rounded-4">
+
+        <div class="card-body p-5 text-center">
+
+            <h3 class="mb-4">
+
+                Supprimer cette permission ?
+
+            </h3>
+
+            <p class="text-muted mb-4">
+
+                {{ permission.motif }}
+
+            </p>
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <button class="btn btn-danger">
+
+                    Oui supprimer
+
+                </button>
+
+                <a
+                    href="{% url 'permission_list' %}"
+                    class="btn btn-secondary"
+                >
+
+                    Annuler
+
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
