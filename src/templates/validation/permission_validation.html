@@ -1,0 +1,103 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Validation permission
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="card border-0 shadow-sm rounded-4">
+
+        <div class="card-body p-4">
+
+            <h3 class="mb-4">
+
+                Validation permission
+
+            </h3>
+
+            <!-- INFOS -->
+
+            <div class="row mb-4">
+
+                <div class="col-md-6">
+
+                    <label class="fw-bold">
+
+                        Employé
+
+                    </label>
+
+                    <p>
+
+                        {{ permission.employe }}
+
+                    </p>
+
+                </div>
+
+                <div class="col-md-6">
+
+                    <label class="fw-bold">
+
+                        Motif
+
+                    </label>
+
+                    <p>
+
+                        {{ permission.motif }}
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- FORM -->
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+
+                        Décision
+
+                    </label>
+
+                    {{ form.decision }}
+
+                </div>
+
+                <div class="mb-4">
+
+                    <label class="form-label">
+
+                        Commentaire
+
+                    </label>
+
+                    {{ form.commentaire }}
+
+                </div>
+
+                <button class="btn btn-success">
+
+                    Valider
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,14 +1,17 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import (
     render,
     redirect,
     get_object_or_404
 )
+
+from demande.forms.validation_form import ValidationForm
 from demande.models.validation_model import Validation
 from demande.models.permission_model import Permission
 from demande.models.conges_model import Conges
 from demande.models.repos_maladie_model import ReposMaladie
 
-
+@login_required
 def validation_list(request):
 
     validations = Validation.objects.all().order_by(
@@ -25,7 +28,7 @@ def validation_list(request):
         context
     )
 
-
+@login_required
 def validate_permission(request, pk):
 
     permission = get_object_or_404(
@@ -33,37 +36,29 @@ def validate_permission(request, pk):
         pk=pk
     )
 
+    validation_form = ValidationForm()
+
     if request.method == 'POST':
 
-        decision = request.POST.get(
-            'decision'
-        )
+        validation_form = ValidationForm(request.POST)
 
-        commentaire = request.POST.get(
-            'commentaire'
-        )
+        if validation_form.is_valid():
+            validation = validation_form.save(commit=False)
+            validation.validateur = request.user
+            validation.type_demande = "permission"
+            validation.demande_id = permission.id
+            validation.save()
 
-        Validation.objects.create(
-            type_demande='permission',
-            demande_id=permission.id,
-            decision=decision,
-            validateur=request.user,
-            commentaire=commentaire
-        )
+            # mise à jour du statut permission
 
-        if decision == 'ACCEPTEE':
-            permission.statut = 'accepte'
-        else:
-            permission.statut = 'refuse'
+            permission.statut = validation.decision
+            permission.save()
 
-        permission.save()
-
-        return redirect(
-            'permission_list'
-        )
+            return redirect('permission_list')
 
     context = {
-        'permission': permission
+        'permission': permission,
+        'validation_form': validation_form,
     }
 
     return render(
@@ -72,7 +67,7 @@ def validate_permission(request, pk):
         context
     )
 
-
+@login_required
 def validate_conge(request, pk):
 
     conge = get_object_or_404(
@@ -120,7 +115,7 @@ def validate_conge(request, pk):
     )
 
 
-
+@login_required
 def validate_repos_maladie(request, pk):
 
     repos = get_object_or_404(

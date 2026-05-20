@@ -4,21 +4,21 @@ from employe.models.utilisateur_model import Utilisateur
 
 
 class Validation(DateTime):
-    DECISION_CHOICE = [
+    ACTION_CHOICE = [
         ("accepte", "Accepté"),
         ("refuse", "Refusé")
     ]
 
-    TYPE_DEMANDE_CHOICES = [
+    TYPE_DEMANDE = [
         ('permission', 'Permission'),
         ('conge', 'Congé'),
         ('repos_maladie', 'Repos maladie'),
     ]
 
-    validateur_id = models.ForeignKey(Utilisateur, on_delete=models.CASCADE, related_name="validation_effectuees")
-    type_demande = models.CharField(max_length=255, choices=TYPE_DEMANDE_CHOICES)
     demande_id = models.PositiveIntegerField()
-    decision = models.CharField(max_length=10, choices=DECISION_CHOICE)
+    validateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE, related_name="validation_effectuees")
+    type_demande = models.CharField(max_length=255, choices=TYPE_DEMANDE)
+    decision = models.CharField(max_length=10, choices=ACTION_CHOICE)
     commentaire = models.CharField(max_length=255)
 
     class Meta:
