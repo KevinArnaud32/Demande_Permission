@@ -8,13 +8,8 @@ def login_view(request):
 
     if request.method == 'POST':
 
-        username = request.POST.get(
-            'username'
-        )
-
-        password = request.POST.get(
-            'password'
-        )
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
         user = authenticate(
             request,
@@ -27,6 +22,16 @@ def login_view(request):
             login(request, user)
 
             return redirect('dashboard')
+        else:
+            context = {
+                "error": "Identifiants incorrects"
+            }
+
+            return render(
+                request,
+                'auth/login.html',
+                context
+            )
 
     return render(
         request,

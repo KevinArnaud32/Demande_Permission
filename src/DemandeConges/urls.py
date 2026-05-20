@@ -26,7 +26,7 @@ import authentification
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('dashboard/', dashboard),
+    path('', include('dashboard.urls')),
     path('permission/', include('demande.urls.permission_url')),
     path('conges/', include('demande.urls.conge_url')),
     path('repos_maladie/',include('demande.urls.repos_maladie_url')),
