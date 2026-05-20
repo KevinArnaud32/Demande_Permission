@@ -1,32 +1,23 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import (
-    render,
-    redirect,
-    get_object_or_404
-)
-
+from django.shortcuts import render, redirect, get_object_or_404
 from demande.forms.validation_form import ValidationForm
 from demande.models.validation_model import Validation
 from demande.models.permission_model import Permission
 from demande.models.conges_model import Conges
 from demande.models.repos_maladie_model import ReposMaladie
 
+
 @login_required
 def validation_list(request):
 
-    validations = Validation.objects.all().order_by(
-        '-id'
-    )
+    validations = Validation.objects.all().order_by('-date_creation')
 
     context = {
         'validations': validations
     }
 
-    return render(
-        request,
-        'validation/index.html',
-        context
-    )
+    return render(request,'validation/index.html', context)
+
 
 @login_required
 def validate_permission(request, pk):
@@ -35,6 +26,29 @@ def validate_permission(request, pk):
         Permission,
         pk=pk
     )
+
+    # EMPLOYE NE PEUT PAS VALIDER
+
+    if request.user.role == 'employe':
+        return redirect('dashboard')
+
+    # PERMISSION DEJA VALIDEE NE PAS ETRE VALIDE UNE SECONDE FOIS ( Double validation empêchée )
+
+    validation_exist = Validation.objects.filter(
+        type_demande='permission',
+        demande_id=permission.id
+    ).exists()
+
+    if validation_exist:
+        return redirect('permission_list')
+
+    # EMPÊCHER AUTO VALIDATION
+
+    if permission.employe == request.user.employe:
+        return redirect('dashboard')
+
+
+    # ENREGISTRMENT D'UNE VALIDATION
 
     validation_form = ValidationForm()
 
@@ -61,11 +75,8 @@ def validate_permission(request, pk):
         'validation_form': validation_form,
     }
 
-    return render(
-        request,
-        'validation/permission_validation.html',
-        context
-    )
+    return render(request,'validation/permission_validation.html',context)
+
 
 @login_required
 def validate_conge(request, pk):
@@ -85,10 +96,7 @@ def validate_conge(request, pk):
             'commentaire'
         )
 
-        Validation.objects.create(
-            type_demande='conge',
-            demande_id=conge.id,
-            decision=decision,
+        Validation.objects.create(type_demande='conge',demande_id=conge.id, decision=decision,
             validateur=request.user,
             commentaire=commentaire
         )
