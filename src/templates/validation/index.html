@@ -1,0 +1,131 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Historique validations
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="card border-0 shadow-sm rounded-4">
+
+        <div class="card-body p-4">
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+
+                <h3>
+
+                    Historique des validations
+
+                </h3>
+
+            </div>
+
+            <table class="table align-middle table-hover">
+
+                <thead class="table-light">
+
+                    <tr>
+
+                        <th>Type</th>
+
+                        <th>Demande ID</th>
+
+                        <th>Décision</th>
+
+                        <th>Validateur</th>
+
+                        <th>Commentaire</th>
+
+                        <th>Date</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for validation in validations %}
+
+                    <tr>
+
+                        <td>
+
+                            {{ validation.get_type_demande_display }}
+
+                        </td>
+
+                        <td>
+
+                            #{{ validation.demande_id }}
+
+                        </td>
+
+                        <td>
+
+                            {% if validation.decision == 'accepte' %}
+
+                            <span class="badge bg-success">
+
+                                Accepté
+
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge bg-danger">
+
+                                Refusé
+
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {{ validation.validateur }}
+
+                        </td>
+
+                        <td>
+
+                            {{ validation.commentaire }}
+
+                        </td>
+
+                        <td>
+
+                            {{ validation.date_action }}
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="6">
+
+                            Aucune validation trouvée
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
