@@ -1,35 +1,26 @@
-from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from demande.models.permission_model import Permission
 from demande.forms.permission_form import PermissionForm
+from demande.models.validation_model import Validation
 
 @login_required
 def permission_list(request):
 
-    user = request.user
+    permissions = Permission.objects.none()
 
-    if user.role == 'employe':
-
-        permissions = Permission.objects.filter(
-            employe=user.employe
-        )
-
-    elif user.role == 'manager':
-
-        permissions = Permission.objects.filter(
-            employe__superieur=user.employe
-        )
-
-    else:
-
-        permissions = Permission.objects.all().order_by('-id')
+    if request.user.role == 'employe':
+        permissions = Permission.objects.filter(employe=request.user.employe)
+    elif request.user.role == 'manager':
+        permissions = Permission.objects.filter(employe__superieur=request.user.employe)
+    elif request.user.role in ['rh', 'admin']:
+        permissions = Permission.objects.all()
 
     context = {
-        'permissions': permissions
+        'permissions': permissions.order_by('-id')
     }
 
-    return render(request,'permission/index.html',context)
+    return render(request,'permission/index.html', context)
 
 
 @login_required
@@ -54,6 +45,7 @@ def permission_create(request):
 
     return render(request, 'permission/create.html', context)
 
+
 @login_required
 def permission_detail(request, pk):
 
@@ -62,15 +54,17 @@ def permission_detail(request, pk):
         pk=pk
     )
 
+    validations = Validation.objects.filter(
+        type_demande='permission',
+        demande_id=permission.id).order_by('-date_action')
+
     context = {
-        'permission': permission
+        'permission': permission,
+        'validations': validations,
     }
 
-    return render(
-        request,
-        'permission/detail.html',
-        context
-    )
+    return render(request,'permission/detail.html', context)
+
 
 @login_required
 def permission_update(request, pk):

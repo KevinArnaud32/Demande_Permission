@@ -8,118 +8,306 @@ Détail permission
 
 <div class="container-fluid">
 
-    <div class="card border-0 shadow-sm rounded-4">
+    <!-- ================= HEADER ================= -->
 
-        <div class="card-body p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-            <div class="d-flex justify-content-between mb-4">
+        <div>
 
-                <h3>
-                    Détail permission
-                </h3>
+            <h2 class="fw-bold">
 
-                <a
-                    href="{% url 'permission_list' %}"
-                    class="btn btn-secondary"
-                >
+                Détail permission
 
-                    Retour
+            </h2>
 
-                </a>
+            <p class="text-muted mb-0">
 
-            </div>
+                Consultation complète de la demande
 
-            <div class="row g-4">
+            </p>
 
-                <div class="col-md-6">
+        </div>
 
-                    <label class="fw-bold">
-                        Employé
-                    </label>
+        <div class="d-flex gap-2">
 
-                    <p>
-                        {{ permission.employe }}
-                    </p>
+            <!-- PDF -->
 
-                </div>
+            <a
+                href="#"
+                class="btn btn-danger rounded-3"
+            >
 
-                <div class="col-md-6">
+                <i class="bi bi-file-earmark-pdf"></i>
 
-                    <label class="fw-bold">
-                        Motif
-                    </label>
+                Export PDF
 
-                    <p>
-                        {{ permission.motif }}
-                    </p>
+            </a>
 
-                </div>
+            <!-- RETOUR -->
 
-                <div class="col-md-6">
+            <a
+                href="{% url 'permission_list' %}"
+                class="btn btn-light border rounded-3"
+            >
 
-                    <label class="fw-bold">
-                        Heure sortie
-                    </label>
+                Retour
 
-                    <p>
-                        {{ permission.heure_sortie }}
-                    </p>
+            </a>
 
-                </div>
+        </div>
 
-                <div class="col-md-6">
+    </div>
 
-                    <label class="fw-bold">
-                        Heure retour
-                    </label>
+    <!-- ================= INFOS ================= -->
 
-                    <p>
-                        {{ permission.heure_retour }}
-                    </p>
+    <div class="row g-4">
 
-                </div>
+        <!-- LEFT -->
 
-                <div class="col-md-6">
+        <div class="col-lg-8">
 
-                    <label class="fw-bold">
-                        Nombre minutes
-                    </label>
+            <div class="card border-0 shadow-sm rounded-4">
 
-                    <p>
-                        {{ permission.nombre_minute }}
-                    </p>
+                <div class="card-body p-4">
 
-                </div>
+                    <div class="d-flex justify-content-between mb-4">
 
-                <div class="col-md-6">
+                        <h4>
 
-                    <label class="fw-bold">
-                        Statut
-                    </label>
+                            Informations permission
 
-                    <p>
+                        </h4>
+
+                        <!-- STATUT -->
 
                         {% if permission.statut == 'accepte' %}
 
-                        <span class="badge bg-success">
+                        <span class="badge bg-success rounded-pill px-4 py-2">
+
                             Accepté
+
                         </span>
 
                         {% elif permission.statut == 'refuse' %}
 
-                        <span class="badge bg-danger">
+                        <span class="badge bg-danger rounded-pill px-4 py-2">
+
                             Refusé
+
                         </span>
 
                         {% else %}
 
-                        <span class="badge bg-warning text-dark">
+                        <span class="badge bg-warning text-dark rounded-pill px-4 py-2">
+
                             En attente
+
                         </span>
 
                         {% endif %}
 
-                    </p>
+                    </div>
+
+                    <!-- EMPLOYE -->
+
+                    <div class="mb-4">
+
+                        <label class="text-muted">
+
+                            Employé
+
+                        </label>
+
+                        <h5>
+
+                            {{ permission.employe.nom }}
+                            {{ permission.employe.prenom }}
+
+                        </h5>
+
+                    </div>
+
+                    <!-- FONCTION -->
+
+                    <div class="mb-4">
+
+                        <label class="text-muted">
+
+                            Fonction
+
+                        </label>
+
+                        <h6>
+
+                            {{ permission.employe.fonction }}
+
+                        </h6>
+
+                    </div>
+
+                    <!-- MOTIF -->
+
+                    <div class="mb-4">
+
+                        <label class="text-muted">
+
+                            Motif
+
+                        </label>
+
+                        <div class="p-3 bg-light rounded-3">
+
+                            {{ permission.motif }}
+
+                        </div>
+
+                    </div>
+
+                    <!-- HORAIRES -->
+
+                    <div class="row">
+
+                        <div class="col-md-6">
+
+                            <div class="mb-4">
+
+                                <label class="text-muted">
+
+                                    Heure sortie
+
+                                </label>
+
+                                <h6>
+
+                                    {{ permission.heure_sortie }}
+
+                                </h6>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div class="mb-4">
+
+                                <label class="text-muted">
+
+                                    Heure retour
+
+                                </label>
+
+                                <h6>
+
+                                    {{ permission.heure_retour }}
+
+                                </h6>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- DUREE -->
+
+                    <div class="mb-4">
+
+                        <label class="text-muted">
+
+                            Durée
+
+                        </label>
+
+                        <h6>
+
+                            {{ permission.nombre_minute }} minutes
+
+                        </h6>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- RIGHT -->
+
+        <div class="col-lg-4">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4">
+
+                    <h5 class="mb-4">
+
+                        Historique validations
+
+                    </h5>
+
+                    {% for validation in validations %}
+
+                    <div
+                        class="border rounded-4 p-3 mb-3"
+                    >
+
+                        <div class="d-flex justify-content-between mb-2">
+
+                            <strong>
+
+                                {{ validation.validateur }}
+
+                            </strong>
+
+                            {% if validation.decision == 'accepte' %}
+
+                            <span class="badge bg-success">
+
+                                Accepté
+
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge bg-danger">
+
+                                Refusé
+
+                            </span>
+
+                            {% endif %}
+
+                        </div>
+
+                        <small class="text-muted">
+
+                            {{ validation.date_action }}
+
+                        </small>
+
+                        {% if validation.commentaire %}
+
+                        <div class="mt-3 p-2 bg-light rounded-3">
+
+                            {{ validation.commentaire }}
+
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                    {% empty %}
+
+                    <div class="text-muted">
+
+                        Aucune validation disponible
+
+                    </div>
+
+                    {% endfor %}
 
                 </div>
 
