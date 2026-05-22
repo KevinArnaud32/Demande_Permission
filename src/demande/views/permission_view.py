@@ -7,13 +7,15 @@ from demande.models.validation_model import Validation
 @login_required
 def permission_list(request):
 
+    user = request.user
+
     permissions = Permission.objects.none()
 
-    if request.user.role == 'employe':
+    if user.role == 'employe':
         permissions = Permission.objects.filter(employe=request.user.employe)
-    elif request.user.role == 'manager':
+    elif user.role == 'manager':
         permissions = Permission.objects.filter(employe__superieur=request.user.employe)
-    elif request.user.role in ['rh', 'admin']:
+    elif user.role in ['rh', 'admin']:
         permissions = Permission.objects.all()
 
     context = {
@@ -26,6 +28,8 @@ def permission_list(request):
 @login_required
 def permission_create(request):
 
+    user = request.user
+
     permission_form = PermissionForm()
 
     if request.method == 'POST':
@@ -33,7 +37,7 @@ def permission_create(request):
 
         if permission_form.is_valid():
             permission = permission_form.save(commit=False)
-            permission.employe = request.user.employe
+            permission.employe = user.employe
             permission.save()
 
             return redirect('permission_list')
@@ -116,8 +120,4 @@ def permission_delete(request, pk):
         'permission': permission
     }
 
-    return render(
-        request,
-        'permission/delete.html',
-        context
-    )
+    return render(request,'permission/delete.html', context)

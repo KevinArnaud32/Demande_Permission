@@ -3,7 +3,6 @@ from employe.models.employe_model import Employe
 from demande.models.conges_model import Conges
 from demande.models.permission_model import Permission
 from demande.models.repos_maladie_model import ReposMaladie
-from demande.models.validation_model import Validation
 from django.shortcuts import render
 
 # Create your views here.
