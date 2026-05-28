@@ -1,10 +1,12 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate
-from django.contrib.auth import login
-from django.contrib.auth import logout
+from django.contrib.auth import authenticate, login, logout
+
 
 # Create your views here.
 def login_view(request):
+
+    error = None
 
     if request.method == 'POST':
 
@@ -20,25 +22,31 @@ def login_view(request):
 
             login(request, user)
 
-            return redirect('dashboard')
+            if user.role == "admin":
+                return redirect('admin_dashboard')
+
+            elif user.role == "rh":
+                return redirect('rh_dashboard')
+
+            elif user.role == "Manager":
+                return redirect('manager_dashboard')
+
+            else:
+                return redirect('employe_dashboard')
+
         else:
-            context = {
-                "error": "Identifiants incorrects"
-            }
 
-            return render(
-                request,
-                'auth/login.html',
-                context
-            )
+            error = "Identifiants invalides"
 
-    return render(
-        request,
-        'auth/login.html'
-    )
+    context = {
+        "error": error,
+    }
+
+    return render(request,'auth/login.html',context)
 
 
 
+@login_required
 def logout_view(request):
 
     logout(request)
