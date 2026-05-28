@@ -5,9 +5,11 @@ from demande.models.validation_model import Validation
 from demande.models.permission_model import Permission
 from demande.models.conges_model import Conges
 from demande.models.repos_maladie_model import ReposMaladie
+from core.decorators import role_required
 
 
 @login_required
+@role_required(['admin'])
 def validation_list(request):
 
     validations = Validation.objects.all().order_by('-date_creation')
