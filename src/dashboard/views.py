@@ -98,3 +98,28 @@ def dashboard(request):
     }
 
     return render(request,'dashboard/index.html', context)
+
+
+
+
+@login_required
+def admin_dashboard(request):
+    return render(request,'dashboard/admin_dashboard.html')
+
+
+
+@login_required
+def rh_dashboard(request):
+    return render(request,'dashboard/rh_dashboard.html')
+
+
+
+@login_required
+def manager_dashboard(request):
+    return render( request,'dashboard/manager_dashboard.html')
+
+
+
+@login_required
+def employe_dashboard(request):
+    return render(request,'dashboard/employe_dashboard.html')

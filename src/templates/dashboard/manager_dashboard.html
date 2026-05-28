@@ -1,0 +1,83 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Dashboard Manager
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="mb-4">
+
+        <h2 class="fw-bold">
+            Dashboard Manager
+        </h2>
+
+        <p class="text-muted">
+            Gestion des équipes et validations
+        </p>
+
+    </div>
+
+    <div class="row g-4">
+
+        <div class="col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body">
+
+                    <h5 class="fw-bold mb-3">
+                        Équipe
+                    </h5>
+
+                    <ul class="list-group list-group-flush">
+
+                        <li class="list-group-item">
+                            Jean Dupont
+                        </li>
+
+                        <li class="list-group-item">
+                            Marie Kouassi
+                        </li>
+
+                        <li class="list-group-item">
+                            Paul Aka
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-file-earmark-check fs-1 text-primary"></i>
+
+                    <h5 class="mt-3">
+                        Demandes à valider
+                    </h5>
+
+                    <h2 class="fw-bold">
+                        7
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
