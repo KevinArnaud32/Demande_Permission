@@ -201,85 +201,92 @@
 
 <body>
 
-<div class="login-card">
+    <div class="login-card">
 
-    <div class="text-center">
+        <div class="text-center">
 
-        <img
-            src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
-            class="logo"
-            alt="Logo"
-        >
+            <img
+                src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                class="logo"
+                alt="Logo"
+            >
 
-        <h1 class="title">
-            Connectez-vous à votre espace
-        </h1>
+            <h1 class="title">
+                Connectez-vous à votre espace
+            </h1>
 
-        <p class="subtitle">
-            Connectez-vous à votre espace
-        </p>
 
-    </div>
+            {% if error %}
 
-    <form method="POST">
+            <div class="alert alert-danger rounded-4">
 
-        {% csrf_token %}
-
-        <div class="mb-3">
-
-            <div class="input-group">
-
-                <span class="input-group-text">
-                    <i class="bi bi-person-fill"></i>
-                </span>
-
-                <input
-                    type="text"
-                    name="username"
-                    class="form-control"
-                    placeholder="Nom utilisateur"
-                >
+                {{ error }}
 
             </div>
 
+            {% endif %}
+
         </div>
 
-        <div class="mb-4">
+        <form method="POST">
 
-            <div class="input-group">
+            {% csrf_token %}
 
-                <span class="input-group-text">
-                    <i class="bi bi-lock-fill"></i>
-                </span>
+            <div class="mb-3">
 
-                <input
-                    type="password"
-                    name="password"
-                    class="form-control"
-                    placeholder="Mot de passe"
-                >
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        <i class="bi bi-person-fill"></i>
+                    </span>
+
+                    <input
+                        type="text"
+                        name="username"
+                        class="form-control"
+                        placeholder="Nom utilisateur"
+                    >
+
+                </div>
 
             </div>
 
+            <div class="mb-4">
+
+                <div class="input-group">
+
+                    <span class="input-group-text">
+                        <i class="bi bi-lock-fill"></i>
+                    </span>
+
+                    <input
+                        type="password"
+                        name="password"
+                        class="form-control"
+                        placeholder="Mot de passe"
+                    >
+
+                </div>
+
+            </div>
+
+            <button class="btn btn-login w-100">
+
+                <i class="bi bi-box-arrow-in-right"></i>
+
+                Connexion
+
+            </button>
+
+        </form>
+
+        <div class="footer-text">
+
+            Demandes de congé et permission
+
         </div>
 
-        <button class="btn btn-login w-100">
-
-            <i class="bi bi-box-arrow-in-right"></i>
-
-            Connexion
-
-        </button>
-
-    </form>
-
-    <div class="footer-text">
-
-        Demandes de congé et permission
-
     </div>
-
-</div>
 
 </body>
 
