@@ -30,6 +30,9 @@ def permission_create(request):
 
     user = request.user
 
+    if user.role != 'employe':
+        return redirect('login')
+
     permission_form = PermissionForm()
 
     if request.method == 'POST':
