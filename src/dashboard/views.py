@@ -1,12 +1,17 @@
 from django.contrib.auth.decorators import login_required
+from core.decorators import role_required
+from employe.models.departement_model import Departement
 from employe.models.employe_model import Employe
 from demande.models.conges_model import Conges
 from demande.models.permission_model import Permission
 from demande.models.repos_maladie_model import ReposMaladie
 from django.shortcuts import render
+from employe.models.utilisateur_model import Utilisateur
+
 
 # Create your views here.
 @login_required
+@role_required('rh')
 def dashboard(request):
 
     user = request.user
@@ -55,7 +60,7 @@ def dashboard(request):
 
     # ================= RH / ADMIN =================
 
-    elif user.role in ['rh', 'admin']:
+    elif user.role in ['rh', 'ADMIN']:
 
         permissions = Permission.objects.all()
 
@@ -104,7 +109,21 @@ def dashboard(request):
 
 @login_required
 def admin_dashboard(request):
-    return render(request,'dashboard/admin_dashboard.html')
+
+    nombre_employe = Employe.objects.all().count()
+    nombre_departement = Departement.objects.all().count()
+    nombre_manager = Utilisateur.objects.filter(role='manager').count()
+    nombre_rh = Utilisateur.objects.filter(role='rh').count()
+
+
+    context = {
+        'nombre_employe': nombre_employe,
+        'nombre_departement': nombre_departement,
+        'nombre_manager': nombre_manager,
+        'nombre_rh': nombre_rh,
+    }
+
+    return render(request,'dashboard/admin_dashboard.html', context)
 
 
 
