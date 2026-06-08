@@ -1,0 +1,101 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Détails utilisateur
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card border-0 shadow-lg rounded-4">
+
+                <!-- HEADER -->
+
+                <div
+                    class="card-header border-0 py-4 rounded-top-4"
+                    style="background: linear-gradient(135deg, #0d6efd, #2563eb);"
+                >
+
+                    <h4 class="text-white fw-bold mb-0">
+
+                        <i class="bi bi-person-badge-fill me-2"></i>
+
+                        Détails utilisateur
+
+                    </h4>
+
+                </div>
+
+                <!-- BODY -->
+
+                <div class="card-body p-5">
+
+                    <h5 class="fw-bold mb-4">
+
+                        Informations utilisateur
+
+                    </h5>
+
+                    <p><strong>Username :</strong> {{ utilisateur.username }}</p>
+
+                    <p><strong>Email :</strong> {{ utilisateur.email }}</p>
+
+                    <p><strong>Rôle :</strong> {{ utilisateur.role }}</p>
+
+                    <hr>
+
+                    <h5 class="fw-bold mb-4">
+
+                        Employé associé
+
+                    </h5>
+
+                    {% if utilisateur.employe %}
+
+                        <p><strong>Nom :</strong> {{ utilisateur.employe.nom }}</p>
+
+                        <p><strong>Prénom :</strong> {{ utilisateur.employe.prenom }}</p>
+
+                        <p><strong>Département :</strong> {{ utilisateur.employe.departement }}</p>
+
+                        <p><strong>Fonction :</strong> {{ utilisateur.employe.fonction }}</p>
+
+                    {% else %}
+
+                        <div class="alert alert-warning">
+
+                            Aucun employé associé à cet utilisateur
+
+                        </div>
+
+                    {% endif %}
+
+                    <div class="mt-4">
+
+                        <a
+                            href="{% url 'utilisateur_list' %}"
+                            class="btn btn-secondary rounded-3"
+                        >
+
+                            Retour
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

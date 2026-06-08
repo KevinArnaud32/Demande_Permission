@@ -1,0 +1,410 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Créer utilisateur
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- HEADER -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold text-dark mb-1">
+
+                Création d'utilisateur
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Ajouter un nouvel employé dans le système RH
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- CARD -->
+
+    <div class="row justify-content-center">
+
+        <div class="col-xl-10">
+
+            <div class="card border-0 shadow-lg rounded-4">
+
+                <!-- CARD HEADER -->
+
+                <div
+                    class="card-header border-0 py-4 rounded-top-4"
+                    style="
+                        background:
+                        linear-gradient(
+                            135deg,
+                            #0d6efd,
+                            #2563eb
+                        );
+                    "
+                >
+
+                    <h4 class="text-white fw-bold mb-0">
+
+                        <i class="bi bi-person-plus-fill me-2"></i>
+
+                       Nouveau compte
+
+                    </h4>
+
+                </div>
+
+                <!-- CARD BODY -->
+
+                <div class="card-body p-5">
+
+                    <form method="POST">
+
+                        {% csrf_token %}
+
+                        <!-- ================= UTILISATEUR ================= -->
+
+                        <div class="mb-5">
+
+                            <div class="d-flex align-items-center mb-4">
+
+                                <div
+                                    class="me-3 d-flex align-items-center justify-content-center rounded-circle"
+                                    style="
+                                        width:50px;
+                                        height:50px;
+                                        background:#e7f1ff;
+                                    "
+                                >
+
+                                    <i
+                                        class="bi bi-person-fill text-primary"
+                                        style="font-size:22px;"
+                                    ></i>
+
+                                </div>
+
+                                <div>
+
+                                    <h5 class="fw-bold mb-1 text-dark">
+
+                                        Informations utilisateur
+
+                                    </h5>
+
+                                    <p class="text-muted mb-0">
+
+                                        Informations de connexion du collaborateur
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <!-- USERNAME -->
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Nom d'utilisateur
+
+                                    </label>
+
+                                    {{ form_utilisateur.username }}
+
+                                    {% if form_utilisateur.username.errors %}
+
+                                        <div class="text-danger small mt-1">
+
+                                            {{ form_utilisateur.username.errors }}
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                                <!-- EMAIL -->
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Adresse email
+
+                                    </label>
+
+                                    {{ form_utilisateur.email }}
+
+
+                                    {% if form_utilisateur.email.errors %}
+
+                                        <div class="text-danger small mt-1">
+
+                                            {{ form_utilisateur.email.errors }}
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <!-- PASSWORD -->
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Mot de passe
+
+                                    </label>
+
+                                    {{ form_utilisateur.password }}
+
+
+                                    {% if form_utilisateur.password.errors %}
+
+                                        <div class="text-danger small mt-1">
+
+                                            {{ form_utilisateur.password.errors }}
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                                <!-- ROLE -->
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Rôle
+
+                                    </label>
+
+                                    {{ form_utilisateur.role }}
+
+
+                                    {% if form_utilisateur.role.errors %}
+
+                                        <div class="text-danger small mt-1">
+
+                                            {{ form_utilisateur.role.errors }}
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- ================= EMPLOYE ================= -->
+
+                        <div>
+
+                            <div class="d-flex align-items-center mb-4">
+
+                                <div
+                                    class="me-3 d-flex align-items-center justify-content-center rounded-circle"
+                                    style="
+                                        width:50px;
+                                        height:50px;
+                                        background:#e8fff1;
+                                    "
+                                >
+
+                                    <i
+                                        class="bi bi-briefcase-fill text-success"
+                                        style="font-size:22px;"
+                                    ></i>
+
+                                </div>
+
+                                <div>
+
+                                    <h5 class="fw-bold mb-1 text-dark">
+
+                                        Informations employé
+
+                                    </h5>
+
+                                    <p class="text-muted mb-0">
+
+                                        Informations administratives du collaborateur
+
+                                    </p>
+
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <!-- NOM -->
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Nom
+
+                                    </label>
+
+                                    {{ form_employe.nom }}
+
+
+                                    {% if form_employe.nom.errors %}
+
+                                        <div class="text-danger small mt-1">
+
+                                            {{ form_employe.nom.errors }}
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                                <!-- PRENOM -->
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Prénom
+
+                                    </label>
+
+                                    {{ form_employe.prenom }}
+
+
+                                    {% if form_employe.prenom.errors %}
+
+                                        <div class="text-danger small mt-1">
+
+                                            {{ form_employe.prenom.errors }}
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <!-- DEPARTEMENT -->
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Département
+
+                                    </label>
+
+                                    {{ form_employe.departement }}
+
+
+                                    {% if form_employe.departement.errors %}
+
+                                        <div class="text-danger small mt-1">
+
+                                            {{ form_employe.departement.errors }}
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                                <!-- FONCTION -->
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label class="form-label fw-semibold">
+
+                                        Fonction
+
+                                    </label>
+
+                                    {{ form_fonction.nom_fonction }}
+
+
+                                    {% if form_fonction.nom_fonction.errors %}
+
+                                        <div class="text-danger small mt-1">
+
+                                            {{ form_fonction.nom_fonction.errors }}
+
+                                        </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- BUTTON -->
+
+                        <div class="mt-5">
+
+                            <button
+                                type="submit"
+                                class="btn btn-primary w-100 py-3 rounded-4 fw-bold"
+                                style="
+                                    background:
+                                    linear-gradient(
+                                        135deg,
+                                        #0d6efd,
+                                        #2563eb
+                                    );
+                                    border:none;
+                                "
+                            >
+
+                                <i class="bi bi-check-circle-fill me-2"></i>
+
+                                Créer utilisateur & employé
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

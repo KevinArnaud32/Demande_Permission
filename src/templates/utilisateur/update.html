@@ -1,0 +1,184 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Modifier utilisateur
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold text-dark mb-1">
+                Modification d'utilisateur
+            </h2>
+
+            <p class="text-muted mb-0">
+                Mettre à jour les informations de l'utilisateur et de l'employé
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- CARD -->
+    <div class="row justify-content-center">
+
+        <div class="col-xl-10">
+
+            <div class="card border-0 shadow-lg rounded-4">
+
+                <!-- HEADER CARD -->
+                <div class="card-header border-0 py-4 rounded-top-4"
+                     style="background: linear-gradient(135deg,#0d6efd,#2563eb);">
+
+                    <h4 class="text-white fw-bold mb-0">
+                        <i class="bi bi-pencil-square me-2"></i>
+                        Modification du compte
+                    </h4>
+
+                </div>
+
+                <!-- BODY -->
+                <div class="card-body p-5">
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <!-- ================= USER ================= -->
+                        <div class="mb-5">
+
+                            <div class="d-flex align-items-center mb-4">
+
+                                <div class="me-3 d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width:50px;height:50px;background:#e7f1ff;">
+
+                                    <i class="bi bi-person-fill text-primary" style="font-size:22px;"></i>
+
+                                </div>
+
+                                <div>
+                                    <h5 class="fw-bold mb-1 text-dark">
+                                        Informations utilisateur
+                                    </h5>
+                                    <p class="text-muted mb-0">
+                                        Mise à jour des données de connexion
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label class="form-label fw-semibold">Nom d'utilisateur</label>
+                                    {{ utilisateur_form.username }}
+
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+
+                                    <label class="form-label fw-semibold">Email</label>
+                                    {{ utilisateur_form.email }}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <!-- ================= EMPLOYE ================= -->
+                        {% if utilisateur.employe %}
+
+                        <div>
+
+                            <div class="d-flex align-items-center mb-4">
+
+                                <div class="me-3 d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width:50px;height:50px;background:#e8fff1;">
+
+                                    <i class="bi bi-briefcase-fill text-success" style="font-size:22px;"></i>
+
+                                </div>
+
+                                <div>
+                                    <h5 class="fw-bold mb-1 text-dark">
+                                        Informations employé
+                                    </h5>
+                                    <p class="text-muted mb-0">
+                                        Mise à jour des informations professionnelles
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label fw-semibold">Nom</label>
+                                    {{ employe_form.nom }}
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label fw-semibold">Prénom</label>
+                                    {{ employe_form.prenom }}
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label fw-semibold">Département</label>
+                                    {{ employe_form.departement }}
+                                </div>
+
+                                <div class="col-md-6 mb-4">
+                                    <label class="form-label fw-semibold">Fonction</label>
+                                    {{ employe_form.fonction }}
+                                </div>
+
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Supérieur hiérarchique</label>
+                                {{ employe_form.superieur }}
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+
+                        <!-- BUTTON -->
+                        <div class="mt-5">
+
+                            <button type="submit"
+                                    class="btn btn-primary w-100 py-3 rounded-4 fw-bold"
+                                    style="background: linear-gradient(135deg,#0d6efd,#2563eb); border:none;">
+
+                                <i class="bi bi-check-circle-fill me-2"></i>
+
+                                Mettre à jour
+
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

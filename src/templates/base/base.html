@@ -492,11 +492,13 @@
 
         <ul class="sidebar-menu">
 
-            <!-- DASHBOARD -->
+            <!-- ================= EMPLOYE ================= -->
+
+            {% if request.user.role == 'employe' %}
 
             <li>
 
-                <a href="{% url 'dashboard' %}" class="active">
+                <a href="" class="active">
 
                     <i class="bi bi-grid-fill"></i>
 
@@ -507,10 +509,6 @@
                 </a>
 
             </li>
-
-            <!-- ================= EMPLOYE ================= -->
-
-            {% if request.user.role == 'employe' %}
 
             <li>
 
@@ -531,6 +529,20 @@
             <!-- ================= MANAGER ================= -->
 
             {% if request.user.role == 'manager' %}
+
+            <li>
+
+                <a href="" class="active">
+
+                    <i class="bi bi-grid-fill"></i>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+            </li>
 
             <li>
 
@@ -568,6 +580,20 @@
 
             <li>
 
+                <a href="" class="active">
+
+                    <i class="bi bi-grid-fill"></i>
+
+                    <span>
+                        Dashboard
+                    </span>
+
+                </a>
+
+            </li>
+
+            <li>
+
                 <a href="{% url 'permission_list' %}">
 
                     <i class="bi bi-calendar-check-fill"></i>
@@ -602,39 +628,40 @@
 
             <li>
 
-                <a href="#">
+                <a href="{% url 'admin_dashboard' %}" class="active">
 
-                    <i class="bi bi-people-fill"></i>
+                    <i class="bi bi-grid-fill"></i>
 
                     <span>
-                        Employés
+                        Dashboard
                     </span>
+
                 </a>
 
             </li>
 
             <li>
 
-                <a href="#">
+                <a href="{% url 'utilisateur_list' %}">
+
+                    <i class="bi bi-person-fill-add"></i>
+
+                    <span>
+                        Gérer les utilisateurs
+                    </span>
+                </a>
+
+            </li>
+
+
+            <li>
+
+                <a href="{% url 'departement_list' %}">
 
                     <i class="bi bi-diagram-3-fill"></i>
 
                     <span>
-                        Départements
-                    </span>
-
-                </a>
-
-            </li>
-
-            <li>
-
-                <a href="#">
-
-                    <i class="bi bi-person-badge-fill"></i>
-
-                    <span>
-                        Fonctions
+                        Gérer départements
                     </span>
 
                 </a>
