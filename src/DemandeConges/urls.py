@@ -14,14 +14,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from tkinter.font import names
 
 from django.contrib import admin
 from django.urls import path, include
-from dashboard.views import dashboard
 from django.conf import settings
 from django.conf.urls.static import static
-import authentification
+
 
 
 urlpatterns = [
@@ -32,6 +30,8 @@ urlpatterns = [
     path('repos_maladie/',include('demande.urls.repos_maladie_url')),
     path('validaion/', include('demande.urls.validation_url')),
     path('auth/',include('authentification.urls')),
+    path('utilisateur/', include('employe.urls.utilisateur_url')),
+    path('departement/', include('employe.urls.departement_url')),
 ]
 
 urlpatterns += static(
