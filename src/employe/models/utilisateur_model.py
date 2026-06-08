@@ -5,13 +5,14 @@ from base.helpers.date_time_model import DateTime
 
 class Utilisateur(AbstractUser, DateTime):
     ROLE_CHOICES = [
-        ('EMPLOYE', 'Employé'),
-        ('MANAGER', 'Manager'),
-        ('RH', 'RH'),
-        ('ADMIN', 'Admin'),
+        ('employe', 'Employé'),
+        ('manager', 'Manager'),
+        ('rh', 'RH'),
+        ('admin', 'Admin'),
     ]
 
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, null=True)
+    first_login = models.BooleanField(default=True)
 
     class Meta:
         verbose_name = 'Utilisateur'
