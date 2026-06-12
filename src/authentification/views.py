@@ -9,14 +9,11 @@ def login_view(request):
     if request.user.is_authenticated:
         if request.user.role == "admin":
             return redirect('admin_dashboard')
-
         elif request.user.role == "rh":
             return redirect('rh_dashboard')
-
-        elif request.user.role == "Manager":
+        elif request.user.role == "manager":
             return redirect('manager_dashboard')
-
-        else:
+        elif request.user.role == 'employe':
             return redirect('employe_dashboard')
 
 
