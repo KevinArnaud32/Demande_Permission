@@ -496,9 +496,11 @@
 
             {% if request.user.role == 'employe' %}
 
+            <!-- DASHBOARD -->
+
             <li>
 
-                <a href="" class="active">
+                <a href="{% url 'employe_dashboard' %}" class="active">
 
                     <i class="bi bi-grid-fill"></i>
 
@@ -510,14 +512,97 @@
 
             </li>
 
+            <!-- MES DEMANDES -->
+
             <li>
 
-                <a href="{% url 'permission_list' %}">
+                <a
+                    data-bs-toggle="collapse"
+                    href="#demandeMenu"
+                    role="button"
+                    aria-expanded="false"
+                >
 
-                    <i class="bi bi-person-check-fill"></i>
+                    <i class="bi bi-file-earmark-text-fill"></i>
 
                     <span>
-                        Mes permissions
+                        Mes Demandes
+                    </span>
+
+                </a>
+
+                <div class="collapse show" id="demandeMenu">
+
+                    <ul class="list-unstyled ps-4 mt-2">
+
+                        <li class="mb-2">
+
+                            <a href="{% url 'permission_list' %}">
+
+                                <i class="bi bi-person-check-fill"></i>
+
+                                Permission
+
+                            </a>
+
+                        </li>
+
+                        <li class="mb-2">
+
+                            <a href="{% url 'conge_create' %}">
+
+                                <i class="bi bi-calendar-check-fill"></i>
+
+                                Congé
+
+                            </a>
+
+                        </li>
+
+                        <li>
+
+                            <a href="{% url 'repos_maladie_create' %}">
+
+                                <i class="bi bi-heart-pulse-fill"></i>
+
+                                Repos maladie
+
+                            </a>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </li>
+
+            <!-- SUIVI -->
+
+            <li>
+
+                <a href="">
+
+                    <i class="bi bi-list-check"></i>
+
+                    <span>
+                        Suivi des demandes
+                    </span>
+
+                </a>
+
+            </li>
+
+            <!-- PROFIL -->
+
+            <li>
+
+                <a href="">
+
+                    <i class="bi bi-person-circle"></i>
+
+                    <span>
+                        Mon profil
                     </span>
 
                 </a>
@@ -532,7 +617,7 @@
 
             <li>
 
-                <a href="" class="active">
+                <a href="{% url 'manager_dashboard' %}" class="active">
 
                     <i class="bi bi-grid-fill"></i>
 
@@ -544,23 +629,73 @@
 
             </li>
 
+            <!-- DEMANDES -->
+
             <li>
 
-                <a href="{% url 'permission_list' %}">
+                <a
+                    data-bs-toggle="collapse"
+                    href="#demandeMenu"
+                    role="button"
+                    aria-expanded="false"
+                >
 
-                    <i class="bi bi-check2-circle"></i>
+                    <i class="bi bi-file-earmark-text-fill"></i>
 
                     <span>
-                        Validation permissions
+                        Demandes
                     </span>
 
                 </a>
 
+                <div
+                    class="collapse"
+                    id="demandeMenu"
+                >
+
+                    <ul class="list-unstyled ps-4 mt-2">
+
+                        <li class="mb-2">
+
+                            <a
+                                href=""
+                                class="text-decoration-none"
+                            >
+
+                                <i class="bi bi-list-task"></i>
+
+                                Suivi des demandes
+
+                            </a>
+
+                        </li>
+
+                        <li>
+
+                            <a
+                                href="{% url 'validation_list' %}"
+                                class="text-decoration-none"
+                            >
+
+                                <i class="bi bi-check-circle-fill"></i>
+
+                                Validation des demandes
+
+                            </a>
+
+                        </li>
+
+                    </ul>
+
+                </div>
+
             </li>
+
+            <!-- EQUIPE -->
 
             <li>
 
-                <a href="#">
+                <a href="">
 
                     <i class="bi bi-people-fill"></i>
 
@@ -594,7 +729,7 @@
 
             <li>
 
-                <a href="{% url 'permission_list' %}">
+                <a href="">
 
                     <i class="bi bi-calendar-check-fill"></i>
 

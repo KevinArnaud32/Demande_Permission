@@ -8,35 +8,274 @@ Dashboard Employé
 
 <div class="container-fluid">
 
-    <div class="mb-4">
+    <!-- HEADER -->
 
-        <h2 class="fw-bold">
-            Dashboard Employé
-        </h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
 
-        <p class="text-muted">
-            Suivi de vos demandes RH
-        </p>
+        <div>
+
+            <h2 class="fw-bold">
+
+                Bonjour {{ request.user.employe.prenom }}
+
+            </h2>
+
+            <p class="text-muted mb-0">
+
+                Bienvenue dans votre espace personnel
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <span class="badge bg-success px-3 py-2">
+
+                Employé
+
+            </span>
+
+        </div>
 
     </div>
 
+    <!-- STATISTIQUES -->
+
+    <div class="row g-4 mb-4">
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-send-check-fill text-primary fs-1"></i>
+
+                    <h6 class="mt-3 text-muted">
+
+                        Total demandes
+
+                    </h6>
+
+                    <h2 class="fw-bold">
+
+                        {{ total_demandes }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-check-circle-fill text-success fs-1"></i>
+
+                    <h6 class="mt-3 text-muted">
+
+                        Acceptées
+
+                    </h6>
+
+                    <h2 class="fw-bold">
+
+                        {{ demandes_acceptees }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-hourglass-split text-warning fs-1"></i>
+
+                    <h6 class="mt-3 text-muted">
+
+                        En attente
+
+                    </h6>
+
+                    <h2 class="fw-bold">
+
+                        {{ demandes_attente }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body text-center">
+
+                    <i class="bi bi-calendar-check-fill text-info fs-1"></i>
+
+                    <h6 class="mt-3 text-muted">
+
+                        Solde congés
+
+                    </h6>
+
+                    <h2 class="fw-bold">
+
+                        {{ solde_conge }}
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ACTIONS RAPIDES -->
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4">
+
+        <div class="card-header bg-white border-0">
+
+            <h5 class="fw-bold mb-0">
+
+                <i class="bi bi-lightning-charge-fill text-primary"></i>
+
+                Actions rapides
+
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            <div class="row g-3">
+
+                <div class="col-md-4">
+
+                    <a href="{% url 'permission_create' %}"
+                       class="btn btn-primary w-100 py-3 rounded-4">
+
+                        <i class="bi bi-person-check-fill"></i>
+
+                        Demande permission
+
+                    </a>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <a href="{% url 'conge_create' %}"
+                       class="btn btn-success w-100 py-3 rounded-4">
+
+                        <i class="bi bi-calendar-event-fill"></i>
+
+                        Demande congé
+
+                    </a>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <a href="{% url 'repos_maladie_create' %}"
+                       class="btn btn-danger w-100 py-3 rounded-4">
+
+                        <i class="bi bi-heart-pulse-fill"></i>
+
+                        Repos maladie
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- PROFIL + DERNIERES DEMANDES -->
+
     <div class="row g-4">
 
-        <div class="col-md-4">
+        <!-- PROFIL -->
 
-            <div class="card border-0 shadow-sm rounded-4">
+        <div class="col-lg-4">
 
-                <div class="card-body text-center">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
 
-                    <i class="bi bi-send-check fs-1 text-primary"></i>
+                <div class="card-header bg-white border-0">
 
-                    <h5 class="mt-3">
-                        Mes demandes
+                    <h5 class="fw-bold mb-0">
+
+                        Mon profil
+
                     </h5>
 
-                    <h2 class="fw-bold">
-                        10
-                    </h2>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="text-center mb-4">
+
+                        <i class="bi bi-person-circle fs-1 text-primary"></i>
+
+                    </div>
+
+                    <p>
+
+                        <strong>Nom :</strong>
+
+                        {{ request.user.employe.nom }}
+
+                        {{ request.user.employe.prenom }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>Département :</strong>
+
+                        {{ request.user.employe.departement }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>Fonction :</strong>
+
+                        {{ request.user.employe.fonction }}
+
+                    </p>
+
+                    <p>
+
+                        <strong>Email :</strong>
+
+                        {{ request.user.email }}
+
+                    </p>
 
                 </div>
 
@@ -44,43 +283,112 @@ Dashboard Employé
 
         </div>
 
-        <div class="col-md-4">
+        <!-- DERNIERES DEMANDES -->
 
-            <div class="card border-0 shadow-sm rounded-4">
+        <div class="col-lg-8">
 
-                <div class="card-body text-center">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
 
-                    <i class="bi bi-check-circle fs-1 text-success"></i>
+                <div class="card-header bg-white border-0">
 
-                    <h5 class="mt-3">
-                        Acceptées
+                    <h5 class="fw-bold mb-0">
+
+                        Mes dernières demandes
+
                     </h5>
-
-                    <h2 class="fw-bold">
-                        6
-                    </h2>
 
                 </div>
 
-            </div>
+                <div class="card-body">
 
-        </div>
+                    <div class="table-responsive">
 
-        <div class="col-md-4">
+                        <table class="table table-hover align-middle">
 
-            <div class="card border-0 shadow-sm rounded-4">
+                            <thead>
 
-                <div class="card-body text-center">
+                                <tr>
 
-                    <i class="bi bi-clock fs-1 text-warning"></i>
+                                    <th>Type</th>
 
-                    <h5 class="mt-3">
-                        En attente
-                    </h5>
+                                    <th>Date</th>
 
-                    <h2 class="fw-bold">
-                        4
-                    </h2>
+                                    <th>Statut</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {% for demande in dernieres_demandes %}
+
+                                <tr>
+
+                                    <td>
+
+                                        {{ demande.type }}
+
+                                    </td>
+
+                                    <td>
+
+                                        {{ demande.date_creation|date:"d/m/Y" }}
+
+                                    </td>
+
+                                    <td>
+
+                                        {% if demande.statut == 'ACCEPTEE' %}
+
+                                        <span class="badge bg-success">
+
+                                            Acceptée
+
+                                        </span>
+
+                                        {% elif demande.statut == 'REFUSEE' %}
+
+                                        <span class="badge bg-danger">
+
+                                            Refusée
+
+                                        </span>
+
+                                        {% else %}
+
+                                        <span class="badge bg-warning text-dark">
+
+                                            En attente
+
+                                        </span>
+
+                                        {% endif %}
+
+                                    </td>
+
+                                </tr>
+
+                                {% empty %}
+
+                                <tr>
+
+                                    <td colspan="3"
+                                        class="text-center text-muted">
+
+                                        Aucune demande enregistrée
+
+                                    </td>
+
+                                </tr>
+
+                                {% endfor %}
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
 
                 </div>
 

@@ -8,306 +8,383 @@ Permissions
 
 <div class="container-fluid">
 
-    <!-- ================= HEADER ================= -->
+<!-- ================= HEADER ================= -->
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex justify-content-between align-items-center mb-4">
 
-        <div>
+    <div>
 
-            <h3 class="fw-bold">
+        <h3 class="fw-bold">
 
-                Gestion des permissions
+            Gestion des permissions
 
-            </h3>
+        </h3>
 
-            <p class="text-muted mb-0">
+        <p class="text-muted mb-0">
 
-                Liste des permissions enregistrées
+            {% if request.user.role == 'employe' %}
 
-            </p>
+                Suivi de vos permissions
 
-        </div>
+            {% elif request.user.role == 'manager' %}
 
-        <!-- EMPLOYE SEULEMENT -->
+                Permissions des collaborateurs de votre département
 
-        {% if request.user.role == 'employe' %}
+            {% elif request.user.role == 'rh' %}
 
-        <a
-            href="{% url 'permission_create' %}"
-            class="btn btn-primary rounded-3 px-4"
-        >
+                Gestion RH des permissions
 
-            <i class="bi bi-plus-circle"></i>
+            {% else %}
 
-            Nouvelle permission
+                Administration de toutes les permissions
 
-        </a>
+            {% endif %}
 
-        {% endif %}
+        </p>
 
     </div>
 
-    <!-- ================= TABLE CARD ================= -->
+    <!-- EMPLOYE -->
 
-    <div class="card border-0 shadow-sm rounded-4">
+    {% if request.user.role == 'employe' %}
 
-        <div class="card-body p-4">
+    <a
+        href="{% url 'permission_create' %}"
+        class="btn btn-primary rounded-3 px-4"
+    >
 
-            <div class="table-responsive">
+        <i class="bi bi-plus-circle"></i>
 
-                <table class="table align-middle table-hover">
+        Nouvelle permission
 
-                    <thead class="table-light">
+    </a>
 
-                        <tr>
+    {% endif %}
 
-                            <th>#</th>
+</div>
 
+<!-- ================= TABLE CARD ================= -->
+
+<div class="card border-0 shadow-sm rounded-4">
+
+    <div class="card-body p-4">
+
+        <div class="table-responsive">
+
+            <table class="table align-middle table-hover">
+
+                <thead class="table-light">
+                    <tr>
+
+                        {% if request.user.role != 'employe' %}
                             <th>Employé</th>
+                        {% endif %}
 
-                            <th>Motif</th>
+                        <th>Motif</th>
+                        <th>Heure sortie</th>
+                        <th>Durée</th>
+                        <th>Heure retour</th>
+                        <th>Statut</th>
+                        <th class="text-center">Actions</th>
 
-                            <th>Heure sortie</th>
+                    </tr>
+                </thead>
 
-                            <th>Heure retour</th>
+                <tbody>
 
-                            <th>Durée</th>
+                    {% for permission in permissions %}
 
-                            <th>Statut</th>
+                    <tr>
 
-                            <th class="text-center">
 
-                                Actions
+                        <!-- EMPLOYE -->
 
-                            </th>
+                        {% if request.user.role != 'employe' %}
 
-                        </tr>
+                        <td>
 
-                    </thead>
+                            <div class="d-flex align-items-center gap-2">
 
-                    <tbody>
+                                <div
+                                    class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
+                                    style="
+                                        width:40px;
+                                        height:40px;
+                                        font-size:14px;
+                                        font-weight:600;
+                                    "
+                                >
 
-                        {% for permission in permissions %}
-
-                        <tr>
-
-                            <!-- ID -->
-
-                            <td>
-
-                                <span class="fw-bold">
-
-                                    #{{ permission.id }}
-
-                                </span>
-
-                            </td>
-
-                            <!-- EMPLOYE -->
-
-                            <td>
-
-                                <div class="d-flex align-items-center gap-2">
-
-                                    <div
-                                        class="rounded-circle bg-primary text-white d-flex justify-content-center align-items-center"
-                                        style="
-                                            width:40px;
-                                            height:40px;
-                                            font-size:14px;
-                                            font-weight:600;
-                                        "
-                                    >
-
-                                        {{ permission.employe.nom|slice:":1" }}
-                                        {{ permission.employe.prenom|slice:":1" }}
-
-                                    </div>
-
-                                    <div>
-
-                                        <div class="fw-semibold">
-
-                                            {{ permission.employe.nom }}
-                                            {{ permission.employe.prenom }}
-
-                                        </div>
-
-                                        <small class="text-muted">
-
-                                            {{ permission.employe.fonction }}
-
-                                        </small>
-
-                                    </div>
+                                    {{ permission.employe.nom|slice:":1" }}
+                                    {{ permission.employe.prenom|slice:":1" }}
 
                                 </div>
 
-                            </td>
+                                <div>
 
-                            <!-- MOTIF -->
+                                    <div class="fw-semibold">
 
-                            <td>
+                                        {{ permission.employe.nom }}
+                                        {{ permission.employe.prenom }}
 
-                                {{ permission.motif }}
+                                    </div>
 
-                            </td>
+                                    <small class="text-muted">
 
-                            <!-- HEURE SORTIE -->
+                                        {{ permission.employe.fonction }}
 
-                            <td>
+                                    </small>
+                                </div>
 
-                                {{ permission.heure_sortie }}
+                            </div>
 
-                            </td>
+                        </td>
 
-                            <!-- HEURE RETOUR -->
+                        {% endif %}
 
-                            <td>
+                        <!-- MOTIF -->
 
-                                {{ permission.heure_retour }}
+                        <td>
 
-                            </td>
+                            {{ permission.motif }}
 
-                            <!-- DUREE -->
+                        </td>
 
-                            <td>
+                        <!-- HEURE SORTIE -->
 
-                                {{ permission.nombre_minute }}
-                                min
+                        <td>
 
-                            </td>
+                            {{ permission.heure_sortie }}
 
-                            <!-- STATUT -->
+                        </td>
 
-                            <td>
+                        <!-- DUREE -->
 
-                                {% if permission.statut == 'accepte' %}
+                        <td>
 
-                                <span class="badge bg-success rounded-pill px-3 py-2">
+                            {{ permission.nombre_minute }} min
 
-                                    <i class="bi bi-check-circle"></i>
+                        </td>
 
-                                    Accepté
+                        <!-- HEURE RETOUR -->
 
-                                </span>
+                        <td>
 
-                                {% elif permission.statut == 'refuse' %}
+                            {{ permission.heure_retour }}
 
-                                <span class="badge bg-danger rounded-pill px-3 py-2">
+                        </td>
 
-                                    <i class="bi bi-x-circle"></i>
+                        <!-- STATUT -->
 
-                                    Refusé
+                        <td>
 
-                                </span>
+                            {% if permission.statut == 'accepte' %}
 
-                                {% else %}
+                            <span class="badge bg-success rounded-pill px-3 py-2">
 
-                                <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
+                                <i class="bi bi-check-circle"></i>
 
-                                    <i class="bi bi-clock"></i>
+                                Accepté
 
-                                    En attente
+                            </span>
 
-                                </span>
+                            {% elif permission.statut == 'refuse' %}
 
-                                {% endif %}
+                            <span class="badge bg-danger rounded-pill px-3 py-2">
 
-                            </td>
+                                <i class="bi bi-x-circle"></i>
 
-                            <!-- ACTIONS -->
+                                Refusé
 
-                            <td>
+                            </span>
 
-                                <div class="d-flex justify-content-center gap-2">
+                            {% else %}
 
-                                    <!-- DETAILS -->
+                            <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
+
+                                <i class="bi bi-clock"></i>
+
+                                En attente
+
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <!-- ACTIONS -->
+
+                        <td>
+
+                            <div class="d-flex justify-content-center gap-2">
+
+                                <!-- DETAILS -->
+
+                                <a
+                                    href="{% url 'permission_detail' permission.id %}"
+                                    class="btn btn-light border rounded-3"
+                                    title="Détails"
+                                >
+
+                                    <i class="bi bi-eye"></i>
+
+                                </a>
+
+                                <!-- PDF -->
+
+                                <a
+                                    href="#"
+                                    class="btn btn-light border rounded-3"
+                                    title="Exporter PDF"
+                                >
+
+                                    <i class="bi bi-file-earmark-pdf"></i>
+
+                                </a>
+
+                                <!-- EMPLOYE -->
+
+                                {% if request.user.role == 'employe' %}
+
+                                    {% if permission.statut == 'en attente' %}
 
                                     <a
-                                        href="{% url 'permission_detail' permission.id %}"
-                                        class="btn btn-light border rounded-3"
+                                        href="{% url 'permission_update' permission.id %}"
+                                        class="btn btn-warning rounded-3"
+                                        title="Modifier"
                                     >
 
-                                        <i class="bi bi-eye"></i>
+                                        <i class="bi bi-pencil-square"></i>
 
                                     </a>
 
-                                    <!-- PDF -->
-
                                     <a
-                                        href="#"
-                                        class="btn btn-light border rounded-3"
+                                        href="{% url 'permission_delete' permission.id %}"
+                                        class="btn btn-danger rounded-3"
+                                        title="Supprimer"
+                                        onclick="return confirm('Voulez-vous supprimer cette demande ?')"
                                     >
 
-                                        <i class="bi bi-file-earmark-pdf"></i>
+                                        <i class="bi bi-trash"></i>
 
                                     </a>
-
-                                    <!-- VALIDATION -->
-
-                                    {% if request.user.role != 'employe' %}
-
-                                        {% if permission.statut == 'en attente' %}
-
-                                        <a
-                                            href="{% url 'validation_permission' permission.id %}"
-                                            class="btn btn-success rounded-3"
-                                        >
-
-                                            <i class="bi bi-check2-circle"></i>
-
-                                        </a>
-
-                                        {% endif %}
 
                                     {% endif %}
 
-                                </div>
+                                {% endif %}
 
-                            </td>
+                                <!-- MANAGER -->
 
-                        </tr>
+                                {% if request.user.role == 'manager' %}
 
-                        {% empty %}
+                                    {% if permission.statut == 'en attente' %}
 
-                        <tr>
+                                    <a
+                                        href="{% url 'validation_permission' permission.id %}"
+                                        class="btn btn-success rounded-3"
+                                        title="Valider"
+                                    >
 
-                            <td
-                                colspan="8"
-                                class="text-center py-5"
-                            >
+                                        <i class="bi bi-check2-circle"></i>
 
-                                <div class="text-muted">
+                                    </a>
 
-                                    <i
-                                        class="bi bi-folder-x"
-                                        style="font-size:50px;"
-                                    ></i>
+                                    {% endif %}
 
-                                    <p class="mt-3">
+                                {% endif %}
 
-                                        Aucune permission trouvée
+                                <!-- RH -->
 
-                                    </p>
+                                {% if request.user.role == 'rh' %}
 
-                                </div>
+                                    {% if permission.statut == 'en attente' %}
 
-                            </td>
+                                    <a
+                                        href="{% url 'validation_permission' permission.id %}"
+                                        class="btn btn-success rounded-3"
+                                        title="Traiter"
+                                    >
 
-                        </tr>
+                                        <i class="bi bi-check2-circle"></i>
 
-                        {% endfor %}
+                                    </a>
 
-                    </tbody>
+                                    {% endif %}
 
-                </table>
+                                {% endif %}
 
-            </div>
+                                <!-- ADMIN -->
+
+                                {% if request.user.role == 'admin' or request.user.is_superuser %}
+
+                                    <a
+                                        href="{% url 'permission_update' permission.id %}"
+                                        class="btn btn-warning rounded-3"
+                                        title="Modifier"
+                                    >
+
+                                        <i class="bi bi-pencil-square"></i>
+
+                                    </a>
+
+                                    <a
+                                        href="{% url 'permission_delete' permission.id %}"
+                                        class="btn btn-danger rounded-3"
+                                        title="Supprimer"
+                                        onclick="return confirm('Voulez-vous supprimer cette permission ?')"
+                                    >
+
+                                        <i class="bi bi-trash"></i>
+
+                                    </a>
+
+                                {% endif %}
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="8"
+                            class="text-center py-5"
+                        >
+
+                            <div class="text-muted">
+
+                                <i
+                                    class="bi bi-folder-x"
+                                    style="font-size:50px;"
+                                ></i>
+
+                                <p class="mt-3">
+
+                                    Aucune permission trouvée
+
+                                </p>
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
 
         </div>
 
     </div>
+
+</div>
 
 </div>
 

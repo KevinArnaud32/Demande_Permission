@@ -1,160 +1,60 @@
 {% extends 'base/base.html' %}
 
 {% block title %}
-Dashboard Admin
+Dashboard Administrateur
 {% endblock %}
 
 {% block content %}
 
 <div class="container-fluid">
 
-    <!-- HEADER -->
+<!-- HEADER -->
 
-    <div class="mb-4">
+<div class="mb-4">
 
-        <h2 class="fw-bold">
-            Dashboard Administrateur
-        </h2>
+    <h2 class="fw-bold">
 
-        <p class="text-muted">
-            Gestion globale de la plateforme RH
-        </p>
+        Dashboard Administrateur
 
-    </div>
+    </h2>
 
-    <!-- STATS -->
+    <p class="text-muted">
 
-    <div class="row g-4">
+        Vue globale de la plateforme de gestion RH
 
-        <div class="col-md-3">
+    </p>
 
-            <div class="card border-0 shadow-sm rounded-4">
+</div>
 
-                <div class="card-body">
+<!-- STATISTIQUES -->
 
-                    <div class="d-flex justify-content-between">
+<div class="row g-4 mb-4">
 
-                        <div>
+    <div class="col-xl-3 col-md-6">
 
-                            <p class="text-muted">
-                                Employés
-                            </p>
+        <div class="card border-0 shadow-sm rounded-4">
 
-                            <h3 class="fw-bold">
-                                {{ nombre_employe }}
-                            </h3>
+            <div class="card-body">
 
-                        </div>
+                <div class="d-flex justify-content-between align-items-center">
 
-                        <div class="text-primary">
+                    <div>
 
-                            <i class="bi bi-people-fill fs-1"></i>
+                        <p class="text-muted mb-1">
 
-                        </div>
+                            Employés
 
-                    </div>
+                        </p>
 
-                </div>
+                        <h3 class="fw-bold">
 
-            </div>
+                            {{ nombre_employe }}
 
-        </div>
-
-        <div class="col-md-3">
-
-            <div class="card border-0 shadow-sm rounded-4">
-
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between">
-
-                        <div>
-
-                            <p class="text-muted">
-                                Départements
-                            </p>
-
-                            <h3 class="fw-bold">
-                                {{ nombre_departement }}
-                            </h3>
-
-                        </div>
-
-                        <div class="text-success">
-
-                            <i class="bi bi-building fs-1"></i>
-
-                        </div>
+                        </h3>
 
                     </div>
 
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-3">
-
-            <div class="card border-0 shadow-sm rounded-4">
-
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between">
-
-                        <div>
-
-                            <p class="text-muted">
-                                Managers
-                            </p>
-
-                            <h3 class="fw-bold">
-                                {{ nombre_manager }}
-                            </h3>
-
-                        </div>
-
-                        <div class="text-warning">
-
-                            <i class="bi bi-person-badge-fill fs-1"></i>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <div class="col-md-3">
-
-            <div class="card border-0 shadow-sm rounded-4">
-
-                <div class="card-body">
-
-                    <div class="d-flex justify-content-between">
-
-                        <div>
-
-                            <p class="text-muted">
-                                RH
-                            </p>
-
-                            <h3 class="fw-bold">
-                                {{ nombre_rh }}
-                            </h3>
-
-                        </div>
-
-                        <div class="text-danger">
-
-                            <i class="bi bi-person-workspace fs-1"></i>
-
-                        </div>
-
-                    </div>
+                    <i class="bi bi-people-fill text-primary fs-1"></i>
 
                 </div>
 
@@ -163,6 +63,461 @@ Dashboard Admin
         </div>
 
     </div>
+
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card border-0 shadow-sm rounded-4">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <p class="text-muted mb-1">
+
+                            Départements
+
+                        </p>
+
+                        <h3 class="fw-bold">
+
+                            {{ nombre_departement }}
+
+                        </h3>
+
+                    </div>
+
+                    <i class="bi bi-building text-success fs-1"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card border-0 shadow-sm rounded-4">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <p class="text-muted mb-1">
+
+                            Fonctions
+
+                        </p>
+
+                        <h3 class="fw-bold">
+
+                            {{ nombre_fonction }}
+
+                        </h3>
+
+                    </div>
+
+                    <i class="bi bi-briefcase-fill text-warning fs-1"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-xl-3 col-md-6">
+
+        <div class="card border-0 shadow-sm rounded-4">
+
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center">
+
+                    <div>
+
+                        <p class="text-muted mb-1">
+
+                            Utilisateurs
+
+                        </p>
+
+                        <h3 class="fw-bold">
+
+                            {{ nombre_utilisateur }}
+
+                        </h3>
+
+                    </div>
+
+                    <i class="bi bi-person-badge-fill text-info fs-1"></i>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- DEUXIEME LIGNE STATS -->
+
+<div class="row g-4 mb-4">
+
+    <div class="col-xl-4 col-md-6">
+
+        <div class="card border-0 shadow-sm rounded-4">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-person-workspace text-danger fs-1"></i>
+
+                <h5 class="mt-3">
+
+                    RH
+
+                </h5>
+
+                <h2 class="fw-bold">
+
+                    {{ nombre_rh }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-xl-4 col-md-6">
+
+        <div class="card border-0 shadow-sm rounded-4">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-person-badge text-warning fs-1"></i>
+
+                <h5 class="mt-3">
+
+                    Managers
+
+                </h5>
+
+                <h2 class="fw-bold">
+
+                    {{ nombre_manager }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="col-xl-4 col-md-6">
+
+        <div class="card border-0 shadow-sm rounded-4">
+
+            <div class="card-body text-center">
+
+                <i class="bi bi-hourglass-split text-primary fs-1"></i>
+
+                <h5 class="mt-3">
+
+                    Demandes en attente
+
+                </h5>
+
+                <h2 class="fw-bold">
+
+                    {{ nombre_demande_attente }}
+
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ACTIONS RAPIDES -->
+
+<div class="card border-0 shadow-sm rounded-4 mb-4">
+
+    <div class="card-header bg-white border-0">
+
+        <h5 class="fw-bold mb-0">
+
+            <i class="bi bi-lightning-charge-fill text-primary"></i>
+
+            Actions rapides
+
+        </h5>
+
+    </div>
+
+    <div class="card-body">
+
+        <div class="row g-3">
+
+            <div class="col-lg-3 col-md-6">
+
+                <a href="{% url 'utilisateur_create' %}"
+                   class="btn btn-primary w-100 py-3 rounded-4">
+
+                    <i class="bi bi-person-plus-fill"></i>
+
+                    Nouvel utilisateur
+
+                </a>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <a href="{% url 'departement_create' %}"
+                   class="btn btn-success w-100 py-3 rounded-4">
+
+                    <i class="bi bi-building"></i>
+
+                    Département
+
+                </a>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <a href=""
+                   class="btn btn-warning w-100 py-3 rounded-4">
+
+                    <i class="bi bi-briefcase-fill"></i>
+
+                    Fonction
+
+                </a>
+
+            </div>
+
+            <div class="col-lg-3 col-md-6">
+
+                <a href="{% url 'utilisateur_list' %}"
+                   class="btn btn-dark w-100 py-3 rounded-4">
+
+                    <i class="bi bi-people-fill"></i>
+
+                    Utilisateurs
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- TABLEAUX -->
+
+<div class="row g-4">
+
+    <!-- UTILISATEURS -->
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+
+            <div class="card-header bg-white border-0">
+
+                <h5 class="fw-bold mb-0">
+
+                    <i class="bi bi-person-plus-fill text-primary"></i>
+
+                    Derniers utilisateurs créés
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Utilisateur</th>
+
+                                <th>Rôle</th>
+
+                                <th>Date</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% for utilisateur in derniers_utilisateurs %}
+
+                            <tr>
+
+                                <td>
+
+                                    {{ utilisateur.username }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ utilisateur.role }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ utilisateur.date_creation|date:"d/m/Y" }}
+
+                                </td>
+
+                            </tr>
+
+                            {% empty %}
+
+                            <tr>
+
+                                <td colspan="3" class="text-center text-muted">
+
+                                    Aucun utilisateur enregistré
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- EMPLOYES -->
+
+    <div class="col-lg-6">
+
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+
+            <div class="card-header bg-white border-0">
+
+                <h5 class="fw-bold mb-0">
+
+                    <i class="bi bi-people-fill text-success"></i>
+
+                    Derniers employés enregistrés
+
+                </h5>
+
+            </div>
+
+            <div class="card-body">
+
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead>
+
+                            <tr>
+
+                                <th>Nom</th>
+
+                                <th>Département</th>
+
+                                <th>Fonction</th>
+
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% for employe in derniers_employes %}
+
+                            <tr>
+
+                                <td>
+
+                                    {{ employe.nom }}
+
+                                    {{ employe.prenom }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ employe.departement }}
+
+                                </td>
+
+                                <td>
+
+                                    {{ employe.fonction }}
+
+                                </td>
+
+                            </tr>
+
+                            {% empty %}
+
+                            <tr>
+
+                                <td colspan="3" class="text-center text-muted">
+
+                                    Aucun employé enregistré
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 </div>
 
