@@ -5,13 +5,13 @@ from employe.models.employe_model import Employe
 
 class Demande(DateTime):
     STATUT_CHOICE = [
-        ("en_attente", "En attente"),
+        ("en attente", "En attente"),
         ("accepte", "Accepté"),
         ("refuse", "Refusé"),
     ]
 
     employe = models.ForeignKey(Employe, on_delete=models.CASCADE)
-    statut = models.CharField(max_length=255, choices=STATUT_CHOICE, default="en_attente")
+    statut = models.CharField(max_length=255, choices=STATUT_CHOICE, default="en attente")
 
     def __str__(self):
         return f"{self.employe} - {self.statut}"

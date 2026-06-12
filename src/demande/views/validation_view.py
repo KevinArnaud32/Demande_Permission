@@ -21,6 +21,7 @@ def validation_list(request):
     return render(request,'validation/index.html', context)
 
 
+
 @login_required
 def validate_permission(request, pk):
 
@@ -80,6 +81,7 @@ def validate_permission(request, pk):
     return render(request,'validation/permission_validation.html',context)
 
 
+
 @login_required
 def validate_conge(request, pk):
 
@@ -123,6 +125,7 @@ def validate_conge(request, pk):
         'validation/conge_validation.html',
         context
     )
+
 
 
 @login_required

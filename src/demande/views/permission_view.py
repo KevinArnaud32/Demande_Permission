@@ -4,6 +4,7 @@ from demande.models.permission_model import Permission
 from demande.forms.permission_form import PermissionForm
 from demande.models.validation_model import Validation
 
+
 @login_required
 def permission_list(request):
 
@@ -23,6 +24,8 @@ def permission_list(request):
     }
 
     return render(request,'permission/index.html', context)
+
+
 
 
 @login_required
