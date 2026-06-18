@@ -1,6 +1,9 @@
 from django.contrib.auth.decorators import login_required
 
 from core.decorators import role_required
+from demande.models.conges_model import Conges
+from demande.models.permission_model import Permission
+from demande.models.repos_maladie_model import ReposMaladie
 from employe.models.departement_model import Departement
 from employe.models.employe_model import Employe
 from django.shortcuts import render, redirect
@@ -68,4 +71,36 @@ def manager_dashboard(request):
 @login_required
 @role_required('employe')
 def employe_dashboard(request):
-    return render(request,'dashboard/employe_dashboard.html')
+
+    employe = request.user.employe
+
+    # total demandes
+    total_permissions = Permission.objects.filter(employe=employe).count()
+    total_repos_maladies = ReposMaladie.objects.filter(employe=employe).count()
+    total_conges = Conges.objects.filter(employe=employe).count()
+
+    total_demandes = total_conges + total_repos_maladies + total_permissions
+
+    # demande en attente
+    permission_attente = Permission.objects.filter(statut='en attente', employe=employe).count()
+    repos_maladie_attente = ReposMaladie.objects.filter(statut='en attente', employe=employe).count()
+    conges_attente = Conges.objects.filter(statut='en attente', employe=employe).count()
+
+    demandes_attente = permission_attente + repos_maladie_attente + conges_attente
+
+    # demande accpetée
+
+    permission_accepte = Permission.objects.filter(statut='accepte', employe=employe).count()
+    repos_maladie_accepte = ReposMaladie.objects.filter(statut='accepte', employe=employe).count()
+    conges_accepte = Conges.objects.filter(statut='accepte', employe=employe).count()
+
+    demande_accepte = permission_accepte + repos_maladie_accepte + conges_accepte
+
+    context = {
+        'total_demandes': total_demandes,
+        'demandes_attente': demandes_attente,
+        'total_conges': total_conges,
+        'demande_accepte': demande_accepte,
+    }
+
+    return render(request,'dashboard/employe_dashboard.html', context)
