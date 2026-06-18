@@ -1,0 +1,158 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Détails du congé
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-5">
+
+                    <!-- HEADER -->
+
+                    <div class="text-center mb-5">
+
+                        <div
+                            class="mx-auto mb-3 d-flex justify-content-center align-items-center rounded-circle bg-info text-white"
+                            style="
+                                width:80px;
+                                height:80px;
+                                font-size:30px;
+                            "
+                        >
+
+                            <i class="bi bi-calendar-check-fill"></i>
+
+                        </div>
+
+                        <h2 class="fw-bold">
+
+                            Détails de la demande de congé
+
+                        </h2>
+
+                        <p class="text-muted">
+
+                            Consultez les informations de cette demande.
+
+                        </p>
+
+                    </div>
+
+                    <!-- INFORMATIONS -->
+
+                    <div class="row g-4">
+
+                        {% if request.user.role != 'employe' %}
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">
+                                Employé
+                            </label>
+                            <div class="form-control bg-light">
+                                {{ conge.employe }}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">
+                                Date de début
+                            </label>
+                            <div class="form-control bg-light">
+                                {{ conge.date_debut }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">
+                                Nombre de jours
+                            </label>
+                            <div class="form-control bg-light">
+                                {{ conge.nombre_jours }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">
+                                Date de fin
+                            </label>
+                            <div class="form-control bg-light">
+                                {{ conge.date_fin }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">
+                                Statut
+                            </label>
+
+                            <div>
+                                {% if conge.statut == 'ACCEPTEE' %}
+                                    <span class="badge bg-success px-3 py-2">
+                                        Accepté
+                                    </span>
+                                {% elif conge.statut == 'REFUSEE' %}
+                                    <span class="badge bg-danger px-3 py-2">
+                                        Refusé
+                                    </span>
+                                {% else %}
+                                    <span class="badge bg-warning text-dark px-3 py-2">
+                                        En attente
+                                    </span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">
+                                Date de création
+                            </label>
+                            <div class="form-control bg-light">
+                                {{ conge.date_creation }}
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- BOUTONS -->
+
+                    <div class="d-flex justify-content-end gap-3 mt-5">
+
+                        <a
+                            href="{% url 'conge_list' %}"
+                            class="btn btn-light border px-4 py-2 rounded-3"
+                        >
+                            Retour
+                        </a>
+
+                        {% if request.user.role == 'employe' and conge.statut == 'EN_ATTENTE' %}
+                        <a
+                            href="{% url 'conges_update' conge.id %}"
+                            class="btn btn-warning px-4 py-2 rounded-3"
+                        >
+                            <i class="bi bi-pencil-square"></i>
+                            Modifier
+                        </a>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

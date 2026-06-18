@@ -1,0 +1,125 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Nouvelle demande de repos maladie
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-5">
+
+                    <!-- HEADER -->
+
+                    <div class="text-center mb-5">
+
+                        <div
+                            class="mx-auto mb-3 d-flex justify-content-center align-items-center rounded-circle bg-danger text-white"
+                            style="
+                                width:80px;
+                                height:80px;
+                                font-size:30px;
+                            "
+                        >
+
+                            <i class="bi bi-heart-pulse-fill"></i>
+
+                        </div>
+
+                        <h2 class="fw-bold">
+                            Nouvelle demande de repos maladie
+                        </h2>
+
+                        <p class="text-muted">
+                            Renseignez les informations et joignez votre justificatif médical.
+                        </p>
+
+                    </div>
+
+                    <!-- FORMULAIRE -->
+
+                    <form method="POST" enctype="multipart/form-data">
+
+                        {% csrf_token %}
+
+                        <!-- DATE DE DÉBUT -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                Date de début
+                            </label>
+
+                            {{ repos_maladie_form.date_debut }}
+
+                        </div>
+
+                        <!-- NOMBRE DE JOURS -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                Nombre de jours
+                            </label>
+
+                            {{ repos_maladie_form.nombre_jours }}
+
+                        </div>
+
+                        <!-- JUSTIFICATIF -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+                                Justificatif médical (PDF)
+                            </label>
+
+                            {{ repos_maladie_form.justificatif }}
+
+                            <small class="text-muted">
+                                Seuls les fichiers PDF sont acceptés.
+                            </small>
+
+                        </div>
+
+                        <!-- BOUTONS -->
+
+                        <div class="d-flex justify-content-end gap-3">
+
+                            <a
+                                href="{% url 'repos_maladie_list' %}"
+                                class="btn btn-light border px-4 py-2 rounded-3"
+                            >
+                                Annuler
+                            </a>
+
+                            <button
+                                type="submit"
+                                class="btn btn-danger px-4 py-2 rounded-3"
+                            >
+                                <i class="bi bi-send"></i>
+                                Envoyer la demande
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -32,429 +32,8 @@
         rel="stylesheet"
     >
 
-    <style>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-        }
-
-        body{
-
-            font-family:'Poppins', sans-serif;
-
-            background:#f1f5f9;
-
-            overflow-x:hidden;
-        }
-
-        .wrapper{
-            display:flex;
-            min-height:100vh;
-        }
-
-        /* ================= SIDEBAR ================= */
-
-        .sidebar{
-
-            width:280px;
-
-            background:
-                linear-gradient(
-                    180deg,
-                    #0f172a,
-                    #1e293b
-                );
-
-            color:white;
-
-            position:fixed;
-
-            top:0;
-            left:0;
-            bottom:0;
-
-            padding:25px 20px;
-
-            box-shadow:
-                5px 0 25px rgba(0,0,0,0.08);
-
-            z-index:1000;
-
-            overflow-y:auto;
-        }
-
-        .sidebar-header{
-
-            display:flex;
-
-            align-items:center;
-
-            gap:15px;
-
-            margin-bottom:45px;
-        }
-
-        .sidebar-logo{
-
-            width:58px;
-            height:58px;
-
-            border-radius:18px;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #2563eb,
-                    #3b82f6
-                );
-
-            display:flex;
-
-            align-items:center;
-
-            justify-content:center;
-
-            font-size:24px;
-
-            color:white;
-        }
-
-        .sidebar-title{
-
-            font-size:22px;
-
-            font-weight:700;
-        }
-
-        .sidebar-subtitle{
-
-            font-size:13px;
-
-            color:#cbd5e1;
-        }
-
-        .sidebar-menu{
-
-            list-style:none;
-
-            padding:0;
-        }
-
-        .sidebar-menu li{
-            margin-bottom:12px;
-        }
-
-        .sidebar-menu a{
-
-            display:flex;
-
-            align-items:center;
-
-            gap:14px;
-
-            padding:14px 18px;
-
-            border-radius:16px;
-
-            color:#e2e8f0;
-
-            text-decoration:none;
-
-            transition:0.3s;
-
-            font-size:15px;
-
-            font-weight:500;
-        }
-
-        .sidebar-menu a:hover{
-
-            background:rgba(255,255,255,0.08);
-
-            color:white;
-
-            transform:translateX(5px);
-        }
-
-        .sidebar-menu a.active{
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #2563eb,
-                    #3b82f6
-                );
-
-            color:white;
-
-            box-shadow:
-                0 10px 20px rgba(37,99,235,0.35);
-        }
-
-        .sidebar-menu i{
-            font-size:18px;
-        }
-
-        /* ================= MAIN ================= */
-
-        .main{
-
-            margin-left:280px;
-
-            width:calc(100% - 280px);
-
-            min-height:100vh;
-        }
-
-        /* ================= NAVBAR ================= */
-
-        .topbar{
-
-            height:85px;
-
-            background:white;
-
-            display:flex;
-
-            justify-content:space-between;
-
-            align-items:center;
-
-            padding:0 35px;
-
-            box-shadow:
-                0 2px 15px rgba(0,0,0,0.05);
-
-            position:sticky;
-
-            top:0;
-
-            z-index:999;
-        }
-
-        .topbar-title{
-
-            font-size:25px;
-
-            font-weight:700;
-
-            color:#0f172a;
-        }
-
-        .topbar-subtitle{
-
-            font-size:14px;
-
-            color:#64748b;
-        }
-
-        /* ================= PROFILE ================= */
-
-        .profile-box{
-
-            display:flex;
-
-            align-items:center;
-
-            gap:15px;
-        }
-
-        .profile-avatar{
-
-            width:52px;
-            height:52px;
-
-            border-radius:50%;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    #2563eb,
-                    #3b82f6
-                );
-
-            display:flex;
-
-            align-items:center;
-
-            justify-content:center;
-
-            color:white;
-
-            font-size:20px;
-
-            box-shadow:
-                0 5px 15px rgba(59,130,246,0.35);
-        }
-
-        .profile-info h6{
-
-            margin:0;
-
-            font-size:15px;
-
-            font-weight:700;
-
-            color:#0f172a;
-        }
-
-        .profile-info p{
-
-            margin:0;
-
-            font-size:13px;
-
-            color:#64748b;
-        }
-
-        /* ================= DROPDOWN ================= */
-
-        .dropdown-toggle::after{
-            display:none;
-        }
-
-        .profile-btn{
-
-            border:none;
-
-            background:#f1f5f9;
-
-            width:45px;
-            height:45px;
-
-            border-radius:50%;
-
-            transition:0.3s;
-        }
-
-        .profile-btn:hover{
-
-            background:#e2e8f0;
-        }
-
-        .dropdown-menu{
-
-            border:none;
-
-            border-radius:18px;
-
-            box-shadow:
-                0 10px 30px rgba(0,0,0,0.08);
-
-            padding:10px;
-        }
-
-        .dropdown-item{
-
-            border-radius:10px;
-
-            padding:10px 14px;
-
-            font-size:14px;
-
-            transition:0.3s;
-        }
-
-        .dropdown-item:hover{
-
-            background:#f1f5f9;
-        }
-
-        /* ================= CONTENT ================= */
-
-        .content{
-            padding:35px;
-        }
-
-        /* ================= CARD ================= */
-
-        .card{
-
-            border:none;
-
-            border-radius:24px;
-
-            box-shadow:
-                0 5px 25px rgba(0,0,0,0.04);
-        }
-
-        /* ================= TABLE ================= */
-
-        .table{
-
-            border-radius:15px;
-
-            overflow:hidden;
-        }
-
-        .table thead{
-
-            background:#f8fafc;
-        }
-
-        .table th{
-
-            font-weight:600;
-
-            color:#334155;
-        }
-
-        /* ================= BUTTON ================= */
-
-        .btn{
-
-            border-radius:12px;
-
-            font-weight:500;
-        }
-
-        /* ================= RESPONSIVE ================= */
-
-        @media(max-width:992px){
-
-            .sidebar{
-                width:90px;
-            }
-
-            .sidebar-title,
-            .sidebar-subtitle,
-            .sidebar-menu span{
-                display:none;
-            }
-
-            .sidebar-menu a{
-                justify-content:center;
-            }
-
-            .main{
-                margin-left:90px;
-                width:calc(100% - 90px);
-            }
-        }
-
-        @media(max-width:768px){
-
-            .sidebar{
-                display:none;
-            }
-
-            .main{
-                margin-left:0;
-                width:100%;
-            }
-
-            .topbar{
-                padding:20px;
-            }
-
-            .content{
-                padding:20px;
-            }
-        }
-
-    </style>
 
 </head>
 
@@ -549,7 +128,7 @@
 
                         <li class="mb-2">
 
-                            <a href="{% url 'conge_create' %}">
+                            <a href="{% url 'conge_list' %}">
 
                                 <i class="bi bi-calendar-check-fill"></i>
 
@@ -561,7 +140,7 @@
 
                         <li>
 
-                            <a href="{% url 'repos_maladie_create' %}">
+                            <a href="{% url 'repos_maladie_list' %}">
 
                                 <i class="bi bi-heart-pulse-fill"></i>
 
@@ -615,22 +194,20 @@
 
             {% if request.user.role == 'manager' %}
 
+            <!-- ================= DASHBOARD ================= -->
             <li>
 
                 <a href="{% url 'manager_dashboard' %}" class="active">
 
                     <i class="bi bi-grid-fill"></i>
 
-                    <span>
-                        Dashboard
-                    </span>
+                    <span>Dashboard</span>
 
                 </a>
 
             </li>
 
-            <!-- DEMANDES -->
-
+            <!-- ================= DEMANDES ================= -->
             <li>
 
                 <a
@@ -642,47 +219,33 @@
 
                     <i class="bi bi-file-earmark-text-fill"></i>
 
-                    <span>
-                        Demandes
-                    </span>
+                    <span>Demandes</span>
 
                 </a>
 
-                <div
-                    class="collapse"
-                    id="demandeMenu"
-                >
+                <div class="collapse" id="demandeMenu">
 
                     <ul class="list-unstyled ps-4 mt-2">
 
                         <li class="mb-2">
-
-                            <a
-                                href=""
-                                class="text-decoration-none"
-                            >
-
-                                <i class="bi bi-list-task"></i>
-
-                                Suivi des demandes
-
+                            <a href="{% url 'permission_list' %}" class="text-decoration-none">
+                                <i class="bi bi-arrow-right-circle"></i>
+                                Permissions
                             </a>
-
                         </li>
 
-                        <li>
-
-                            <a
-                                href="{% url 'validation_list' %}"
-                                class="text-decoration-none"
-                            >
-
-                                <i class="bi bi-check-circle-fill"></i>
-
-                                Validation des demandes
-
+                        <li class="mb-2">
+                            <a href="{% url 'conge_list' %}" class="text-decoration-none">
+                                <i class="bi bi-calendar-check"></i>
+                                Congés
                             </a>
+                        </li>
 
+                        <li class="mb-2">
+                            <a href="{% url 'repos_maladie_list' %}" class="text-decoration-none">
+                                <i class="bi bi-heart-pulse"></i>
+                                Repos maladie
+                            </a>
                         </li>
 
                     </ul>
@@ -691,17 +254,71 @@
 
             </li>
 
-            <!-- EQUIPE -->
+            <!-- ================= VALIDATION ================= -->
+            <li>
 
+                <a
+                    data-bs-toggle="collapse"
+                    href="#validationMenu"
+                    role="button"
+                    aria-expanded="false"
+                >
+
+                    <i class="bi bi-check-circle-fill"></i>
+
+                    <span>Validation</span>
+
+                </a>
+
+                <div class="collapse" id="validationMenu">
+
+                    <ul class="list-unstyled ps-4 mt-2">
+
+                        <li class="mb-2">
+                            <a href="" class="text-decoration-none">
+                                Permissions en attente
+                            </a>
+                        </li>
+
+                        <li class="mb-2">
+                            <a href="" class="text-decoration-none">
+                                Congés en attente
+                            </a>
+                        </li>
+
+                        <li class="mb-2">
+                            <a href="" class="text-decoration-none">
+                                Repos maladie en attente
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </li>
+
+            <!-- ================= EQUIPE ================= -->
             <li>
 
                 <a href="">
 
                     <i class="bi bi-people-fill"></i>
 
-                    <span>
-                        Mon équipe
-                    </span>
+                    <span>Mon équipe</span>
+
+                </a>
+
+            </li>
+
+            <!-- ================= STATISTIQUES ================= -->
+            <li>
+
+                <a href="">
+
+                    <i class="bi bi-bar-chart-fill"></i>
+
+                    <span>Statistiques</span>
 
                 </a>
 
@@ -833,11 +450,10 @@
 
             <div>
 
-                <div class="topbar-title">
+                <p class="text-muted mb-0">
 
-                    Tableau de bord RH
-
-                </div>
+                    Votre espace personnel
+                </p>
 
                 <div class="topbar-subtitle">
 
@@ -861,14 +477,46 @@
 
                     <h6>
 
-                        {{ request.user.employe.nom }}
-                        {{ request.user.employe.prenom }}
+                        {{ request.user.employe }}
 
                     </h6>
 
                     <p>
+                        {% if request.user.role == 'admin' %}
 
-                        {{ request.user.get_role_display }}
+                                    <span class="badge bg-danger">
+
+                                        Administrateur
+
+                                    </span>
+
+                                {% elif request.user.role == 'rh' %}
+
+                                    <span class="badge bg-primary">
+
+                                        RH
+
+                                    </span>
+
+                                {% elif request.user.role == 'manager' %}
+
+                                    <span class="badge bg-warning text-dark">
+
+                                        Manager
+
+                                    </span>
+
+                                {% elif request.user.role == 'employe' %}
+
+                                    <span class="badge bg-success">
+
+                                        Employé
+
+                                    </span>
+
+                                {% endif %}
+
+                        {{ request.user.employe.departement }}
 
                     </p>
 

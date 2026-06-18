@@ -1,0 +1,246 @@
+{% extends 'base/base.html' %}
+
+{% block title %}
+Congés
+{% endblock %}
+
+{% block content %}
+
+<div class="container-fluid">
+
+    <!-- ================= HEADER ================= -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h3 class="fw-bold">
+               {% if request.user.role == 'employe' %}
+                    Suivi de vos demandes de congé
+
+                {% elif request.user.role == 'manager' %}
+                    Congés des employés de votre département
+
+                {% elif request.user.role == 'rh' %}
+                    Validation RH des congés
+
+                {% else %}
+                    Administration de tous les congés
+                {% endif %}
+            </h3>
+
+        </div>
+
+        <!-- BOUTON AJOUT EMPLOYÉ -->
+        {% if request.user.role == 'employe' %}
+        <a
+            href="{% url 'conge_create' %}"
+            class="btn btn-success rounded-3 px-4"
+        >
+            <i class="bi bi-plus-circle"></i>
+            Nouvelle demande
+        </a>
+        {% endif %}
+
+    </div>
+
+    <!-- ================= TABLE ================= -->
+    <div class="card border-0 shadow-sm rounded-4">
+
+        <div class="card-body p-4">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <!-- HEADER TABLE -->
+                    <thead class="table-light">
+                        <tr>
+
+                            {% if request.user.role != 'employe' %}
+                                <th>Employé</th>
+                            {% endif %}
+
+                            <th>Date début</th>
+                            <th>Nombre de jours</th>
+                            <th>Date fin</th>
+                            <th>Statut</th>
+                            <th class="text-center">Actions</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for conge in conges %}
+
+                        <tr>
+
+
+                            <!-- EMPLOYÉ (si manager / RH / admin) -->
+                            {% if request.user.role != 'employe' %}
+                            <td>
+
+                                <div class="d-flex align-items-center gap-2">
+
+                                    <div
+                                        class="rounded-circle bg-success text-white d-flex justify-content-center align-items-center"
+                                        style="width:40px;height:40px;font-size:14px;font-weight:600;"
+                                    >
+
+                                        {{ conge.employe.user.first_name|slice:":1" }}
+                                        {{ conge.employe.user.last_name|slice:":1" }}
+
+                                    </div>
+
+                                    <div>
+
+                                        <div class="fw-semibold">
+
+                                            {{ conge.employe.user.first_name }}
+                                            {{ conge.employe.user.last_name }}
+
+                                        </div>
+
+                                        <small class="text-muted">
+                                            {{ conge.employe.fonction }}
+                                        </small>
+
+                                    </div>
+
+                                </div>
+
+                            </td>
+                            {% endif %}
+
+                            <!-- DATE DEBUT -->
+                            <td>
+                                {{ conge.date_debut }}
+                            </td>
+
+                            <!-- NOMBRE JOURS -->
+                            <td>
+                                {{ conge.nombre_jours }} jours
+                            </td>
+
+                            <!-- DATE FIN -->
+                            <td>
+                                {{ conge.date_fin }}
+                            </td>
+
+                            <!-- STATUT -->
+                            <td>
+
+                                {% if conge.statut == 'ACCEPTEE' %}
+
+                                <span class="badge bg-success rounded-pill px-3 py-2">
+                                    <i class="bi bi-check-circle"></i>
+                                    Accepté
+                                </span>
+
+                                {% elif conge.statut == 'REFUSEE' %}
+
+                                <span class="badge bg-danger rounded-pill px-3 py-2">
+                                    <i class="bi bi-x-circle"></i>
+                                    Refusé
+                                </span>
+
+                                {% else %}
+
+                                <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
+                                    <i class="bi bi-clock"></i>
+                                    En attente
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                            <!-- ACTIONS -->
+                            <td>
+
+                                <div class="d-flex justify-content-center gap-2">
+
+                                    <!-- DETAILS -->
+                                    <a
+                                        href="{% url 'conge_detail' conge.id %}"
+                                        class="btn btn-light border rounded-3"
+                                    >
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+
+                                    <!-- EMPLOYÉ -->
+                                    {% if request.user.role == 'employe' %}
+
+                                        {% if conge.statut == 'en attente' %}
+
+                                        <a
+                                            href="{% url 'conge_update' conge.id %}"
+                                            class="btn btn-warning rounded-3"
+                                        >
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+
+                                        <a
+                                            href="{% url 'conge_delete' conge.id %}"
+                                            class="btn btn-danger rounded-3"
+                                            onclick="return confirm('Voulez-vous supprimer cette demande ?')"
+                                        >
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+
+                                        {% endif %}
+
+                                    {% endif %}
+
+                                    <!-- RH / MANAGER VALIDATION -->
+                                    {% if request.user.role == 'manager' or request.user.role == 'rh' %}
+
+                                        {% if conge.statut == 'EN_ATTENTE' %}
+
+                                        <a
+                                            href="{% url 'validation_conge' conge.id %}"
+                                            class="btn btn-success rounded-3"
+                                        >
+                                            <i class="bi bi-check2-circle"></i>
+                                        </a>
+
+                                        {% endif %}
+
+                                    {% endif %}
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+                            <td colspan="7" class="text-center py-5">
+
+                                <div class="text-muted">
+                                    <i class="bi bi-folder-x" style="font-size:50px;"></i>
+                                    <p class="mt-3">
+                                        Aucun congé trouvé
+                                    </p>
+                                </div>
+
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
