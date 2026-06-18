@@ -10,25 +10,25 @@ urlpatterns = [
     ),
 
     path(
-        'conges/create/',
+        'create/',
         conge_create,
         name='conge_create'
     ),
 
     path(
-        'conges/<int:pk>/',
+        'detail/<int:pk>/',
         conge_detail,
         name='conge_detail'
     ),
 
     path(
-        'conges/update/<int:pk>/',
+        'update/<int:pk>/',
         conge_update,
         name='conge_update'
     ),
 
     path(
-        'conges/delete/<int:pk>/',
+        'delete/<int:pk>/',
         conge_delete,
         name='conge_delete'
     ),

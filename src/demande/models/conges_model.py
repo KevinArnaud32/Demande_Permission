@@ -14,7 +14,10 @@ class Conges(Demande):
         return f"Congé - {self.employe}"
 
     def save(self, *args, **kwargs):
-        self.date_fin = (self.date_debut + timedelta(days=self.nombre_jours))
+
+        if self.date_debut and self.nombre_jours:
+
+            self.date_fin = self.date_debut + timedelta(days=self.nombre_jours)
 
         super().save(*args, **kwargs)
 

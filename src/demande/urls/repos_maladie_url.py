@@ -10,25 +10,25 @@ urlpatterns = [
     ),
 
     path(
-        'repos-maladies/create/',
+        'create/',
         repos_maladie_create,
         name='repos_maladie_create'
     ),
 
     path(
-        'repos-maladies/<int:pk>/',
+        'detail/<int:pk>/',
         repos_maladie_detail,
         name='repos_maladie_detail'
     ),
 
     path(
-        'repos-maladies/update/<int:pk>/',
+        'update/<int:pk>/',
         repos_maladie_update,
         name='repos_maladie_update'
     ),
 
     path(
-        'repos-maladies/delete/<int:pk>/',
+        'delete/<int:pk>/',
         repos_maladie_delete,
         name='repos_maladie_delete'
     ),

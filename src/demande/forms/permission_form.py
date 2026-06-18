@@ -21,10 +21,10 @@ class PermissionForm(forms.ModelForm):
                 }
             ),
 
-            'heure_sortie': forms.DateTimeInput(
+            'heure_sortie': forms.TimeInput(
                 attrs={
                     'class': 'form-control',
-                    'type': 'datetime-local'
+                    'type': 'time'
                 }
             ),
 

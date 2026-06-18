@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
+from core.decorators import role_required
 from demande.models.permission_model import Permission
 from demande.forms.permission_form import PermissionForm
 from demande.models.validation_model import Validation
@@ -15,7 +17,7 @@ def permission_list(request):
     if user.role == 'employe':
         permissions = Permission.objects.filter(employe=request.user.employe)
     elif user.role == 'manager':
-        permissions = Permission.objects.filter(employe__superieur=request.user.employe)
+        permissions = Permission.objects.filter(employe__departement=user.employe.departement).exclude(employe=user.employe)
     elif user.role in ['rh', 'admin']:
         permissions = Permission.objects.all()
 
@@ -28,13 +30,11 @@ def permission_list(request):
 
 
 
-@login_required
+@login_required()
+@role_required('employe')
 def permission_create(request):
 
     user = request.user
-
-    if user.role != 'employe':
-        return redirect('login')
 
     permission_form = PermissionForm()
 
@@ -45,7 +45,7 @@ def permission_create(request):
             permission = permission_form.save(commit=False)
             permission.employe = user.employe
             permission.save()
-
+            messages.success(request, "Demande de permission envoyée avec succès.")
             return redirect('permission_list')
 
 
@@ -66,7 +66,7 @@ def permission_detail(request, pk):
 
     validations = Validation.objects.filter(
         type_demande='permission',
-        demande_id=permission.id).order_by('-date_action')
+        demande_id=permission.id).order_by('-date_creation')
 
     context = {
         'permission': permission,
@@ -109,21 +109,8 @@ def permission_update(request, pk):
 @login_required
 def permission_delete(request, pk):
 
-    permission = get_object_or_404(
-        Permission,
-        pk=pk
-    )
+    permission = get_object_or_404(Permission, pk=pk)
 
-    if request.method == 'POST':
+    permission.delete()
 
-        permission.delete()
-
-        return redirect(
-            'permission_list'
-        )
-
-    context = {
-        'permission': permission
-    }
-
-    return render(request,'permission/delete.html', context)
+    return redirect('permission_list')

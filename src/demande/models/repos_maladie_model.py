@@ -1,7 +1,5 @@
 from datetime import timedelta
-
 from django.db import models
-
 from demande.models.demande_model import Demande
 
 
