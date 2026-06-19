@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-
+from itertools import chain
 from core.decorators import role_required
 from demande.models.conges_model import Conges
 from demande.models.permission_model import Permission
@@ -74,6 +74,28 @@ def employe_dashboard(request):
 
     employe = request.user.employe
 
+    # derniers demandes
+    permissions = Permission.objects.filter(employe=employe)
+    conges = Conges.objects.filter(employe=employe)
+    repos_maladies = ReposMaladie.objects.filter(employe=employe)
+
+    # Ajouter un attribut "type" pour l'affichage
+    for p in permissions:
+        p.type = "Permission"
+
+    for c in conges:
+        c.type = "Congé"
+
+    for r in repos_maladies:
+        r.type = "Repos maladie"
+
+    # Fusionner et trier par date de création décroissante
+    dernieres_demandes = sorted(
+        chain(permissions, conges, repos_maladies),
+        key=lambda demande: demande.date_creation,
+        reverse=True
+    )[:5]
+
     # total demandes
     total_permissions = Permission.objects.filter(employe=employe).count()
     total_repos_maladies = ReposMaladie.objects.filter(employe=employe).count()
@@ -101,6 +123,7 @@ def employe_dashboard(request):
         'demandes_attente': demandes_attente,
         'total_conges': total_conges,
         'demande_accepte': demande_accepte,
+        'dernieres_demandes': dernieres_demandes,
     }
 
     return render(request,'dashboard/employe_dashboard.html', context)
