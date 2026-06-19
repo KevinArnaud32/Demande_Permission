@@ -19,7 +19,7 @@ def conge_list(request):
     elif user.role == 'rh':
         conges = Conges.objects.all().order_by('-date_creation')
     elif user.role == 'manager':
-        pass
+        conges = Conges.objects.filter(employe__departement=user.employe.departement)
 
 
     context = {

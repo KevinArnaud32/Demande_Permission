@@ -20,7 +20,7 @@ def repos_maladie_list(request):
     elif user.role in ['rh', 'admin']:
         repos_maladies = ReposMaladie.objects.all().order_by('-date_creation')
     elif user.role == 'manager':
-        pass
+        repos_maladies = ReposMaladie.objects.filter(employe__departement=user.employe.departement).exclude(employe=employe)
 
     context = {
         'repos_maladies': repos_maladies
