@@ -1,11 +1,9 @@
-from datetime import timedelta
-
 from  django.db import models
 from employe.models.employe_model import Employe
 
 
 class SoldesConges(models.Model):
-    employe_id = models.OneToOneField(Employe, on_delete=models.CASCADE, related_name="solde_conge")
+    employe = models.OneToOneField(Employe, on_delete=models.CASCADE, related_name="solde_conge")
     total_jours = models.PositiveIntegerField(default=30)
     jours_utilise = models.PositiveIntegerField(default=0)
     jours_restant = models.PositiveIntegerField(null=True, blank=True)
