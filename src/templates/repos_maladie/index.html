@@ -94,8 +94,8 @@ Repos maladie
                                         style="width:40px;height:40px;font-size:14px;font-weight:600;"
                                     >
 
-                                        {{ repos.employe.user.first_name|slice:":1" }}
-                                        {{ repos.employe.user.last_name|slice:":1" }}
+                                        {{ repos.employe.nom|slice:":1" }}
+                                        {{ repos.employe.prenom|slice:":1" }}
 
                                     </div>
 
@@ -211,13 +211,21 @@ Repos maladie
                                     <!-- MANAGER / RH -->
                                     {% if request.user.role == 'manager' or request.user.role == 'rh' %}
 
-                                        {% if repos.statut == 'EN_ATTENTE' %}
+                                        {% if repos.statut == 'en attente' %}
 
                                         <a
-                                            href="{% url 'validation_repos_maladie' repos.id %}"
+                                            href=""
                                             class="btn btn-success rounded-3"
                                         >
                                             <i class="bi bi-check2-circle"></i>
+                                        </a>
+
+                                        <a href=""
+                                           class="btn btn-danger rounded-3"
+                                           title="Refuser">
+
+                                            <i class="bi bi-x-circle"></i>
+
                                         </a>
 
                                         {% endif %}

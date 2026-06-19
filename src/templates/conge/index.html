@@ -87,8 +87,8 @@ Congés
                                         style="width:40px;height:40px;font-size:14px;font-weight:600;"
                                     >
 
-                                        {{ conge.employe.user.first_name|slice:":1" }}
-                                        {{ conge.employe.user.last_name|slice:":1" }}
+                                        {{ conge.employe.nom|slice:":1" }}
+                                        {{ conge.employe.prenom|slice:":1" }}
 
                                     </div>
 
@@ -96,8 +96,8 @@ Congés
 
                                         <div class="fw-semibold">
 
-                                            {{ conge.employe.user.first_name }}
-                                            {{ conge.employe.user.last_name }}
+                                            {{ conge.employe.nom }}
+                                            {{ conge.employe.prenom }}
 
                                         </div>
 
@@ -195,13 +195,21 @@ Congés
                                     <!-- RH / MANAGER VALIDATION -->
                                     {% if request.user.role == 'manager' or request.user.role == 'rh' %}
 
-                                        {% if conge.statut == 'EN_ATTENTE' %}
+                                        {% if conge.statut == 'en attente' %}
 
                                         <a
-                                            href="{% url 'validation_conge' conge.id %}"
+                                            href=""
                                             class="btn btn-success rounded-3"
                                         >
                                             <i class="bi bi-check2-circle"></i>
+                                        </a>
+
+                                        <a href=""
+                                           class="btn btn-danger rounded-3"
+                                           title="Refuser">
+
+                                            <i class="bi bi-x-circle"></i>
+
                                         </a>
 
                                         {% endif %}
