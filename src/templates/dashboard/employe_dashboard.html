@@ -181,14 +181,14 @@ Dashboard Employé
                                     <td>{{ demande.date_creation|date:"d/m/Y" }}</td>
                                     <td>
 
-                                        {% if demande.statut == 'ACCEPTEE' %}
-                                            <span class="badge bg-success">OK</span>
+                                        {% if demande.statut == 'accepte' %}
+                                            <span class="badge bg-success">Accepté</span>
 
-                                        {% elif demande.statut == 'REFUSEE' %}
-                                            <span class="badge bg-danger">NO</span>
+                                        {% elif demande.statut == 'refuse' %}
+                                            <span class="badge bg-danger">Refusé</span>
 
                                         {% else %}
-                                            <span class="badge bg-warning text-dark">WAIT</span>
+                                            <span class="badge bg-warning text-dark">En attente</span>
                                         {% endif %}
 
                                     </td>
