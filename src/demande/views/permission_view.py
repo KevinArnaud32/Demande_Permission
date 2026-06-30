@@ -114,3 +114,94 @@ def permission_delete(request, pk):
     permission.delete()
 
     return redirect('permission_list')
+
+
+@login_required
+def valider_permission(request, pk):
+
+    permission = get_object_or_404(Permission, pk=pk)
+
+    user = request.user
+
+    # verification du role utilisateur
+
+    if request.user.role != 'manager':
+        return redirect('permission_list')
+
+    if permission.employe.departement != user.employe.departement:
+        return redirect("permission_list")
+
+    # Empêcher de valider sa propre demande
+    if permission.employe == user.employe:
+        messages.error(request, "Vous ne pouvez pas valider votre propre demande.")
+        return redirect("permission_detail", pk=pk)
+
+
+    # Vérifier le statut
+    if permission.statut != "en attente":
+        messages.warning(request, "Cette demande a déjà été traitée.")
+        return redirect("permission_detail", pk=pk)
+
+
+    # Mise à jour du statut
+    permission.statut = "accepte"
+    permission.save()
+
+    # Historique
+    Validation.objects.create(
+        demande_id=permission.id,
+        validateur=user,
+        type_demande="permission",
+        decision="accepte",
+        commentaire="Demande validée"
+    )
+
+    messages.success(request, "La demande a été validée avec succès.")
+
+    return redirect("permission_detail", pk=pk)
+
+
+
+@login_required
+def refuser_permission(request, pk):
+
+    permission = get_object_or_404(Permission, pk=pk)
+
+    user = request.user
+
+    # verification du role utilisateur
+
+    if request.user.role != 'manager':
+        return redirect('permission_list')
+
+    if permission.employe.departement != user.employe.departement:
+        return redirect("permission_list")
+
+    # Empêcher de valider sa propre demande
+    if permission.employe == user.employe:
+        messages.error(request, "Vous ne pouvez pas valider votre propre demande.")
+        return redirect("permission_detail", pk=pk)
+
+
+    # Vérifier le statut
+    if permission.statut != "en attente":
+        messages.warning(request, "Cette demande a déjà été traitée.")
+        return redirect("permission_detail", pk=pk)
+
+
+    # Mise à jour du statut
+    permission.statut = "refusé"
+    permission.save()
+
+    # Historique
+    Validation.objects.create(
+        demande_id=permission.id,
+        validateur=user,
+        type_demande="permission",
+        decision="refusé",
+        commentaire="Demande validée"
+    )
+
+    messages.success(request, "La demande a été validée avec succès.")
+
+    return redirect("permission_detail", pk=pk)

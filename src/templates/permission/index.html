@@ -60,6 +60,7 @@ Permissions
 
                         {% if request.user.role == 'employe' %}
 
+                            <th>Date</th>
                             <th>Motif</th>
                             <th>Durée</th>
                             <th>Statut</th>
@@ -133,7 +134,7 @@ Permissions
                         {% if request.user.role == 'employe' or request.user.role == 'admin' or request.user.is_superuser %}
 
                         <td>
-                            {{ permission.date_creation|date:"d/m/Y" }}
+                            {{ permission.date_creation|date:"d F Y H:i" }}
                         </td>
 
                         {% endif %}
@@ -259,7 +260,7 @@ Permissions
 
                                     {% if permission.statut == 'en attente' %}
 
-                                    <a href=""
+                                    <a href="{% url 'valider_permission' permission.id %}"
                                        class="btn btn-success rounded-3"
                                        title="Valider">
 
@@ -267,7 +268,7 @@ Permissions
 
                                     </a>
 
-                                    <a href=""
+                                    <a href="{% url 'refuser_permission' permission.id %}"
                                        class="btn btn-danger rounded-3"
                                        title="Refuser">
 
