@@ -1,5 +1,7 @@
 {% extends 'base/base.html' %}
 
+{% load i18n %}
+
 {% block title %}
 Congés
 {% endblock %}
@@ -114,7 +116,9 @@ Congés
 
                             <!-- DATE DEBUT -->
                             <td>
-                                {{ conge.date_debut }}
+                                {% language 'fr' %}
+                                    {{ conge.date_debut|date:"d F Y" }}
+                                {% endlanguage %}
                             </td>
 
                             <!-- NOMBRE JOURS -->
@@ -124,7 +128,9 @@ Congés
 
                             <!-- DATE FIN -->
                             <td>
-                                {{ conge.date_fin }}
+                                {% language 'fr' %}
+                                    {{ conge.date_fin|date:"d F Y" }}
+                                {% endlanguage %}
                             </td>
 
                             <!-- STATUT -->
