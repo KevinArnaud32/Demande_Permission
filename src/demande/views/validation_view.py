@@ -6,6 +6,7 @@ from demande.models.permission_model import Permission
 from demande.models.conges_model import Conges
 from demande.models.repos_maladie_model import ReposMaladie
 from core.decorators import role_required
+from django.contrib import messages
 
 
 @login_required
@@ -22,63 +23,6 @@ def validation_list(request):
 
 
 
-@login_required
-def validate_permission(request, pk):
-
-    permission = get_object_or_404(
-        Permission,
-        pk=pk
-    )
-
-    # EMPLOYE NE PEUT PAS VALIDER
-
-    if request.user.role == 'employe':
-        return redirect('dashboard')
-
-    # PERMISSION DEJA VALIDEE NE PAS ETRE VALIDE UNE SECONDE FOIS ( Double validation empêchée )
-
-    validation_exist = Validation.objects.filter(
-        type_demande='permission',
-        demande_id=permission.id
-    ).exists()
-
-    if validation_exist:
-        return redirect('permission_list')
-
-    # EMPÊCHER AUTO VALIDATION
-
-    if permission.employe == request.user.employe:
-        return redirect('dashboard')
-
-
-    # ENREGISTRMENT D'UNE VALIDATION
-
-    validation_form = ValidationForm()
-
-    if request.method == 'POST':
-
-        validation_form = ValidationForm(request.POST)
-
-        if validation_form.is_valid():
-            validation = validation_form.save(commit=False)
-            validation.validateur = request.user
-            validation.type_demande = "permission"
-            validation.demande_id = permission.id
-            validation.save()
-
-            # mise à jour du statut permission
-
-            permission.statut = validation.decision
-            permission.save()
-
-            return redirect('permission_list')
-
-    context = {
-        'permission': permission,
-        'validation_form': validation_form,
-    }
-
-    return render(request,'validation/permission_validation.html',context)
 
 
 

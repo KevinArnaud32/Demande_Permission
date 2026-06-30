@@ -19,7 +19,7 @@ class Validation(DateTime):
     validateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE, related_name="validation_effectuees")
     type_demande = models.CharField(max_length=255, choices=TYPE_DEMANDE)
     decision = models.CharField(max_length=10, choices=ACTION_CHOICE)
-    commentaire = models.CharField(max_length=255)
+    commentaire = models.CharField(max_length=255, default="")
 
     class Meta:
         verbose_name = "Validation"
