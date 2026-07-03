@@ -76,6 +76,7 @@ def permission_detail(request, pk):
     return render(request,'permission/detail.html', context)
 
 
+
 @login_required
 def permission_update(request, pk):
 
@@ -179,7 +180,7 @@ def refuser_permission(request, pk):
 
     # Empêcher de valider sa propre demande
     if permission.employe == user.employe:
-        messages.error(request, "Vous ne pouvez pas valider votre propre demande.")
+        messages.error(request, "Vous ne pouvez pas traiter votre propre demande.")
         return redirect("permission_detail", pk=pk)
 
 
@@ -190,7 +191,7 @@ def refuser_permission(request, pk):
 
 
     # Mise à jour du statut
-    permission.statut = "refusé"
+    permission.statut = "refuse"
     permission.save()
 
     # Historique
@@ -198,10 +199,10 @@ def refuser_permission(request, pk):
         demande_id=permission.id,
         validateur=user,
         type_demande="permission",
-        decision="refusé",
-        commentaire="Demande validée"
+        decision="refuse",
+        commentaire="Demande refusée"
     )
 
-    messages.success(request, "La demande a été validée avec succès.")
+    messages.success(request, "La demande a été refusée.")
 
     return redirect("permission_detail", pk=pk)
