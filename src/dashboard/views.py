@@ -27,7 +27,6 @@ def dashboard(request):
 
 
 
-
 @login_required
 @role_required('admin')
 def admin_dashboard(request):
