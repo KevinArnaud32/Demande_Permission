@@ -1,7 +1,5 @@
 from django.urls import path
-from demande.views.permission_view import (permission_list, permission_create, permission_delete,
-permission_detail, permission_update, valider_permission, refuser_permission)
-
+from demande.views.permission_view import *
 
 urlpatterns = [
 
