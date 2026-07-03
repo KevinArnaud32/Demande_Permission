@@ -43,7 +43,7 @@ Détails repos maladie
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Employé</label>
                             <div class="form-control bg-light">
-                                {{ repos.employe }}
+                                {{ repos_maladie.employe }}
                             </div>
                         </div>
                         {% endif %}
@@ -110,22 +110,62 @@ Détails repos maladie
                     </div>
 
                     <!-- ACTIONS -->
-                    <div class="d-flex justify-content-end gap-3 mt-5">
+                    <div class="d-flex justify-content-end gap-2 mt-5">
 
                         <a
                             href="{% url 'repos_maladie_list' %}"
-                            class="btn btn-light border px-4 py-2 rounded-3"
+                            class="btn btn-secondary"
                         >
                             Retour
                         </a>
 
-                        {% if request.user.role == 'employe' and repos.statut == 'EN_ATTENTE' %}
+                        {% if request.user.role == "employe" and repos_maladie.statut == "en attente" %}
+
                         <a
-                            href="{% url 'repos_maladie_update' repos.id %}"
-                            class="btn btn-warning px-4 py-2 rounded-3"
+                            href=""
+                            class="btn btn-warning"
                         >
                             Modifier
                         </a>
+
+                        {% endif %}
+
+                        {% if request.user.role == "manager" and repos_maladie.statut == "en attente" %}
+
+                        <a
+                            href=""
+                            class="btn btn-success"
+                        >
+                            <i class="bi bi-check-circle-fill"></i>
+                            Valider
+                        </a>
+
+                        <a
+                            href=""
+                            class="btn btn-danger"
+                        >
+                            <i class="bi bi-x-circle-fill"></i>
+                            Refuser
+                        </a>
+
+                        {% endif %}
+
+                        {% if request.user.role == "admin" or request.user.is_superuser %}
+
+                        <a
+                            href=""
+                            class="btn btn-warning"
+                        >
+                            Modifier
+                        </a>
+
+                        <a
+                            href=""
+                            class="btn btn-danger"
+                        >
+                            Supprimer
+                        </a>
+
                         {% endif %}
 
                     </div>

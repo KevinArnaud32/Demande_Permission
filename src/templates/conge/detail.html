@@ -101,11 +101,11 @@ Détails du congé
                             </label>
 
                             <div>
-                                {% if conge.statut == 'ACCEPTEE' %}
+                                {% if conge.statut == 'accepte' %}
                                     <span class="badge bg-success px-3 py-2">
                                         Accepté
                                     </span>
-                                {% elif conge.statut == 'REFUSEE' %}
+                                {% elif conge.statut == 'refuse' %}
                                     <span class="badge bg-danger px-3 py-2">
                                         Refusé
                                     </span>
@@ -132,23 +132,62 @@ Détails du congé
 
                     <!-- BOUTONS -->
 
-                    <div class="d-flex justify-content-end gap-3 mt-5">
+                    <div class="d-flex justify-content-end gap-2 mt-5">
 
                         <a
                             href="{% url 'conge_list' %}"
-                            class="btn btn-light border px-4 py-2 rounded-3"
+                            class="btn btn-secondary"
                         >
                             Retour
                         </a>
 
-                        {% if request.user.role == 'employe' and conge.statut == 'en attente' %}
+                        {% if request.user.role == "employe" and conge.statut == "en attente" %}
+
                         <a
-                            href="{% url 'conges_update' conge.id %}"
-                            class="btn btn-warning px-4 py-2 rounded-3"
+                            href="{% url 'conge_update' conge.id %}"
+                            class="btn btn-warning"
                         >
-                            <i class="bi bi-pencil-square"></i>
                             Modifier
                         </a>
+
+                        {% endif %}
+
+                        {% if request.user.role == "manager" and conge.statut == "en attente" %}
+
+                        <a
+                            href="{% url 'valider_conge' conge.id %}"
+                            class="btn btn-success"
+                        >
+                            <i class="bi bi-check-circle-fill"></i>
+                            Valider
+                        </a>
+
+                        <a
+                            href="{% url 'refuser_conge' conge.id %}"
+                            class="btn btn-danger"
+                        >
+                            <i class="bi bi-x-circle-fill"></i>
+                            Refuser
+                        </a>
+
+                        {% endif %}
+
+                        {% if request.user.role == "admin" or request.user.is_superuser %}
+
+                        <a
+                            href="{% url 'conge_update' conge.id %}"
+                            class="btn btn-warning"
+                        >
+                            Modifier
+                        </a>
+
+                        <a
+                            href="{% url 'conge_delete' conge.id %}"
+                            class="btn btn-danger"
+                        >
+                            Supprimer
+                        </a>
+
                         {% endif %}
 
                     </div>

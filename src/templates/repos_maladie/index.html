@@ -103,8 +103,8 @@ Repos maladie
 
                                         <div class="fw-semibold">
 
-                                            {{ repos.employe.user.first_name }}
-                                            {{ repos.employe.user.last_name }}
+                                            {{ repos.employe.nom }}
+                                            {{ repos.employe.prenom }}
 
                                         </div>
 
@@ -149,13 +149,13 @@ Repos maladie
                             <!-- STATUT -->
                             <td>
 
-                                {% if repos.statut == 'ACCEPTEE' %}
+                                {% if repos.statut == 'accepte' %}
 
                                 <span class="badge bg-success px-3 py-2">
                                     Accepté
                                 </span>
 
-                                {% elif repos.statut == 'REFUSEE' %}
+                                {% elif repos.statut == 'refuse' %}
 
                                 <span class="badge bg-danger px-3 py-2">
                                     Refusé
@@ -180,6 +180,7 @@ Repos maladie
                                     <a
                                         href="{% url 'repos_maladie_detail' repos.id %}"
                                         class="btn btn-light border rounded-3"
+                                        title="Voir plus"
                                     >
                                         <i class="bi bi-eye"></i>
                                     </a>
@@ -216,6 +217,7 @@ Repos maladie
                                         <a
                                             href=""
                                             class="btn btn-success rounded-3"
+                                            title="Accepter"
                                         >
                                             <i class="bi bi-check2-circle"></i>
                                         </a>

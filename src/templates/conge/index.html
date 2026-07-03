@@ -136,14 +136,14 @@ Congés
                             <!-- STATUT -->
                             <td>
 
-                                {% if conge.statut == 'ACCEPTEE' %}
+                                {% if conge.statut == 'accepte' %}
 
                                 <span class="badge bg-success rounded-pill px-3 py-2">
                                     <i class="bi bi-check-circle"></i>
                                     Accepté
                                 </span>
 
-                                {% elif conge.statut == 'REFUSEE' %}
+                                {% elif conge.statut == 'refuse' %}
 
                                 <span class="badge bg-danger rounded-pill px-3 py-2">
                                     <i class="bi bi-x-circle"></i>
