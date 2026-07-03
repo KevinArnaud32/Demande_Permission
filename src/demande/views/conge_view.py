@@ -1,9 +1,11 @@
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from core.decorators import role_required
 from demande.models.conges_model import Conges
 from demande.forms.conges_form import CongesForm
+from demande.models.validation_model import Validation
 
 
 def conge_list(request):
@@ -130,3 +132,73 @@ def conge_delete(request, pk):
     conge.delete()
 
     return redirect('conge_list')
+
+
+
+@login_required()
+def valider_conge(request, pk):
+
+    conge = get_object_or_404(Conges, pk=pk)
+
+    user = request.user
+
+    # Empêcher de valider sa propre demande
+    if conge.employe == user.employe:
+        messages.error(request, "Vous ne pouvez pas valider votre propre demande.")
+        return redirect("permission_detail", pk=pk)
+
+    # Vérifier le statut
+    if conge.statut != "en attente":
+        messages.warning(request, "Cette demande a déjà été traitée.")
+        return redirect("permission_detail", pk=pk)
+
+
+    conge.statut = 'accepte'
+    conge.save()
+
+    # Historique
+    Validation.objects.create(
+        demande_id=conge.id,
+        validateur=user,
+        type_demande="conge",
+        decision="accepte",
+        commentaire="Demande validée"
+    )
+
+
+    return redirect('conge_detail', pk=pk)
+
+
+
+@login_required()
+def refuser_conge(request, pk):
+
+    conge = get_object_or_404(Conges, pk=pk)
+
+    user = request.user
+
+    # Empêcher de valider sa propre demande
+    if conge.employe == user.employe:
+        messages.error(request, "Vous ne pouvez pas valider votre propre demande.")
+        return redirect("permission_detail", pk=pk)
+
+    # Vérifier le statut
+    if conge.statut != "en attente":
+        messages.warning(request, "Cette demande a déjà été traitée.")
+        return redirect("permission_detail", pk=pk)
+
+
+    conge.statut = 'refuse'
+    conge.save()
+
+    # Historique
+    Validation.objects.create(
+        demande_id=conge.id,
+        validateur=user,
+        type_demande="conge",
+        decision="refuse",
+        commentaire="Demande refusée"
+    )
+
+
+    return redirect('conge_detail', pk=pk)
