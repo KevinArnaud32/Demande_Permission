@@ -65,7 +65,11 @@ Congés
                             <th>Date début</th>
                             <th>Nombre de jours</th>
                             <th>Date fin</th>
-                            <th>Statut</th>
+
+                            {% if request.user.role != 'manager' and request.user.role != 'rh' %}
+                                <th>Statut</th>
+                            {% endif %}
+
                             <th class="text-center">Actions</th>
 
                         </tr>
@@ -134,6 +138,7 @@ Congés
                             </td>
 
                             <!-- STATUT -->
+                            {% if request.user.role != 'manager' and request.user.role != 'rh' %}
                             <td>
 
                                 {% if conge.statut == 'accepte' %}
@@ -160,6 +165,7 @@ Congés
                                 {% endif %}
 
                             </td>
+                            {% endif %}
 
                             <!-- ACTIONS -->
                             <td>
@@ -174,7 +180,7 @@ Congés
                                         <i class="bi bi-eye"></i>
                                     </a>
 
-                                    <!-- EMPLOYÉ -->
+                                    <!-- ================= EMPLOYÉ ================= -->
                                     {% if request.user.role == 'employe' %}
 
                                         {% if conge.statut == 'en attente' %}
@@ -182,6 +188,7 @@ Congés
                                         <a
                                             href="{% url 'conge_update' conge.id %}"
                                             class="btn btn-warning rounded-3"
+                                            title="Modifier"
                                         >
                                             <i class="bi bi-pencil-square"></i>
                                         </a>
@@ -190,6 +197,7 @@ Congés
                                             href="{% url 'conge_delete' conge.id %}"
                                             class="btn btn-danger rounded-3"
                                             onclick="return confirm('Voulez-vous supprimer cette demande ?')"
+                                            title="Suprimer"
                                         >
                                             <i class="bi bi-trash"></i>
                                         </a>
@@ -198,24 +206,43 @@ Congés
 
                                     {% endif %}
 
-                                    <!-- RH / MANAGER VALIDATION -->
-                                    {% if request.user.role == 'manager' or request.user.role == 'rh' %}
+                                    <!-- ================= MANAGER ================= -->
+                                    {% if request.user.role == 'manager' %}
 
                                         {% if conge.statut == 'en attente' %}
 
                                         <a
-                                            href=""
+                                            href="{% url 'conge_validate_manager' conge.id %}"
                                             class="btn btn-success rounded-3"
+                                            title="Valider"
                                         >
                                             <i class="bi bi-check2-circle"></i>
                                         </a>
 
-                                        <a href=""
-                                           class="btn btn-danger rounded-3"
-                                           title="Refuser">
-
+                                        <a
+                                            href="{% url 'conge_refuse_manager' conge.id %}"
+                                            class="btn btn-danger rounded-3"
+                                            title="Refuser"
+                                        >
                                             <i class="bi bi-x-circle"></i>
+                                        </a>
 
+                                        {% endif %}
+
+                                    {% endif %}
+
+                                    <!-- ================= RH ================= -->
+                                    {% if request.user.role == 'rh' %}
+
+                                        {% if conge.statut == 'accepte' %}
+
+                                        <!-- BOUTON TRAITER RH -->
+                                        <a
+                                            href="{% url 'traiter_conge' conge.id %}"
+                                            class="btn btn-primary rounded-3"
+                                            title="Traiter la demande"
+                                        >
+                                            <i class="bi bi-box-arrow-in-right"></i>
                                         </a>
 
                                         {% endif %}
