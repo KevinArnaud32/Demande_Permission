@@ -1,11 +1,10 @@
 from datetime import timedelta
-
 from django.db import models
-
 from demande.models.demande_model import Demande
 
 
 class Conges(Demande):
+    traite = models.BooleanField(default=False)
     date_debut = models.DateField()
     nombre_jours = models.PositiveIntegerField()
     date_fin = models.DateField(null=True, blank=True)
