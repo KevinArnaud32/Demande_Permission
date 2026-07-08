@@ -19,7 +19,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-
+from demande.views.pdf_conge import conge_pdf_view
+from demande.views.traitement_demande import traiter_conge
 
 
 urlpatterns = [
@@ -32,6 +33,7 @@ urlpatterns = [
     path('auth/',include('authentification.urls')),
     path('utilisateur/', include('employe.urls.utilisateur_url')),
     path('departement/', include('employe.urls.departement_url')),
+    path('envoi_pdf/<int:pk>/', traiter_conge, name='traiter_conge'),
 ]
 
 urlpatterns += static(
