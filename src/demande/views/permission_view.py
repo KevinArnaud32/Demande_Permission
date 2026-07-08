@@ -5,6 +5,7 @@ from core.decorators import role_required
 from demande.models.permission_model import Permission
 from demande.forms.permission_form import PermissionForm
 from demande.models.validation_model import Validation
+from utils.email import notifier_manager
 
 
 @login_required
@@ -16,9 +17,9 @@ def permission_list(request):
 
     if user.role == 'employe':
         permissions = Permission.objects.filter(employe=request.user.employe)
-    elif user.role == 'manager':
+    elif user.role in ['manager', 'rh']:
         permissions = Permission.objects.filter(employe__departement=user.employe.departement).exclude(employe=user.employe)
-    elif user.role in ['rh', 'admin']:
+    elif user.role == 'admin':
         permissions = Permission.objects.all()
 
     context = {
@@ -45,6 +46,7 @@ def permission_create(request):
             permission = permission_form.save(commit=False)
             permission.employe = user.employe
             permission.save()
+            notifier_manager(permission)
             messages.success(request, "Demande de permission envoyée avec succès.")
             return redirect('permission_list')
 

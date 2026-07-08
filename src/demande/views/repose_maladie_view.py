@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from demande.models.repos_maladie_model import ReposMaladie
 from demande.forms.repos_maladie_form import ReposMaladieForm
+from utils.email import notifier_manager
 
 
 @login_required()
@@ -15,9 +16,9 @@ def repos_maladie_list(request):
 
     if user.role == 'employe':
         repos_maladies = ReposMaladie.objects.filter(statut='en attente', employe=employe).order_by('-date_creation')
-    elif user.role in ['rh', 'admin']:
+    elif user.role == 'admin':
         repos_maladies = ReposMaladie.objects.all().order_by('-date_creation')
-    elif user.role == 'manager':
+    elif user.role in ['manager', 'rh']:
         repos_maladies = ReposMaladie.objects.filter(employe__departement=user.employe.departement).exclude(employe=employe)
 
     context = {
@@ -42,6 +43,7 @@ def repos_maladie_create(request):
             repos = repos_maladie_form.save(commit=False)
             repos.employe = employe
             repos.save()
+            notifier_manager(repos)
 
             return redirect('repos_maladie_list')
 

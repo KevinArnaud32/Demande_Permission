@@ -6,6 +6,7 @@ from core.decorators import role_required
 from demande.models.conges_model import Conges
 from demande.forms.conges_form import CongesForm
 from demande.models.validation_model import Validation
+from utils.email import notifier_manager
 
 
 def conge_list(request):
@@ -48,6 +49,7 @@ def conge_create(request):
             conges = conges_form.save(commit=False)
             conges.employe = employe
             conges.save()
+            notifier_manager(conges)
 
             return redirect('conge_list')
 
