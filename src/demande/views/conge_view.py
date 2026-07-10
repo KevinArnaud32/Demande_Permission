@@ -6,7 +6,7 @@ from core.decorators import role_required
 from demande.models.conges_model import Conges
 from demande.forms.conges_form import CongesForm
 from demande.models.validation_model import Validation
-from utils.email import notifier_manager
+from utils.email import notifier_manager, envoyer_mail_conge, notifier_rh, envoyer_mail_refus_manager
 
 
 def conge_list(request):
@@ -157,6 +157,8 @@ def valider_conge(request, pk):
 
     conge.statut = 'accepte'
     conge.save()
+    envoyer_mail_conge(conge)
+    notifier_rh(conge)
 
     # Historique
     Validation.objects.create(
@@ -192,6 +194,7 @@ def refuser_conge(request, pk):
 
     conge.statut = 'refuse'
     conge.save()
+    envoyer_mail_refus_manager(conge)
 
     # Historique
     Validation.objects.create(
