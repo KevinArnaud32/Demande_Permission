@@ -5,7 +5,8 @@ from core.decorators import role_required
 from demande.models.permission_model import Permission
 from demande.forms.permission_form import PermissionForm
 from demande.models.validation_model import Validation
-from utils.email import notifier_manager
+from utils.email import *
+
 
 
 @login_required
@@ -150,6 +151,9 @@ def valider_permission(request, pk):
     permission.statut = "accepte"
     permission.save()
 
+    envoyer_mail_permission(permission)
+
+
     # Historique
     Validation.objects.create(
         demande_id=permission.id,
@@ -195,6 +199,7 @@ def refuser_permission(request, pk):
     # Mise à jour du statut
     permission.statut = "refuse"
     permission.save()
+    envoyer_mail_refus_manager(permission)
 
     # Historique
     Validation.objects.create(
