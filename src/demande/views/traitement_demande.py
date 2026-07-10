@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, get_object_or_404
 from demande.models.conges_model import Conges
 from utils.email import envoyer_mail_conge
-from demande.models.validation_model import Validation
+
 
 
 @login_required
@@ -13,6 +13,10 @@ def traiter_conge(request, pk):
     if request.user.role != "rh":
         return redirect("login")
 
+    envoyer_mail_conge(conge)
+
+    conge.traite = True
+    conge.save()
     envoyer_mail_conge(conge)
 
     # conge.statut = "confirme"
