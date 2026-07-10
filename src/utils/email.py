@@ -1,6 +1,9 @@
 from django.core.mail import EmailMessage
 from utils.generer_pdf_conge import generer_pdf_conge
+from utils.generer_pdf_permission import generer_pdf_permission
+from utils.generer_pdf_repos_maladie import generer_pdf_repos_maladie
 from employe.models.employe_model import Employe
+
 
 
 def notifier_manager(demande):
@@ -71,6 +74,149 @@ Service RH
         f"Conge_{conge.employe.nom}.pdf",
         pdf.getvalue(),
         "application/pdf",
+    )
+
+    email.send(fail_silently=False)
+
+
+
+
+
+def notifier_rh(conge):
+
+    rhs = Employe.objects.filter(
+        utilisateur__role="rh"
+    )
+
+    if not rhs.exists():
+        return
+
+    destinataires = [
+        rh.utilisateur.email
+        for rh in rhs
+        if rh.utilisateur.email
+    ]
+
+    email = EmailMessage(
+        subject="Nouvelle demande de congé validée",
+
+        body=f"""
+Bonjour,
+
+Une demande de congé vient d'être validée par le manager.
+
+Employé :
+{conge.employe.nom} {conge.employe.prenom}
+
+Veuillez vous connecter afin de traiter cette demande.
+
+Système de Gestion RH.
+        """,
+
+        to=destinataires
+    )
+
+    email.send(fail_silently=False)
+
+
+
+def envoyer_mail_refus_manager(demande):
+
+    employe = demande.employe
+
+    type_demande = demande._meta.verbose_name.title()
+
+    email = EmailMessage(
+
+        subject=f"{type_demande} refusé",
+
+        body=f"""
+Bonjour {employe.prenom},
+
+Votre demande de {type_demande.lower()} a été refusée par votre responsable.
+
+Veuillez vous rapprocher de votre manager pour plus d'informations.
+
+Cordialement,
+
+Service RH
+        """,
+
+        to=[employe.utilisateur.email]
+
+    )
+
+    email.send(fail_silently=False)
+
+
+
+
+
+
+def envoyer_mail_permission(permission):
+
+    pdf = generer_pdf_permission(permission)
+
+    email = EmailMessage(
+
+        subject="Permission validée",
+
+        body=f"""
+Bonjour {permission.employe.prenom},
+
+Votre demande de permission a été acceptée par votre manager.
+
+Vous trouverez le document officiel en pièce jointe.
+
+Cordialement,
+
+Service RH
+        """,
+
+        to=[permission.employe.utilisateur.email]
+
+    )
+
+    email.attach(
+        f"Permission_{permission.id}.pdf",
+        pdf.getvalue(),
+        "application/pdf"
+    )
+
+    email.send(fail_silently=False)
+
+
+
+
+
+def envoyer_mail_repos_maladie(repos):
+
+    pdf = generer_pdf_repos_maladie(repos)
+
+    email = EmailMessage(
+
+        subject="Repos maladie validé",
+
+        body=f"""
+Bonjour {repos.employe.prenom},
+
+Votre demande de repos maladie a été acceptée.
+
+Veuillez trouver le document officiel en pièce jointe.
+
+Cordialement,
+
+Service RH
+        """,
+
+        to=[repos.employe.utilisateur.email]
+
+    )
+
+    email.attach(
+        f"Repos_Maladie_{repos.id}.pdf",
+        pdf.getvalue(),
+        "application/pdf"
     )
 
     email.send(fail_silently=False)
