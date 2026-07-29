@@ -26,6 +26,7 @@ from demande.views.traitement_demande import traiter_conge
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('dashboard.urls')),
+    path('demande/',include('demande.urls.suivi_demande_url')),
     path('permission/', include('demande.urls.permission_url')),
     path('conges/', include('demande.urls.conge_url')),
     path('repos_maladie/',include('demande.urls.repos_maladie_url')),
