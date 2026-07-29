@@ -105,7 +105,7 @@
                     <i class="bi bi-file-earmark-text-fill"></i>
 
                     <span>
-                        Mes Demandes
+                        Demandes
                     </span>
 
                 </a>
@@ -158,19 +158,7 @@
 
             <!-- SUIVI -->
 
-            <li>
 
-                <a href="">
-
-                    <i class="bi bi-list-check"></i>
-
-                    <span>
-                        Suivi des demandes
-                    </span>
-
-                </a>
-
-            </li>
 
             <!-- PROFIL -->
 
@@ -217,9 +205,9 @@
                     aria-expanded="false"
                 >
 
-                    <i class="bi bi-file-earmark-text-fill"></i>
+                    <i class="bi bi-list-check"></i>
 
-                    <span>Demandes</span>
+                    <span>Suivi des demandes</span>
 
                 </a>
 
@@ -299,6 +287,7 @@
             </li>
 
             <!-- ================= EQUIPE ================= -->
+
             <li>
 
                 <a href="">
@@ -311,18 +300,7 @@
 
             </li>
 
-            <!-- ================= STATISTIQUES ================= -->
-            <li>
 
-                <a href="">
-
-                    <i class="bi bi-bar-chart-fill"></i>
-
-                    <span>Statistiques</span>
-
-                </a>
-
-            </li>
 
             {% endif %}
 
@@ -346,7 +324,7 @@
 
             <li>
 
-                <a href="">
+                <a href="{% url 'conge_list' %}">
 
                     <i class="bi bi-calendar-check-fill"></i>
 
@@ -358,19 +336,6 @@
 
             </li>
 
-            <li>
-
-                <a href="{% url 'validation_list' %}">
-
-                    <i class="bi bi-check2-square"></i>
-
-                    <span>
-                        Validations
-                    </span>
-
-                </a>
-
-            </li>
 
             {% endif %}
 
@@ -420,21 +385,21 @@
 
             </li>
 
+            {% endif %}
+
             <li>
 
-                <a href="{% url 'validation_list' %}">
+                <a href="{% url 'suivi_demandes' %}">
 
                     <i class="bi bi-clock-history"></i>
 
                     <span>
-                        Historique
+                        Historiques
                     </span>
 
                 </a>
 
             </li>
-
-            {% endif %}
 
         </ul>
 
