@@ -9,5 +9,7 @@ urlpatterns = [
     path('details/<int:pk>/', repos_maladie_detail, name='repos_maladie_detail'),
     path('update/<int:pk>/', repos_maladie_update, name='repos_maladie_update'),
     path('delete/<int:pk>/', repos_maladie_delete, name='repos_maladie_delete'),
+    path('valider/<int:pk>/', valider_repos_maladie, name='valider_repos_maladie'),
+    path('refuser/<int:pk>/', refuser_repos_maladie, name='refuser_repos_maladie'),
 
 ]

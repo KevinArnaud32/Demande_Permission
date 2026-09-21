@@ -53,6 +53,20 @@ Nouvelle permission
 
                         {% csrf_token %}
 
+                        <!-- TYPE DE PERMISSION -->
+
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Type de permission
+
+                            </label>
+
+                            {{ permission_form.type_permission }}
+
+                        </div>
+
                         <!-- MOTIF -->
 
                         <div class="mb-4">
@@ -67,31 +81,31 @@ Nouvelle permission
 
                         </div>
 
-                        <!-- HEURE SORTIE -->
+                        <!-- DATE PERMISSION -->
 
                         <div class="mb-4">
 
                             <label class="form-label fw-semibold">
 
-                                Heure de sortie
+                                Date de la permission
 
                             </label>
 
-                            {{ permission_form.heure_sortie }}
+                            {{ permission_form.date_permission }}
 
                         </div>
 
-                        <!-- DUREE -->
+                        <!-- DATE RETOUR -->
 
                         <div class="mb-4">
 
                             <label class="form-label fw-semibold">
 
-                                Durée (minutes)
+                                Date de retour
 
                             </label>
 
-                            {{ permission_form.nombre_minute }}
+                            {{ permission_form.date_retour }}
 
                         </div>
 

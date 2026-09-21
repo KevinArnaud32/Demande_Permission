@@ -17,11 +17,11 @@ def conge_list(request):
     conges = None
 
     if user.role == 'employe':
-        conges = Conges.objects.filter(employe=employe)
+        conges = Conges.objects.filter(employe=employe).order_by('-id')
     elif user.role == 'rh':
         conges = Conges.objects.all().order_by('-date_creation')
     elif user.role == 'manager':
-        conges = Conges.objects.filter(employe__departement=user.employe.departement)
+        conges = Conges.objects.filter(employe__departement=user.employe.departement).order_by('-id')
 
 
     context = {

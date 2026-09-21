@@ -60,26 +60,24 @@ Permissions
 
                         {% if request.user.role == 'employe' %}
 
-                            <th>Date</th>
-                            <th>Motif</th>
-                            <th>Durée</th>
+                            <th>Type permission</th>
+                            <th>Date depart</th>
+                            <th>Date retour</th>
                             <th>Statut</th>
 
                         {% elif request.user.role == 'manager' %}
 
                             <th>Employé</th>
-                            <th>Motif</th>
-                            <th>Heure sortie</th>
-                            <th>Durée</th>
+                            <th>Type permission</th>
+                            <th>Date depart</th>
+                            <th>Date de retour</th>
+
 
                         {% else %}
 
                             <th>Employé</th>
-                            <th>Date création</th>
+                            <th>Type permission</th>
                             <th>Motif</th>
-                            <th>Heure sortie</th>
-                            <th>Durée</th>
-                            <th>Heure retour</th>
                             <th>Statut</th>
 
                         {% endif %}
@@ -129,47 +127,26 @@ Permissions
 
                         {% endif %}
 
-                        <!-- ================= DATE CREATION ================= -->
 
-                        {% if request.user.role == 'employe' or request.user.role == 'admin' or request.user.is_superuser %}
-
-                        <td>
-                            {{ permission.date_creation|date:"d F Y H:i" }}
-                        </td>
-
-                        {% endif %}
-
-                        <!-- ================= MOTIF ================= -->
+                        <!-- ================= TYPE PERMISSION ================= -->
 
                         <td>
-                            {{ permission.motif }}
+                            {{ permission.type_permission }}
                         </td>
 
-                        <!-- ================= HEURE SORTIE ================= -->
 
-                        {% if request.user.role != 'employe' %}
+                        <!-- ================= DATE DEPART ================= -->
 
                         <td>
-                            {{ permission.heure_sortie|time:"H:i" }}
+                            {{ permission.date_permission }}
                         </td>
 
-                        {% endif %}
 
-                        <!-- ================= DUREE ================= -->
+                        <!-- ================= DATE RETOUR ================= -->
 
                         <td>
-                            {{ permission.nombre_minute }} min
+                            {{ permission.date_retour }}
                         </td>
-
-                        <!-- ================= HEURE RETOUR ================= -->
-
-                        {% if request.user.role == 'admin' or request.user.is_superuser %}
-
-                        <td>
-                            {{ permission.heure_retour|time:"H:i" }}
-                        </td>
-
-                        {% endif %}
 
                         <!-- ================= STATUT ================= -->
 

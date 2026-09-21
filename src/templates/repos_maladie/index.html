@@ -215,14 +215,14 @@ Repos maladie
                                         {% if repos.statut == 'en attente' %}
 
                                         <a
-                                            href=""
+                                            href="{% url 'valider_repos_maladie' repos.id %}"
                                             class="btn btn-success rounded-3"
                                             title="Accepter"
                                         >
                                             <i class="bi bi-check2-circle"></i>
                                         </a>
 
-                                        <a href=""
+                                        <a href="{% url 'refuser_repos_maladie' repos.id %}"
                                            class="btn btn-danger rounded-3"
                                            title="Refuser">
 

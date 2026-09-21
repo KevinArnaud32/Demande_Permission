@@ -1,8 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
+from pyexpat.errors import messages
+
 from demande.models.repos_maladie_model import ReposMaladie
 from demande.forms.repos_maladie_form import ReposMaladieForm
-from utils.email import notifier_manager
+from demande.models.validation_model import Validation
+from utils.email import notifier_manager, envoyer_mail_repos_maladie
 
 
 @login_required()
@@ -113,3 +116,97 @@ def repos_maladie_delete(request, pk):
     return redirect(
         'repos_maladie_list'
     )
+
+
+
+
+
+
+@login_required()
+def valider_repos_maladie(request, pk):
+
+    repos_maladie = get_object_or_404(ReposMaladie, pk=pk)
+
+    user = request.user
+
+    # Empêcher de valider sa propre demande
+    if repos_maladie.employe == user.employe:
+        messages.error(
+            request,
+            "Vous ne pouvez pas valider votre propre demande."
+        )
+        return redirect("repos_maladie_detail", pk=pk)
+
+    # Vérifier le statut
+    if repos_maladie.statut != "en attente":
+        messages.warning(
+            request,
+            "Cette demande a déjà été traitée."
+        )
+        return redirect("repos_maladie_detail", pk=pk)
+
+    # Accepter la demande
+    repos_maladie.statut = "accepte"
+    repos_maladie.save()
+
+    # Envoyer l'email
+    envoyer_mail_repos_maladie(repos_maladie)
+
+    # Notifier le responsable RH si cette fonction existe
+    # notifier_rh_repos_maladie(repos_maladie)
+
+    # Historique de la validation
+    Validation.objects.create(
+        demande_id=repos_maladie.id,
+        validateur=user,
+        type_demande="repos_maladie",
+        decision="accepte",
+        commentaire="Demande de repos maladie validée"
+    )
+
+
+    return redirect("repos_maladie_detail", pk=pk)
+
+
+
+@login_required()
+def refuser_repos_maladie(request, pk):
+
+    repos_maladie = get_object_or_404(ReposMaladie, pk=pk)
+
+    user = request.user
+
+    # Empêcher de refuser sa propre demande
+    if repos_maladie.employe == user.employe:
+        messages.error(
+            request,
+            "Vous ne pouvez pas refuser votre propre demande."
+        )
+        return redirect("repos_maladie_detail", pk=pk)
+
+    # Vérifier le statut
+    if repos_maladie.statut != "en attente":
+        messages.warning(
+            request,
+            "Cette demande a déjà été traitée."
+        )
+        return redirect("repos_maladie_detail", pk=pk)
+
+    # Refuser la demande
+    repos_maladie.statut = "refuse"
+    repos_maladie.save()
+
+    # Envoyer l'email de refus
+    # envoyer_mail_refus_repos_maladie(repos_maladie)
+
+    # Historique du refus
+    Validation.objects.create(
+        demande_id=repos_maladie.id,
+        validateur=user,
+        type_demande="repos_maladie",
+        decision="refuse",
+        commentaire="Demande de repos maladie refusée"
+    )
+
+
+    return redirect("repos_maladie_detail", pk=pk)

@@ -1,28 +1,14 @@
-from datetime import timedelta, datetime
 from django.db import models
 from demande.models.demande_model import Demande
+from demande.models.type_permission_model import TypePermission
 
 
 class Permission(Demande):
-    motif = models.TextField()
-    heure_sortie = models.TimeField()
-    nombre_minute = models.PositiveIntegerField()
-    heure_retour = models.TimeField(null=True, blank=True)
+    type_permission = models.ForeignKey(TypePermission, on_delete=models.PROTECT, related_name='permissions')
+    motif = models.TextField(null=True)
+    date_permission = models.DateField(null=True)
+    date_retour = models.DateField(null=True)
 
-    def save(self,*args, **kwargs):
-
-        if self.heure_sortie and self.nombre_minute:
-
-            heure_sortie = datetime.combine(
-                datetime.today().date(),
-                self.heure_sortie
-            )
-
-            heure_retour = heure_sortie + timedelta(minutes=self.nombre_minute)
-
-            self.heure_retour = heure_retour.time()
-        
-        super().save(*args, **kwargs)
 
 
     def __str__(self):

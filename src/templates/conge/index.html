@@ -62,6 +62,7 @@ Congés
                                 <th>Employé</th>
                             {% endif %}
 
+                            <th>Type Conges</th>
                             <th>Date début</th>
                             <th>Nombre de jours</th>
                             <th>Date fin</th>
@@ -117,6 +118,11 @@ Congés
 
                             </td>
                             {% endif %}
+
+                            <!-- TYPE CONGE -->
+                            <th>
+                                {{ conge.type_conge }}
+                            </th>
 
                             <!-- DATE DEBUT -->
                             <td>
@@ -212,7 +218,7 @@ Congés
                                         {% if conge.statut == 'en attente' %}
 
                                         <a
-                                            href="{% url 'conge_validate_manager' conge.id %}"
+                                            href="{% url 'valider_conge' conge.id %}"
                                             class="btn btn-success rounded-3"
                                             title="Valider"
                                         >
@@ -220,7 +226,7 @@ Congés
                                         </a>
 
                                         <a
-                                            href="{% url 'conge_refuse_manager' conge.id %}"
+                                            href="{% url 'refuser_conge' conge.id %}"
                                             class="btn btn-danger rounded-3"
                                             title="Refuser"
                                         >
@@ -234,7 +240,7 @@ Congés
                                     <!-- ================= RH ================= -->
                                     {% if request.user.role == 'rh' %}
 
-                                        {% if conge.statut == 'accepte' %}
+                                        {% if conge.statut == 'accepte' and conge.traite != True %}
 
                                         <!-- BOUTON TRAITER RH -->
                                         <a

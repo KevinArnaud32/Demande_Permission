@@ -29,6 +29,8 @@ urlpatterns = [
     path('demande/',include('demande.urls.suivi_demande_url')),
     path('permission/', include('demande.urls.permission_url')),
     path('conges/', include('demande.urls.conge_url')),
+    path('typeconge/', include('demande.urls.type_conge_url')),
+    path('typepermission/', include('demande.urls.type_permission_url')),
     path('repos_maladie/',include('demande.urls.repos_maladie_url')),
     path('validaion/', include('demande.urls.validation_url')),
     path('auth/',include('authentification.urls')),

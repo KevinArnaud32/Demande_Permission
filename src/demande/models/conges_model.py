@@ -1,9 +1,11 @@
 from datetime import timedelta
 from django.db import models
 from demande.models.demande_model import Demande
+from demande.models.type_conges_model import TypeConge
 
 
 class Conges(Demande):
+    type_conge = models.ForeignKey(TypeConge, on_delete=models.PROTECT, related_name='conges', null=True)
     traite = models.BooleanField(default=False)
     date_debut = models.DateField()
     nombre_jours = models.PositiveIntegerField()

@@ -51,6 +51,19 @@ Nouvelle demande de congé
 
                         {% csrf_token %}
 
+                        <!-- TYPE DE CONGE -->
+                        <div class="mb-4">
+
+                            <label class="form-label fw-semibold">
+
+                                Type de congé
+
+                            </label>
+
+                            {{ conges_form.type_conge }}
+
+                        </div>
+
                         <!-- DATE DEBUT -->
                         <div class="mb-4">
 
