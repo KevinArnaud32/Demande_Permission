@@ -8,226 +8,412 @@ Détails de la permission
 
 <div class="container-fluid">
 
-    <div class="row justify-content-center">
+    <!-- ================= HEADER ================= -->
 
-        <div class="col-lg-8">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h3 class="fw-bold mb-1">
+                Détails de la permission
+            </h3>
+
+            <p class="text-muted mb-0">
+                Consultation des informations de la demande de permission
+            </p>
+
+        </div>
+
+        <a href="{% url 'permission_list' %}"
+           class="btn btn-light border rounded-3">
+
+            <i class="bi bi-arrow-left me-1"></i>
+            Retour
+
+        </a>
+
+    </div>
+
+
+    <!-- ================= INFORMATIONS ================= -->
+
+    <div class="row g-4">
+
+        <!-- ================= INFORMATIONS EMPLOYE ================= -->
+
+        <div class="col-lg-6">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-4">
+
+                        <i class="bi bi-person-circle text-primary me-2"></i>
+                        Informations de l'employé
+
+                    </h5>
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Nom et prénom
+                        </small>
+
+                        <span class="fw-semibold">
+                            {{ permission.employe.nom }}
+                            {{ permission.employe.prenom }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Département
+                        </small>
+
+                        <span class="fw-semibold">
+                            {{ permission.employe.departement }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Fonction
+                        </small>
+
+                        <span class="fw-semibold">
+                            {{ permission.employe.fonction }}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <small class="text-muted d-block">
+                            Supérieur hiérarchique
+                        </small>
+
+                        {% if permission.employe.superieur %}
+
+                            <span class="fw-semibold">
+                                {{ permission.employe.superieur.nom }}
+                                {{ permission.employe.superieur.prenom }}
+                            </span>
+
+                        {% else %}
+
+                            <span class="text-muted">
+                                Aucun supérieur désigné
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= INFORMATIONS PERMISSION ================= -->
+
+        <div class="col-lg-6">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-4">
+
+                        <i class="bi bi-clock-history text-primary me-2"></i>
+                        Informations de la permission
+
+                    </h5>
+
+
+                    <!-- TYPE -->
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Type de permission
+                        </small>
+
+                        <span class="fw-semibold">
+                            {{ permission.type_permission }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- DATE DEPART -->
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Date de départ
+                        </small>
+
+                        <span class="fw-semibold">
+                            {{ permission.date_permission }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- DATE RETOUR -->
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Date de retour
+                        </small>
+
+                        <span class="fw-semibold">
+                            {{ permission.date_retour }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- MOTIF -->
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Motif
+                        </small>
+
+                        <span class="fw-semibold">
+                            {% if permission.motif %}
+                                {{ permission.motif }}
+                            {% else %}
+                                Aucun motif renseigné
+                            {% endif %}
+                        </span>
+
+                    </div>
+
+
+                    <!-- DATE CREATION -->
+
+                    <div>
+
+                        <small class="text-muted d-block">
+                            Date de création
+                        </small>
+
+                        <span class="fw-semibold">
+                            {{ permission.date_creation|date:"d/m/Y H:i" }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= STATUT ================= -->
+
+        <div class="col-12">
 
             <div class="card border-0 shadow-sm rounded-4">
 
-                <div class="card-body p-5">
+                <div class="card-body p-4">
 
-                    <!-- HEADER -->
+                    <h5 class="fw-bold mb-4">
 
-                    <div class="text-center mb-5">
+                        <i class="bi bi-info-circle text-primary me-2"></i>
+                        État de la demande
 
-                        <div
-                            class="mx-auto mb-3 d-flex justify-content-center align-items-center rounded-circle bg-primary text-white"
-                            style="width:80px; height:80px; font-size:30px;"
-                        >
+                    </h5>
 
-                            <i class="bi bi-person-check-fill"></i>
 
-                        </div>
+                    <div class="row align-items-center">
 
-                        <h2 class="fw-bold">
-                            Détails de la permission
-                        </h2>
-
-                        <p class="text-muted">
-                            Consultation de la demande de permission
-                        </p>
-
-                    </div>
-
-                    <!-- INFORMATIONS -->
-
-                    <div class="row g-4">
-
-                        {% if request.user.role != "employe" %}
+                        <!-- STATUT -->
 
                         <div class="col-md-6">
 
-                            <label class="form-label fw-semibold">
-                                Employé
-                            </label>
+                            <small class="text-muted d-block mb-2">
+                                Statut actuel
+                            </small>
 
-                            <input
-                                type="text"
-                                class="form-control"
-                                value="{{ permission.employe.nom }} {{ permission.employe.prenom }}"
-                                readonly
-                            >
+                            {% if permission.statut == "refuse" %}
 
-                        </div>
+                                <span class="badge bg-danger rounded-pill px-3 py-2">
 
-                        {% endif %}
+                                    <i class="bi bi-x-circle me-1"></i>
+                                    Refusé
 
-                        <div class="col-md-6">
+                                </span>
 
-                            <label class="form-label fw-semibold">
-                                Motif
-                            </label>
+                            {% elif permission.statut == "accepte" %}
 
-                            <input
-                                type="text"
-                                class="form-control"
-                                value="{{ permission.motif }}"
-                                readonly
-                            >
+                                <span class="badge bg-success rounded-pill px-3 py-2">
 
-                        </div>
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    Accepté
 
-                        <div class="col-md-6">
+                                </span>
 
-                            <label class="form-label fw-semibold">
-                                Heure de sortie
-                            </label>
+                            {% else %}
 
-                            <input
-                                type="text"
-                                class="form-control"
-                                value="{{ permission.heure_sortie }}"
-                                readonly
-                            >
+                                <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
+
+                                    <i class="bi bi-clock me-1"></i>
+                                    En attente
+
+                                </span>
+
+                            {% endif %}
 
                         </div>
 
-                        <div class="col-md-6">
 
-                            <label class="form-label fw-semibold">
-                                Durée
-                            </label>
+                        <!-- DATE CREATION -->
 
-                            <input
-                                type="text"
-                                class="form-control"
-                                value="{{ permission.nombre_minute }} minutes"
-                                readonly
-                            >
+                        <div class="col-md-3">
 
-                        </div>
+                            <small class="text-muted d-block mb-2">
+                                Demande créée le
+                            </small>
 
-                        <div class="col-md-6">
-
-                            <label class="form-label fw-semibold">
-                                Heure de retour
-                            </label>
-
-                            <input
-                                type="text"
-                                class="form-control"
-                                value="{{ permission.heure_retour }}"
-                                readonly
-                            >
+                            <span class="fw-semibold">
+                                {{ permission.date_creation|date:"d/m/Y H:i" }}
+                            </span>
 
                         </div>
 
-                        <div class="col-md-6">
 
-                            <label class="form-label fw-semibold">
-                                Statut
-                            </label>
+                        <!-- DERNIERE MODIFICATION -->
 
-                            <div>
+                        <div class="col-md-3">
 
-                                {% if permission.statut == "accepte" %}
+                            <small class="text-muted d-block mb-2">
+                                Dernière modification
+                            </small>
 
-                                    <span class="badge bg-success fs-6">
-                                        Accepté
-                                    </span>
-
-                                {% elif permission.statut == "refuse" %}
-
-                                    <span class="badge bg-danger fs-6">
-                                        Refusé
-                                    </span>
-
-                                {% else %}
-
-                                    <span class="badge bg-warning text-dark fs-6">
-                                        En attente
-                                    </span>
-
-                                {% endif %}
-
-                            </div>
-
-                        </div>
-
-                        <div class="col-md-6">
-
-                            <label class="form-label fw-semibold">
-                                Date de création
-                            </label>
-
-                            <input
-                                type="text"
-                                class="form-control"
-                                value="{{ permission.date_creation|date:'d F Y H:i' }}"
-                                readonly
-                            >
+                            <span class="fw-semibold">
+                                {{ permission.date_modification|date:"d/m/Y H:i" }}
+                            </span>
 
                         </div>
 
                     </div>
 
-                    <!-- BOUTONS -->
+                </div>
 
-                    <div class="d-flex justify-content-end gap-2 mt-5">
+            </div>
 
-                        <a
-                            href="{% url 'permission_list' %}"
-                            class="btn btn-secondary"
-                        >
-                            Retour
-                        </a>
+        </div>
 
-                        {% if request.user.role == "employe" and permission.statut == "en attente" %}
 
-                        <a
-                            href="{% url 'permission_update' permission.id %}"
-                            class="btn btn-warning"
-                        >
-                            Modifier
-                        </a>
+        <!-- ================= ACTIONS ================= -->
+
+        <div class="col-12">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-end gap-2 flex-wrap">
+
+
+                        <!-- ================= MODIFICATION EMPLOYE ================= -->
+
+                        {% if request.user.role == "employe" %}
+
+                            {% if permission.statut == "en attente" %}
+
+                                <a href="{% url 'permission_update' permission.id %}"
+                                   class="btn btn-warning rounded-3">
+
+                                    <i class="bi bi-pencil-square me-1"></i>
+                                    Modifier
+
+                                </a>
+
+                            {% endif %}
+
+                        {% endif %}
+
+
+                        <!-- ================= VALIDATION MANAGER ================= -->
+
+                        {% if request.user.role == "manager" %}
+
+                            {% if permission.statut == "en attente" %}
+
+                                <a href="{% url 'valider_permission' permission.id %}"
+                                   class="btn btn-success rounded-3">
+
+                                    <i class="bi bi-check-circle me-1"></i>
+                                    Valider
+
+                                </a>
+
+                                <a href="{% url 'refuser_permission' permission.id %}"
+                                   class="btn btn-danger rounded-3">
+
+                                    <i class="bi bi-x-circle me-1"></i>
+                                    Refuser
+
+                                </a>
+
+                            {% endif %}
 
                         {% endif %}
 
-                        {% if request.user.role == "manager" and permission.statut == "en attente" %}
 
-                        <a
-                            href="{% url 'valider_permission' permission.id %}"
-                            class="btn btn-success"
-                        >
-                            <i class="bi bi-check-circle-fill"></i>
-                            Valider
-                        </a>
+                        <!-- ================= PDF ================= -->
 
-                        <a
-                            href="{% url 'refuser_permission' permission.id %}"
-                            class="btn btn-danger"
-                        >
-                            <i class="bi bi-x-circle-fill"></i>
-                            Refuser
-                        </a>
+                        {% if permission.statut == "accepte" %}
+
+                            <a href="{% url 'permission_pdf' permission.id %}"
+                               class="btn btn-primary rounded-3"
+                               target="_blank">
+
+                                <i class="bi bi-printer-fill me-1"></i>
+                                Imprimer / PDF
+
+                            </a>
 
                         {% endif %}
+
+
+                        <!-- ================= ADMIN ================= -->
 
                         {% if request.user.role == "admin" or request.user.is_superuser %}
 
-                        <a
-                            href="{% url 'permission_update' permission.id %}"
-                            class="btn btn-warning"
-                        >
-                            Modifier
-                        </a>
+                            <a href="{% url 'permission_update' permission.id %}"
+                               class="btn btn-warning rounded-3">
 
-                        <a
-                            href="{% url 'permission_delete' permission.id %}"
-                            class="btn btn-danger"
-                        >
-                            Supprimer
-                        </a>
+                                <i class="bi bi-pencil-square me-1"></i>
+                                Modifier
+
+                            </a>
+
+                            <a href="{% url 'permission_delete' permission.id %}"
+                               class="btn btn-danger rounded-3"
+                               onclick="return confirm('Voulez-vous supprimer cette permission ?')">
+
+                                <i class="bi bi-trash me-1"></i>
+                                Supprimer
+
+                            </a>
 
                         {% endif %}
 

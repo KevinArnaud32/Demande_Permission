@@ -1,7 +1,5 @@
 {% extends 'base/base.html' %}
 
-{% load i18n %}
-
 {% block title %}
 Détails du congé
 {% endblock %}
@@ -10,185 +8,789 @@ Détails du congé
 
 <div class="container-fluid">
 
-    <div class="row justify-content-center">
+    <!-- ================= HEADER ================= -->
 
-        <div class="col-lg-8">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h3 class="fw-bold mb-1">
+                Détails du congé
+            </h3>
+
+            <p class="text-muted mb-0">
+                Consultation des informations de la demande de congé
+            </p>
+
+        </div>
+
+        <a href="{% url 'conge_list' %}"
+           class="btn btn-light border rounded-3">
+
+            <i class="bi bi-arrow-left me-1"></i>
+            Retour
+
+        </a>
+
+    </div>
+
+
+    <div class="row g-4">
+
+        <!-- ================= INFORMATIONS EMPLOYE ================= -->
+
+        <div class="col-lg-6">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-4">
+
+                        <i class="bi bi-person-circle text-primary me-2"></i>
+
+                        Informations de l'employé
+
+                    </h5>
+
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Nom et prénom
+                        </small>
+
+                        <span class="fw-semibold">
+
+                            {{ conge.employe.nom }}
+                            {{ conge.employe.prenom }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Département
+                        </small>
+
+                        <span class="fw-semibold">
+
+                            {{ conge.employe.departement }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Fonction
+                        </small>
+
+                        <span class="fw-semibold">
+
+                            {{ conge.employe.fonction }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <small class="text-muted d-block">
+                            Supérieur hiérarchique
+                        </small>
+
+                        {% if conge.employe.superieur %}
+
+                            <span class="fw-semibold">
+
+                                {{ conge.employe.superieur.nom }}
+                                {{ conge.employe.superieur.prenom }}
+
+                            </span>
+
+                        {% else %}
+
+                            <span class="text-muted">
+
+                                Aucun supérieur désigné
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= INFORMATIONS CONGE ================= -->
+
+        <div class="col-lg-6">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-4">
+
+                        <i class="bi bi-calendar-check text-primary me-2"></i>
+
+                        Informations du congé
+
+                    </h5>
+
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Type de congé
+                        </small>
+
+                        <span class="fw-semibold">
+
+                            {{ conge.type_conge }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Date de début
+                        </small>
+
+                        <span class="fw-semibold">
+
+                            {{ conge.date_debut }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Date de fin
+                        </small>
+
+                        <span class="fw-semibold">
+
+                            {{ conge.date_fin }}
+
+                        </span>
+
+                    </div>
+
+
+                    <div class="mb-3">
+
+                        <small class="text-muted d-block">
+                            Nombre de jours
+                        </small>
+
+                        <span class="fw-semibold">
+
+                            {{ conge.nombre_jours }} jour(s)
+
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <small class="text-muted d-block">
+                            Date de création
+                        </small>
+
+                        <span class="fw-semibold">
+
+                            {{ conge.date_creation|date:"d/m/Y H:i" }}
+
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= ETAT DE LA DEMANDE ================= -->
+
+        <div class="col-12">
 
             <div class="card border-0 shadow-sm rounded-4">
 
-                <div class="card-body p-5">
+                <div class="card-body p-4">
 
-                    <!-- HEADER -->
+                    <h5 class="fw-bold mb-4">
 
-                    <div class="text-center mb-5">
+                        <i class="bi bi-info-circle text-primary me-2"></i>
 
-                        <div
-                            class="mx-auto mb-3 d-flex justify-content-center align-items-center rounded-circle bg-info text-white"
-                            style="
-                                width:80px;
-                                height:80px;
-                                font-size:30px;
-                            "
-                        >
+                        État de la demande
 
-                            <i class="bi bi-calendar-check-fill"></i>
+                    </h5>
+
+
+                    <div class="row align-items-center">
+
+                        <!-- STATUT ACTUEL -->
+
+                        <div class="col-md-6">
+
+                            <small class="text-muted d-block mb-2">
+                                Statut actuel
+                            </small>
+
+
+                            {% if conge.statut == "refuse" %}
+
+                                <span class="badge bg-danger rounded-pill px-3 py-2">
+
+                                    <i class="bi bi-x-circle me-1"></i>
+
+                                    Refusé
+
+                                </span>
+
+
+                            {% elif conge.statut == "accepte" and validation_rh %}
+
+                                <span class="badge bg-success rounded-pill px-3 py-2">
+
+                                    <i class="bi bi-check-circle me-1"></i>
+
+                                    Accepté définitivement
+
+                                </span>
+
+
+                            {% elif conge.statut == "accepte" and validation_superieur %}
+
+                                <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
+
+                                    <i class="bi bi-clock me-1"></i>
+
+                                    En attente de validation RH
+
+                                </span>
+
+
+                            {% else %}
+
+                                <span class="badge bg-warning text-dark rounded-pill px-3 py-2">
+
+                                    <i class="bi bi-clock me-1"></i>
+
+                                    En attente de validation du supérieur
+
+                                </span>
+
+                            {% endif %}
 
                         </div>
 
-                        <h2 class="fw-bold">
 
-                            Détails de la demande de congé
+                        <!-- VALIDATION SUPERIEUR -->
 
-                        </h2>
+                        <div class="col-md-3">
 
-                        <p class="text-muted">
+                            <small class="text-muted d-block mb-2">
 
-                            Consultez les informations de cette demande.
+                                Validation supérieur
 
-                        </p>
+                            </small>
 
-                    </div>
 
-                    <!-- INFORMATIONS -->
+                            {% if validation_superieur_obj %}
 
-                    <div class="row g-4">
+                                {% if validation_superieur_obj.decision == "accepte" %}
 
-                        {% if request.user.role != 'employe' %}
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">
-                                Employé
-                            </label>
-                            <div class="form-control bg-light">
-                                {{ conge.employe }}
-                            </div>
-                        </div>
-                        {% endif %}
+                                    <span class="text-success fw-semibold">
 
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">
-                                Date de début
-                            </label>
-                            <div class="form-control bg-light">
-                                {% language 'fr' %}
-                                    {{ conge.date_debut|date:"d F Y" }}
-                                {% endlanguage %}
-                            </div>
-                        </div>
+                                        <i class="bi bi-check-circle-fill me-1"></i>
 
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">
-                                Nombre de jours
-                            </label>
-                            <div class="form-control bg-light">
-                                {{ conge.nombre_jours }}
-                            </div>
-                        </div>
+                                        Validée
 
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">
-                                Date de fin
-                            </label>
-                            <div class="form-control bg-light">
-                                {% language 'fr' %}
-                                    {{ conge.date_fin|date:"d F Y" }}
-                                {% endlanguage %}
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">
-                                Statut
-                            </label>
-
-                            <div>
-                                {% if conge.statut == 'accepte' %}
-                                    <span class="badge bg-success px-3 py-2">
-                                        Accepté
                                     </span>
-                                {% elif conge.statut == 'refuse' %}
-                                    <span class="badge bg-danger px-3 py-2">
-                                        Refusé
+
+
+                                {% elif validation_superieur_obj.decision == "refuse" %}
+
+                                    <span class="text-danger fw-semibold">
+
+                                        <i class="bi bi-x-circle-fill me-1"></i>
+
+                                        Refusée
+
                                     </span>
-                                {% else %}
-                                    <span class="badge bg-warning text-dark px-3 py-2">
-                                        En attente
-                                    </span>
+
                                 {% endif %}
-                            </div>
+
+
+                            {% else %}
+
+                                <span class="text-warning fw-semibold">
+
+                                    <i class="bi bi-clock me-1"></i>
+
+                                    En attente
+
+                                </span>
+
+                            {% endif %}
+
                         </div>
 
-                        <div class="col-md-6">
-                            <label class="form-label fw-semibold">
-                                Date de création
-                            </label>
-                            <div class="form-control bg-light">
-                                {% language 'fr' %}
-                                    {{ conge.date_creation }}
-                                {% endlanguage %}
-                            </div>
+
+                        <!-- VALIDATION RH -->
+
+                        <div class="col-md-3">
+
+                            <small class="text-muted d-block mb-2">
+
+                                Validation RH
+
+                            </small>
+
+
+                            {% if validation_rh_obj %}
+
+                                {% if validation_rh_obj.decision == "accepte" %}
+
+                                    <span class="text-success fw-semibold">
+
+                                        <i class="bi bi-check-circle-fill me-1"></i>
+
+                                        Validée
+
+                                    </span>
+
+
+                                {% elif validation_rh_obj.decision == "refuse" %}
+
+                                    <span class="text-danger fw-semibold">
+
+                                        <i class="bi bi-x-circle-fill me-1"></i>
+
+                                        Refusée
+
+                                    </span>
+
+                                {% endif %}
+
+
+                            {% else %}
+
+                                <span class="text-warning fw-semibold">
+
+                                    <i class="bi bi-clock me-1"></i>
+
+                                    En attente
+
+                                </span>
+
+                            {% endif %}
+
                         </div>
 
                     </div>
 
-                    <!-- BOUTONS -->
+                </div>
 
-                    <div class="d-flex justify-content-end gap-2 mt-5">
+            </div>
 
-                        <a
-                            href="{% url 'conge_list' %}"
-                            class="btn btn-secondary"
-                        >
-                            Retour
-                        </a>
+        </div>
 
-                        {% if request.user.role == "employe" and conge.statut == "en attente" %}
 
-                        <a
-                            href="{% url 'conge_update' conge.id %}"
-                            class="btn btn-warning"
-                        >
-                            Modifier
-                        </a>
+        <!-- ================= HISTORIQUE DES VALIDATIONS ================= -->
+
+        <div class="col-12">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4">
+
+                    <h5 class="fw-bold mb-4">
+
+                        <i class="bi bi-clock-history text-primary me-2"></i>
+
+                        Historique des validations
+
+                    </h5>
+
+
+                    {% if historique_validations %}
+
+                        <div class="table-responsive">
+
+                            <table class="table table-hover align-middle mb-0">
+
+                                <thead class="table-light">
+
+                                    <tr>
+
+                                        <th>
+                                            Validateur
+                                        </th>
+
+                                        <th>
+                                            Rôle
+                                        </th>
+
+                                        <th>
+                                            Décision
+                                        </th>
+
+                                        <th>
+                                            Date
+                                        </th>
+
+                                        <th>
+                                            Commentaire
+                                        </th>
+
+                                    </tr>
+
+                                </thead>
+
+
+                                <tbody>
+
+                                    {% for validation in historique_validations %}
+
+                                        <tr>
+
+                                            <!-- VALIDATEUR -->
+
+                                            <td>
+
+                                                <div class="d-flex align-items-center">
+
+                                                    <div class="bg-light rounded-circle p-2 me-2">
+
+                                                        <i class="bi bi-person text-primary"></i>
+
+                                                    </div>
+
+
+                                                    <div>
+
+                                                        <span class="fw-semibold">
+
+                                                            {% if validation.validateur.first_name or validation.validateur.last_name %}
+
+                                                                {{ validation.validateur.first_name }}
+                                                                {{ validation.validateur.last_name }}
+
+                                                            {% else %}
+
+                                                                {{ validation.validateur.username }}
+
+                                                            {% endif %}
+
+                                                        </span>
+
+                                                    </div>
+
+                                                </div>
+
+                                            </td>
+
+
+                                            <!-- ROLE -->
+
+                                            <td>
+
+                                                {% if validation.validateur.role == "rh" %}
+
+                                                    <span class="badge bg-primary rounded-pill px-3 py-2">
+
+                                                        <i class="bi bi-person-badge me-1"></i>
+
+                                                        Ressources humaines
+
+                                                    </span>
+
+
+                                                {% elif conge.employe.superieur and validation.validateur == conge.employe.superieur.utilisateur %}
+
+                                                    <span class="badge bg-info text-dark rounded-pill px-3 py-2">
+
+                                                        <i class="bi bi-person-check me-1"></i>
+
+                                                        Supérieur hiérarchique
+
+                                                    </span>
+
+
+                                                {% else %}
+
+                                                    <span class="badge bg-secondary rounded-pill px-3 py-2">
+
+                                                        Validateur
+
+                                                    </span>
+
+                                                {% endif %}
+
+                                            </td>
+
+
+                                            <!-- DECISION -->
+
+                                            <td>
+
+                                                {% if validation.decision == "accepte" %}
+
+                                                    <span class="text-success fw-semibold">
+
+                                                        <i class="bi bi-check-circle-fill me-1"></i>
+
+                                                        Acceptée
+
+                                                    </span>
+
+
+                                                {% elif validation.decision == "refuse" %}
+
+                                                    <span class="text-danger fw-semibold">
+
+                                                        <i class="bi bi-x-circle-fill me-1"></i>
+
+                                                        Refusée
+
+                                                    </span>
+
+                                                {% endif %}
+
+                                            </td>
+
+
+                                            <!-- DATE -->
+
+                                            <td>
+
+                                                <span class="text-muted">
+
+                                                    <i class="bi bi-calendar3 me-1"></i>
+
+                                                    {{ validation.date_creation|date:"d/m/Y H:i" }}
+
+                                                </span>
+
+                                            </td>
+
+
+                                            <!-- COMMENTAIRE -->
+
+                                            <td>
+
+                                                {% if validation.commentaire %}
+
+                                                    <span>
+
+                                                        {{ validation.commentaire }}
+
+                                                    </span>
+
+                                                {% else %}
+
+                                                    <span class="text-muted">
+
+                                                        Aucun commentaire
+
+                                                    </span>
+
+                                                {% endif %}
+
+                                            </td>
+
+                                        </tr>
+
+                                    {% endfor %}
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+
+                    {% else %}
+
+                        <div class="text-center py-4">
+
+                            <i class="bi bi-clock-history fs-1 text-muted"></i>
+
+                            <p class="text-muted mb-0 mt-2">
+
+                                Aucune validation enregistrée pour le moment.
+
+                            </p>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= ACTIONS ================= -->
+
+        <div class="col-12">
+
+            <div class="card border-0 shadow-sm rounded-4">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-end gap-2 flex-wrap">
+
+
+                        <!-- MODIFICATION EMPLOYE -->
+
+                        {% if request.user.role == "employe" %}
+
+                            {% if conge.statut == "en attente" %}
+
+                                <a href="{% url 'conge_update' conge.id %}"
+                                   class="btn btn-warning rounded-3">
+
+                                    <i class="bi bi-pencil-square me-1"></i>
+
+                                    Modifier
+
+                                </a>
+
+                            {% endif %}
 
                         {% endif %}
 
-                        {% if request.user.role == "manager" and conge.statut == "en attente" %}
 
-                        <a
-                            href="{% url 'valider_conge' conge.id %}"
-                            class="btn btn-success"
-                        >
-                            <i class="bi bi-check-circle-fill"></i>
-                            Valider
-                        </a>
+                        <!-- ACTIONS MANAGER -->
 
-                        <a
-                            href="{% url 'refuser_conge' conge.id %}"
-                            class="btn btn-danger"
-                        >
-                            <i class="bi bi-x-circle-fill"></i>
-                            Refuser
-                        </a>
+                        {% if request.user.role == "manager" %}
+
+                            {% if not validation_superieur and conge.statut == "en attente" %}
+
+                                <a href="{% url 'valider_conge' conge.id %}"
+                                   class="btn btn-success rounded-3">
+
+                                    <i class="bi bi-check-circle me-1"></i>
+
+                                    Valider
+
+                                </a>
+
+
+                                <a href="{% url 'refuser_conge' conge.id %}"
+                                   class="btn btn-danger rounded-3">
+
+                                    <i class="bi bi-x-circle me-1"></i>
+
+                                    Refuser
+
+                                </a>
+
+                            {% endif %}
 
                         {% endif %}
+
+
+                        <!-- ACTIONS RH -->
+
+                        {% if request.user.role == "rh" %}
+
+                            {% if validation_superieur and not validation_rh and conge.statut == "accepte" %}
+
+                                <a href="{% url 'valider_conge_rh' conge.id %}"
+                                   class="btn btn-success rounded-3">
+
+                                    <i class="bi bi-check-circle me-1"></i>
+
+                                    Valider définitivement
+
+                                </a>
+
+
+                                <a href="{% url 'refuser_conge_rh' conge.id %}"
+                                   class="btn btn-danger rounded-3">
+
+                                    <i class="bi bi-x-circle me-1"></i>
+
+                                    Refuser
+
+                                </a>
+
+                            {% endif %}
+
+                        {% endif %}
+
+
+                        <!-- PDF -->
+
+                        {% if conge.statut == "accepte" and validation_rh %}
+
+                            <a href="{% url 'conge_pdf' conge.id %}"
+                               class="btn btn-primary rounded-3"
+                               target="_blank">
+
+                                <i class="bi bi-printer-fill me-1"></i>
+
+                                Imprimer / PDF
+
+                            </a>
+
+                        {% endif %}
+
+
+                        <!-- ACTIONS ADMIN -->
 
                         {% if request.user.role == "admin" or request.user.is_superuser %}
 
-                        <a
-                            href="{% url 'conge_update' conge.id %}"
-                            class="btn btn-warning"
-                        >
-                            Modifier
-                        </a>
+                            <a href="{% url 'conge_update' conge.id %}"
+                               class="btn btn-warning rounded-3">
 
-                        <a
-                            href="{% url 'conge_delete' conge.id %}"
-                            class="btn btn-danger"
-                        >
-                            Supprimer
-                        </a>
+                                <i class="bi bi-pencil-square me-1"></i>
+
+                                Modifier
+
+                            </a>
+
+
+                            <a href="{% url 'conge_delete' conge.id %}"
+                               class="btn btn-danger rounded-3"
+                               onclick="return confirm('Voulez-vous supprimer ce congé ?')">
+
+                                <i class="bi bi-trash me-1"></i>
+
+                                Supprimer
+
+                            </a>
 
                         {% endif %}
+
 
                     </div>
 
