@@ -19,8 +19,6 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from demande.views.pdf_conge import conge_pdf_view
-from demande.views.traitement_demande import traiter_conge
 
 
 urlpatterns = [
