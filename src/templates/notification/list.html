@@ -1,0 +1,201 @@
+{% extends "base/base.html" %}
+
+{% block content %}
+
+<div class="container-fluid py-4">
+
+    <!-- ================= EN-TÊTE ================= -->
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+
+            <h2 class="fw-bold mb-1">
+                <i class="bi bi-bell-fill me-2"></i>
+                Mes notifications
+            </h2>
+
+            <p class="text-muted mb-0">
+                Consultez l'ensemble de vos notifications.
+            </p>
+
+        </div>
+
+
+        <!-- ================= TOUT MARQUER COMME LU ================= -->
+
+        {% if notifications_non_lues > 0 %}
+
+            <a
+                href="{% url 'tout_marquer_comme_lue' %}"
+                class="btn btn-outline-primary"
+            >
+
+                <i class="bi bi-check2-all me-2"></i>
+
+                Tout marquer comme lu
+
+            </a>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- ================= LISTE DES NOTIFICATIONS ================= -->
+
+    <div class="card border-0 shadow-sm rounded-4">
+
+        <div class="card-body p-0">
+
+            {% for notification in notifications %}
+
+                <a
+                    href="{% url 'notification_detail' notification.id %}"
+                    class="text-decoration-none text-dark"
+                >
+
+                    <div
+                        class="p-4 border-bottom {% if not notification.lue %}bg-light{% endif %}"
+                    >
+
+                        <div class="d-flex align-items-start gap-3">
+
+                            <!-- ================= ICÔNE ================= -->
+
+                            <div>
+
+                                {% if notification.lue %}
+
+                                    <div
+                                        class="rounded-circle bg-secondary bg-opacity-10 p-3"
+                                    >
+
+                                        <i
+                                            class="bi bi-bell text-secondary fs-5"
+                                        ></i>
+
+                                    </div>
+
+                                {% else %}
+
+                                    <div
+                                        class="rounded-circle bg-primary bg-opacity-10 p-3"
+                                    >
+
+                                        <i
+                                            class="bi bi-bell-fill text-primary fs-5"
+                                        ></i>
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <!-- ================= CONTENU ================= -->
+
+                            <div class="flex-grow-1">
+
+                                <div
+                                    class="d-flex justify-content-between align-items-start"
+                                >
+
+                                    <h6 class="fw-bold mb-1">
+
+                                        {{ notification.titre }}
+
+                                    </h6>
+
+
+                                    {% if not notification.lue %}
+
+                                        <span class="badge bg-primary">
+
+                                            Nouvelle
+
+                                        </span>
+
+                                    {% endif %}
+
+                                </div>
+
+
+                                <!-- ================= MESSAGE ================= -->
+
+                                <p class="text-muted mb-2">
+
+                                    {{ notification.message }}
+
+                                </p>
+
+
+                                <!-- ================= INFORMATIONS ================= -->
+
+                                <div class="d-flex align-items-center gap-3">
+
+                                    <small class="text-secondary">
+
+                                        <i class="bi bi-clock me-1"></i>
+
+                                        {{ notification.date_creation|timesince }}
+
+                                    </small>
+
+
+                                    {% if notification.type_demande %}
+
+                                        <small class="text-secondary">
+
+                                            <i class="bi bi-tag me-1"></i>
+
+                                            {{ notification.type_demande }}
+
+                                        </small>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </a>
+
+            {% empty %}
+
+                <!-- ================= AUCUNE NOTIFICATION ================= -->
+
+                <div class="text-center py-5">
+
+                    <i
+                        class="bi bi-bell-slash text-muted display-4"
+                    ></i>
+
+                    <h5 class="mt-3 fw-bold">
+
+                        Aucune notification
+
+                    </h5>
+
+                    <p class="text-muted mb-0">
+
+                        Vous n'avez reçu aucune notification pour le moment.
+
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
