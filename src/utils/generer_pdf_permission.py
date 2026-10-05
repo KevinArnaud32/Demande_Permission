@@ -1,9 +1,9 @@
 from io import BytesIO
-from django.utils import timezone
+
 from reportlab.lib import colors
+from reportlab.lib.enums import TA_CENTER, TA_LEFT
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.units import mm
 from reportlab.platypus import (
     SimpleDocTemplate,
@@ -11,7 +11,6 @@ from reportlab.platypus import (
     Spacer,
     Table,
     TableStyle,
-    HRFlowable,
 )
 
 
@@ -19,18 +18,14 @@ def generer_pdf_permission(permission):
 
     buffer = BytesIO()
 
-    # ==========================================================
-    # CONFIGURATION DU DOCUMENT
-    # ==========================================================
-
     pdf = SimpleDocTemplate(
         buffer,
         pagesize=A4,
-        rightMargin=18 * mm,
-        leftMargin=18 * mm,
-        topMargin=18 * mm,
-        bottomMargin=22 * mm,
-        title="Validation de permission",
+        leftMargin=15 * mm,
+        rightMargin=15 * mm,
+        topMargin=10 * mm,
+        bottomMargin=14 * mm,
+        title="Attestation de permission",
         author="Service des Ressources Humaines",
     )
 
@@ -38,23 +33,20 @@ def generer_pdf_permission(permission):
     # COULEURS
     # ==========================================================
 
-    BLEU = colors.HexColor("#174A7E")
-    BLEU_CLAIR = colors.HexColor("#EAF2F8")
+    BLEU = colors.HexColor("#0B5ED7")
+    BLEU_FONCE = colors.HexColor("#084298")
+    BLEU_CLAIR = colors.HexColor("#EAF2FF")
+
+    GRIS_FOND = colors.HexColor("#F5F7FA")
+    GRIS_BORDURE = colors.HexColor("#D9DEE5")
+    GRIS_TEXTE = colors.HexColor("#5F6B7A")
 
     VERT = colors.HexColor("#198754")
-    VERT_CLAIR = colors.HexColor("#D1E7DD")
-
     ROUGE = colors.HexColor("#DC3545")
-    ROUGE_CLAIR = colors.HexColor("#F8D7DA")
-
     ORANGE = colors.HexColor("#FD7E14")
-    ORANGE_CLAIR = colors.HexColor("#FFE5D0")
-
-    GRIS = colors.HexColor("#6C757D")
-    GRIS_CLAIR = colors.HexColor("#DEE2E6")
-    GRIS_FOND = colors.HexColor("#F8F9FA")
 
     NOIR = colors.HexColor("#212529")
+    BLANC = colors.white
 
     # ==========================================================
     # STYLES
@@ -62,606 +54,811 @@ def generer_pdf_permission(permission):
 
     styles = getSampleStyleSheet()
 
-    style_entreprise = ParagraphStyle(
-        "EntreprisePermission",
-        parent=styles["Normal"],
-        fontName="Helvetica-Bold",
-        fontSize=14,
-        leading=17,
-        textColor=BLEU,
-    )
-
-    style_coordonnees = ParagraphStyle(
-        "CoordonneesPermission",
-        parent=styles["Normal"],
-        fontName="Helvetica",
-        fontSize=8,
-        leading=11,
-        textColor=GRIS,
-    )
-
-    style_titre = ParagraphStyle(
+    titre_style = ParagraphStyle(
         "TitrePermission",
-        parent=styles["Title"],
+        parent=styles["Heading1"],
         fontName="Helvetica-Bold",
-        fontSize=18,
-        leading=22,
+        fontSize=16,
+        leading=18,
+        textColor=BLANC,
         alignment=TA_CENTER,
-        textColor=BLEU,
-        spaceAfter=4,
     )
 
-    style_sous_titre = ParagraphStyle(
+    sous_titre_style = ParagraphStyle(
         "SousTitrePermission",
         parent=styles["Normal"],
         fontName="Helvetica",
-        fontSize=8.5,
-        leading=11,
+        fontSize=8,
+        leading=9,
+        textColor=BLANC,
         alignment=TA_CENTER,
-        textColor=GRIS,
     )
 
-    style_section = ParagraphStyle(
+    section_style = ParagraphStyle(
         "SectionPermission",
         parent=styles["Heading2"],
         fontName="Helvetica-Bold",
-        fontSize=10,
-        leading=13,
-        textColor=BLEU,
-        spaceBefore=4,
-        spaceAfter=7,
+        fontSize=9.5,
+        leading=11,
+        textColor=BLEU_FONCE,
     )
 
-    style_label = ParagraphStyle(
+    label_style = ParagraphStyle(
         "LabelPermission",
         parent=styles["Normal"],
         fontName="Helvetica-Bold",
+        fontSize=8,
+        leading=9,
+        textColor=GRIS_TEXTE,
+    )
+
+    value_style = ParagraphStyle(
+        "ValuePermission",
+        parent=styles["Normal"],
+        fontName="Helvetica",
         fontSize=8.5,
-        leading=11,
+        leading=10,
         textColor=NOIR,
     )
 
-    style_valeur = ParagraphStyle(
-        "ValeurPermission",
+    texte_style = ParagraphStyle(
+        "TextePermission",
         parent=styles["Normal"],
         fontName="Helvetica",
         fontSize=8.5,
         leading=11,
         textColor=NOIR,
+        alignment=TA_LEFT,
     )
 
-    style_decision = ParagraphStyle(
+    decision_style = ParagraphStyle(
         "DecisionPermission",
         parent=styles["Normal"],
         fontName="Helvetica-Bold",
-        fontSize=13,
-        leading=16,
+        fontSize=10.5,
+        leading=12,
         alignment=TA_CENTER,
-    )
-
-    style_footer = ParagraphStyle(
-        "FooterPermission",
-        parent=styles["Normal"],
-        fontName="Helvetica",
-        fontSize=7.5,
-        leading=10,
-        alignment=TA_CENTER,
-        textColor=GRIS,
     )
 
     # ==========================================================
-    # CONTENU
+    # FONCTIONS
+    # ==========================================================
+
+    def section_header(titre):
+
+        table = Table(
+            [
+                [
+                    Paragraph(
+                        f"<b>{titre}</b>",
+                        section_style
+                    )
+                ]
+            ],
+            colWidths=[178 * mm],
+        )
+
+        table.setStyle(
+            TableStyle(
+                [
+                    (
+                        "BACKGROUND",
+                        (0, 0),
+                        (-1, -1),
+                        BLEU_CLAIR,
+                    ),
+                    (
+                        "BOX",
+                        (0, 0),
+                        (-1, -1),
+                        0.7,
+                        BLEU,
+                    ),
+                    (
+                        "LEFTPADDING",
+                        (0, 0),
+                        (-1, -1),
+                        6,
+                    ),
+                    (
+                        "RIGHTPADDING",
+                        (0, 0),
+                        (-1, -1),
+                        6,
+                    ),
+                    (
+                        "TOPPADDING",
+                        (0, 0),
+                        (-1, -1),
+                        4,
+                    ),
+                    (
+                        "BOTTOMPADDING",
+                        (0, 0),
+                        (-1, -1),
+                        4,
+                    ),
+                ]
+            )
+        )
+
+        return table
+
+    def info_table(rows):
+
+        data = []
+
+        for label1, value1, label2, value2 in rows:
+
+            data.append(
+                [
+                    Paragraph(label1, label_style),
+                    Paragraph(str(value1), value_style),
+                    Paragraph(label2, label_style),
+                    Paragraph(str(value2), value_style),
+                ]
+            )
+
+        table = Table(
+            data,
+            colWidths=[
+                43 * mm,
+                46 * mm,
+                43 * mm,
+                46 * mm,
+            ],
+            rowHeights=[8 * mm] * len(data),
+        )
+
+        table.setStyle(
+            TableStyle(
+                [
+                    (
+                        "BACKGROUND",
+                        (0, 0),
+                        (0, -1),
+                        GRIS_FOND,
+                    ),
+                    (
+                        "BACKGROUND",
+                        (2, 0),
+                        (2, -1),
+                        GRIS_FOND,
+                    ),
+                    (
+                        "GRID",
+                        (0, 0),
+                        (-1, -1),
+                        0.5,
+                        GRIS_BORDURE,
+                    ),
+                    (
+                        "VALIGN",
+                        (0, 0),
+                        (-1, -1),
+                        "MIDDLE",
+                    ),
+                    (
+                        "LEFTPADDING",
+                        (0, 0),
+                        (-1, -1),
+                        6,
+                    ),
+                    (
+                        "RIGHTPADDING",
+                        (0, 0),
+                        (-1, -1),
+                        6,
+                    ),
+                    (
+                        "TOPPADDING",
+                        (0, 0),
+                        (-1, -1),
+                        2,
+                    ),
+                    (
+                        "BOTTOMPADDING",
+                        (0, 0),
+                        (-1, -1),
+                        2,
+                    ),
+                ]
+            )
+        )
+
+        return table
+
+    # ==========================================================
+    # ELEMENTS
     # ==========================================================
 
     elements = []
 
     # ==========================================================
-    # EN-TÊTE ENTREPRISE
+    # EN-TÊTE
     # ==========================================================
 
-    # Emplacement prévu pour le logo
-    logo = Table(
-        [
-            [
-                Paragraph(
-                    "<b>LOGO</b>",
-                    ParagraphStyle(
-                        "LogoPermission",
-                        parent=styles["Normal"],
-                        fontName="Helvetica-Bold",
-                        fontSize=10,
-                        alignment=TA_CENTER,
-                        textColor=BLEU,
-                    ),
-                )
-            ]
-        ],
-        colWidths=[30 * mm],
-        rowHeights=[20 * mm],
-    )
-
-    logo.setStyle(
-        TableStyle(
-            [
-                ("BOX", (0, 0), (-1, -1), 1, BLEU),
-                ("BACKGROUND", (0, 0), (-1, -1), BLEU_CLAIR),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ("ALIGN", (0, 0), (-1, -1), "CENTER"),
-            ]
+    logo = Paragraph(
+        "<b>LOGO</b>",
+        ParagraphStyle(
+            "LogoPermission",
+            parent=styles["Normal"],
+            fontName="Helvetica-Bold",
+            fontSize=12,
+            textColor=BLEU_FONCE,
+            alignment=TA_CENTER,
         )
     )
 
-    entreprise = [
-        Paragraph(
-            "NOM DE L'ENTREPRISE",
-            style_entreprise
-        ),
-        Paragraph(
-            "Direction des Ressources Humaines",
-            style_coordonnees
-        ),
-        Paragraph(
-            "Adresse de l'entreprise<br/>"
-            "Téléphone : +225 XX XX XX XX XX<br/>"
-            "Email : contact@entreprise.com",
-            style_coordonnees
-        ),
-    ]
+    entreprise = Paragraph(
+        "<b>NOM DE L'ENTREPRISE</b><br/>"
+        "<font size='7.5'>Direction des Ressources Humaines</font><br/>"
+        "<font size='6.5'>Service Administration du Personnel</font>",
+        ParagraphStyle(
+            "EntreprisePermission",
+            parent=styles["Normal"],
+            fontName="Helvetica",
+            fontSize=8.5,
+            leading=10,
+            textColor=NOIR,
+        )
+    )
+
+    reference = Paragraph(
+        "<b>DOCUMENT OFFICIEL</b><br/>"
+        f"<font size='6.5'>Référence : PERM-{permission.id:05d}</font>",
+        ParagraphStyle(
+            "ReferencePermission",
+            parent=styles["Normal"],
+            fontName="Helvetica",
+            fontSize=7.5,
+            leading=9,
+            textColor=BLEU_FONCE,
+            alignment=TA_CENTER,
+        )
+    )
 
     header = Table(
         [
-            [
-                logo,
-                entreprise,
-            ]
+            [logo, entreprise, reference]
         ],
-        colWidths=[38 * mm, 135 * mm],
+        colWidths=[
+            30 * mm,
+            105 * mm,
+            43 * mm,
+        ],
+        rowHeights=[21 * mm],
     )
 
     header.setStyle(
         TableStyle(
             [
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ("LEFTPADDING", (0, 0), (-1, -1), 0),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 5),
-                ("TOPPADDING", (0, 0), (-1, -1), 0),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 0),
+                (
+                    "BOX",
+                    (0, 0),
+                    (-1, -1),
+                    0.8,
+                    GRIS_BORDURE,
+                ),
+                (
+                    "VALIGN",
+                    (0, 0),
+                    (-1, -1),
+                    "MIDDLE",
+                ),
+                (
+                    "LEFTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    6,
+                ),
+                (
+                    "RIGHTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    6,
+                ),
             ]
         )
     )
 
     elements.append(header)
-
-    elements.append(
-        HRFlowable(
-            width="100%",
-            thickness=1.5,
-            color=BLEU,
-            spaceBefore=6,
-            spaceAfter=16,
-        )
-    )
+    elements.append(Spacer(1, 3 * mm))
 
     # ==========================================================
     # TITRE
     # ==========================================================
 
-    elements.append(
-        Paragraph(
-            "VALIDATION DE PERMISSION",
-            style_titre
-        )
-    )
-
-    elements.append(
-        Paragraph(
-            "DÉCISION DU SERVICE DES RESSOURCES HUMAINES",
-            style_sous_titre
-        )
-    )
-
-    elements.append(Spacer(1, 12))
-
-    # ==========================================================
-    # RÉFÉRENCE DU DOCUMENT
-    # ==========================================================
-
-    reference = f"VAL-PERM-{permission.pk:05d}"
-
-    date_validation = (
-        permission.date_modification.strftime("%d/%m/%Y")
-        if permission.date_modification
-        else timezone.now().strftime("%d/%m/%Y")
-    )
-
-    reference_data = [
-        [
-            Paragraph("<b>Référence</b>", style_label),
-            Paragraph(reference, style_valeur),
-            Paragraph("<b>Date de validation</b>", style_label),
-            Paragraph(date_validation, style_valeur),
-        ]
-    ]
-
-    reference_table = Table(
-        reference_data,
-        colWidths=[32 * mm, 50 * mm, 38 * mm, 53 * mm],
-    )
-
-    reference_table.setStyle(
-        TableStyle(
-            [
-                ("BACKGROUND", (0, 0), (-1, -1), GRIS_FOND),
-                ("BOX", (0, 0), (-1, -1), 0.5, GRIS_CLAIR),
-                ("INNERGRID", (0, 0), (-1, -1), 0.5, GRIS_CLAIR),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ("LEFTPADDING", (0, 0), (-1, -1), 7),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 7),
-                ("TOPPADDING", (0, 0), (-1, -1), 7),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 7),
-            ]
-        )
-    )
-
-    elements.append(reference_table)
-    elements.append(Spacer(1, 17))
-
-    # ==========================================================
-    # IDENTIFICATION DE L'EMPLOYÉ
-    # ==========================================================
-
-    elements.append(
-        Paragraph(
-            "1. IDENTIFICATION DE L'EMPLOYÉ",
-            style_section
-        )
-    )
-
-    employe = permission.employe
-
-    nom = employe.nom or "-"
-    prenom = employe.prenom or "-"
-
-    email = (
-        employe.utilisateur.email
-        if employe.utilisateur
-        else "-"
-    )
-
-    fonction = (
-        str(employe.fonction)
-        if employe.fonction
-        else "-"
-    )
-
-    departement = (
-        employe.departement.nom_departement
-        if employe.departement
-        else "-"
-    )
-
-    employe_data = [
-        [
-            Paragraph("<b>Nom</b>", style_label),
-            Paragraph(nom, style_valeur),
-            Paragraph("<b>Prénom</b>", style_label),
-            Paragraph(prenom, style_valeur),
-        ],
-        [
-            Paragraph("<b>Email</b>", style_label),
-            Paragraph(email, style_valeur),
-            Paragraph("<b>Fonction</b>", style_label),
-            Paragraph(fonction, style_valeur),
-        ],
-        [
-            Paragraph("<b>Département</b>", style_label),
-            Paragraph(departement, style_valeur),
-        ],
-    ]
-
-    employe_table = Table(
-        employe_data,
-        colWidths=[30 * mm, 55 * mm, 30 * mm, 58 * mm],
-    )
-
-    employe_table.setStyle(
-        TableStyle(
-            [
-                ("BACKGROUND", (0, 0), (0, -1), BLEU_CLAIR),
-                ("BACKGROUND", (2, 0), (2, -1), BLEU_CLAIR),
-                ("BOX", (0, 0), (-1, -1), 0.5, GRIS_CLAIR),
-                ("INNERGRID", (0, 0), (-1, -1), 0.5, GRIS_CLAIR),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ("LEFTPADDING", (0, 0), (-1, -1), 7),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 7),
-                ("TOPPADDING", (0, 0), (-1, -1), 7),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 7),
-            ]
-        )
-    )
-
-    elements.append(employe_table)
-    elements.append(Spacer(1, 17))
-
-    # ==========================================================
-    # INFORMATIONS SUR LA PERMISSION
-    # ==========================================================
-
-    elements.append(
-        Paragraph(
-            "2. INFORMATIONS RELATIVES À LA PERMISSION",
-            style_section
-        )
-    )
-
-    type_permission = (
-        str(permission.type_permission)
-        if permission.type_permission
-        else "-"
-    )
-
-    date_permission = (
-        permission.date_permission.strftime("%d/%m/%Y")
-        if permission.date_permission
-        else "-"
-    )
-
-    date_retour = (
-        permission.date_retour.strftime("%d/%m/%Y")
-        if permission.date_retour
-        else "-"
-    )
-
-    motif = (
-        permission.motif
-        if permission.motif
-        else "Aucun motif renseigné."
-    )
-
-    permission_data = [
-        [
-            Paragraph("<b>Type de permission</b>", style_label),
-            Paragraph(type_permission, style_valeur),
-        ],
-        [
-            Paragraph("<b>Date de permission</b>", style_label),
-            Paragraph(date_permission, style_valeur),
-        ],
-        [
-            Paragraph("<b>Date de retour</b>", style_label),
-            Paragraph(date_retour, style_valeur),
-        ],
-        [
-            Paragraph("<b>Motif</b>", style_label),
-            Paragraph(motif, style_valeur),
-        ],
-    ]
-
-    permission_table = Table(
-        permission_data,
-        colWidths=[55 * mm, 118 * mm],
-    )
-
-    permission_table.setStyle(
-        TableStyle(
-            [
-                ("BACKGROUND", (0, 0), (0, -1), BLEU_CLAIR),
-                ("BOX", (0, 0), (-1, -1), 0.5, GRIS_CLAIR),
-                ("INNERGRID", (0, 0), (-1, -1), 0.5, GRIS_CLAIR),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ("LEFTPADDING", (0, 0), (-1, -1), 8),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 8),
-                ("TOPPADDING", (0, 0), (-1, -1), 8),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 8),
-            ]
-        )
-    )
-
-    elements.append(permission_table)
-    elements.append(Spacer(1, 18))
-
-    # ==========================================================
-    # DÉCISION
-    # ==========================================================
-
-    elements.append(
-        Paragraph(
-            "3. DÉCISION",
-            style_section
-        )
-    )
-
-    statut = (
-        str(permission.statut).lower()
-        if permission.statut
-        else ""
-    )
-
-    if "accepte" in statut:
-        decision_text = "PERMISSION ACCORDÉE"
-        decision_color = VERT
-        decision_background = VERT_CLAIR
-
-    elif "refuse" in statut:
-        decision_text = "PERMISSION REFUSÉE"
-        decision_color = ROUGE
-        decision_background = ROUGE_CLAIR
-
-    else:
-        decision_text = "PERMISSION EN ATTENTE DE VALIDATION"
-        decision_color = ORANGE
-        decision_background = ORANGE_CLAIR
-
-    decision_style = ParagraphStyle(
-        "DecisionFinalePermission",
-        parent=style_decision,
-        textColor=decision_color,
-    )
-
-    decision_table = Table(
+    titre = Table(
         [
             [
                 Paragraph(
-                    decision_text,
-                    decision_style
+                    "ATTESTATION DE PERMISSION",
+                    titre_style
                 )
-            ]
+            ],
+            [
+                Paragraph(
+                    "DOCUMENT OFFICIEL DE VALIDATION",
+                    sous_titre_style
+                )
+            ],
         ],
-        colWidths=[173 * mm],
-        rowHeights=[22 * mm],
+        colWidths=[178 * mm],
+        rowHeights=[10 * mm, 6 * mm],
     )
 
-    decision_table.setStyle(
+    titre.setStyle(
         TableStyle(
             [
                 (
                     "BACKGROUND",
                     (0, 0),
                     (-1, -1),
-                    decision_background
+                    BLEU_FONCE,
                 ),
                 (
-                    "BOX",
+                    "VALIGN",
                     (0, 0),
                     (-1, -1),
-                    1.2,
-                    decision_color
+                    "MIDDLE",
                 ),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ("ALIGN", (0, 0), (-1, -1), "CENTER"),
             ]
         )
     )
 
-    elements.append(decision_table)
-    elements.append(Spacer(1, 15))
+    elements.append(titre)
+    elements.append(Spacer(1, 3 * mm))
+
+    # ==========================================================
+    # SALARIÉ
+    # ==========================================================
+
+    elements.append(
+        section_header("1. IDENTIFICATION DU SALARIÉ")
+    )
+
+    elements.append(Spacer(1, 1.5 * mm))
+
+    superieur = (
+        f"{permission.employe.superieur.prenom} "
+        f"{permission.employe.superieur.nom}"
+        if permission.employe.superieur
+        else "Non renseigné"
+    )
+
+    email = (
+        permission.employe.utilisateur.email
+        if permission.employe.utilisateur
+        else "Non renseigné"
+    )
+
+    fonction = (
+        str(permission.employe.fonction)
+        if permission.employe.fonction
+        else "Non renseignée"
+    )
+
+    departement = (
+        str(permission.employe.departement)
+        if permission.employe.departement
+        else "Non renseigné"
+    )
+
+    elements.append(
+        info_table(
+            [
+                (
+                    "Nom",
+                    permission.employe.nom,
+                    "Prénom",
+                    permission.employe.prenom,
+                ),
+                (
+                    "Email",
+                    email,
+                    "Fonction",
+                    fonction,
+                ),
+                (
+                    "Département",
+                    departement,
+                    "Supérieur hiérarchique",
+                    superieur,
+                ),
+            ]
+        )
+    )
+
+    elements.append(Spacer(1, 3 * mm))
+
+    # ==========================================================
+    # PERMISSION
+    # ==========================================================
+
+    elements.append(
+        section_header("2. INFORMATIONS DE LA PERMISSION")
+    )
+
+    elements.append(Spacer(1, 1.5 * mm))
+
+    type_permission = (
+        str(permission.type_permission)
+        if permission.type_permission
+        else "Non renseigné"
+    )
+
+    date_permission = (
+        permission.date_permission.strftime("%d/%m/%Y")
+        if permission.date_permission
+        else "Non renseignée"
+    )
+
+    date_retour = (
+        permission.date_retour.strftime("%d/%m/%Y")
+        if permission.date_retour
+        else "Non renseignée"
+    )
+
+    motif = (
+        permission.motif
+        if permission.motif
+        else "Aucun motif renseigné"
+    )
+
+    statut = permission.statut.replace("_", " ").upper()
+
+    permission_table = info_table(
+        [
+            (
+                "Type de permission",
+                type_permission,
+                "Date de permission",
+                date_permission,
+            ),
+            (
+                "Date de retour",
+                date_retour,
+                "Statut",
+                statut,
+            ),
+            (
+                "Date de demande",
+                permission.date_creation.strftime(
+                    "%d/%m/%Y %H:%M"
+                ),
+                "Référence",
+                f"PERM-{permission.id:05d}",
+            ),
+        ]
+    )
+
+    elements.append(permission_table)
+    elements.append(Spacer(1, 2.5 * mm))
+
+    # ==========================================================
+    # MOTIF
+    # ==========================================================
+
+    motif_box = Table(
+        [
+            [
+                Paragraph(
+                    "<b>MOTIF DE LA PERMISSION</b>",
+                    label_style
+                )
+            ],
+            [
+                Paragraph(
+                    str(motif),
+                    texte_style
+                )
+            ],
+        ],
+        colWidths=[178 * mm],
+        rowHeights=[6 * mm, 14 * mm],
+    )
+
+    motif_box.setStyle(
+        TableStyle(
+            [
+                (
+                    "BOX",
+                    (0, 0),
+                    (-1, -1),
+                    0.6,
+                    GRIS_BORDURE,
+                ),
+                (
+                    "BACKGROUND",
+                    (0, 0),
+                    (-1, 0),
+                    GRIS_FOND,
+                ),
+                (
+                    "VALIGN",
+                    (0, 0),
+                    (-1, -1),
+                    "MIDDLE",
+                ),
+                (
+                    "LEFTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    7,
+                ),
+                (
+                    "RIGHTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    7,
+                ),
+                (
+                    "TOPPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    2,
+                ),
+                (
+                    "BOTTOMPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    2,
+                ),
+            ]
+        )
+    )
+
+    elements.append(motif_box)
+    elements.append(Spacer(1, 3 * mm))
+
+    # ==========================================================
+    # DÉCISION
+    # ==========================================================
+
+    if permission.statut == "accepte":
+
+        decision = "PERMISSION DÉFINITIVEMENT ACCORDÉE"
+        decision_color = VERT
+        decision_text = (
+            "La demande de permission a reçu les validations requises "
+            "et est officiellement accordée."
+        )
+
+    elif permission.statut == "refuse":
+
+        decision = "DEMANDE DE PERMISSION REFUSÉE"
+        decision_color = ROUGE
+        decision_text = (
+            "La demande de permission n'a pas été approuvée."
+        )
+
+    else:
+
+        decision = "DÉCISION EN ATTENTE"
+        decision_color = ORANGE
+        decision_text = (
+            "La demande est actuellement en attente de validation."
+        )
+
+    decision_box = Table(
+        [
+            [
+                Paragraph(
+                    decision,
+                    ParagraphStyle(
+                        "DecisionPermissionTitre",
+                        parent=decision_style,
+                        textColor=decision_color,
+                    )
+                )
+            ],
+            [
+                Paragraph(
+                    decision_text,
+                    ParagraphStyle(
+                        "DecisionPermissionText",
+                        parent=styles["Normal"],
+                        fontName="Helvetica",
+                        fontSize=8,
+                        leading=10,
+                        textColor=GRIS_TEXTE,
+                        alignment=TA_CENTER,
+                    )
+                )
+            ],
+        ],
+        colWidths=[178 * mm],
+        rowHeights=[8 * mm, 8 * mm],
+    )
+
+    decision_box.setStyle(
+        TableStyle(
+            [
+                (
+                    "BOX",
+                    (0, 0),
+                    (-1, -1),
+                    1,
+                    decision_color,
+                ),
+                (
+                    "VALIGN",
+                    (0, 0),
+                    (-1, -1),
+                    "MIDDLE",
+                ),
+            ]
+        )
+    )
+
+    elements.append(decision_box)
+    elements.append(Spacer(1, 3 * mm))
 
     # ==========================================================
     # TEXTE OFFICIEL
     # ==========================================================
 
-    if "accepte" in statut:
+    texte = (
+        "Le présent document atteste que <b>"
+        f"{permission.employe.prenom} {permission.employe.nom}"
+        "</b>, appartenant au département "
+        f"<b>{departement}</b>, est autorisé(e) à bénéficier "
+        "de la permission indiquée dans le présent document, "
+        "conformément aux procédures internes de l'entreprise."
+    )
 
-        texte = (
-            f"Après examen de la demande de permission présentée par "
-            f"<b>{prenom} {nom}</b>, le Service des Ressources Humaines "
-            f"confirme l'autorisation de la permission pour la date du "
-            f"<b>{date_permission}</b>, avec une date de retour prévue "
-            f"le <b>{date_retour}</b>."
-        )
-
-    elif "refuse" in statut:
-
-        texte = (
-            f"Après examen de la demande de permission présentée par "
-            f"<b>{prenom} {nom}</b>, le Service des Ressources Humaines "
-            f"confirme le refus de la permission demandée pour la date "
-            f"du <b>{date_permission}</b>."
-        )
-
-    else:
-
-        texte = (
-            f"La demande de permission présentée par "
-            f"<b>{prenom} {nom}</b> est actuellement en attente "
-            f"de validation."
-        )
-
-    texte_table = Table(
+    texte_box = Table(
         [
             [
-                Paragraph(
-                    texte,
-                    style_valeur
-                )
+                Paragraph(texte, texte_style)
             ]
         ],
-        colWidths=[173 * mm],
+        colWidths=[178 * mm],
+        rowHeights=[15 * mm],
     )
 
-    texte_table.setStyle(
+    texte_box.setStyle(
         TableStyle(
             [
-                ("BACKGROUND", (0, 0), (-1, -1), GRIS_FOND),
-                ("BOX", (0, 0), (-1, -1), 0.5, GRIS_CLAIR),
-                ("LEFTPADDING", (0, 0), (-1, -1), 10),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 10),
-                ("TOPPADDING", (0, 0), (-1, -1), 10),
-                ("BOTTOMPADDING", (0, 0), (-1, -1), 10),
+                (
+                    "BOX",
+                    (0, 0),
+                    (-1, -1),
+                    0.6,
+                    GRIS_BORDURE,
+                ),
+                (
+                    "BACKGROUND",
+                    (0, 0),
+                    (-1, -1),
+                    GRIS_FOND,
+                ),
+                (
+                    "VALIGN",
+                    (0, 0),
+                    (-1, -1),
+                    "MIDDLE",
+                ),
+                (
+                    "LEFTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    8,
+                ),
+                (
+                    "RIGHTPADDING",
+                    (0, 0),
+                    (-1, -1),
+                    8,
+                ),
             ]
         )
     )
 
-    elements.append(texte_table)
-    elements.append(Spacer(1, 22))
+    elements.append(texte_box)
+    elements.append(Spacer(1, 3.5 * mm))
 
     # ==========================================================
     # SIGNATURES
     # ==========================================================
 
-    signature_data = [
-        [
-            Paragraph(
-                "<b>RESPONSABLE HIÉRARCHIQUE</b>",
-                style_label
-            ),
-            Paragraph(
-                "<b>RESSOURCES HUMAINES</b>",
-                style_label
-            ),
-        ],
-        [
-            Paragraph(
-                "<br/><br/><br/>"
-                "Nom et signature :<br/>"
-                "____________________________",
-                style_valeur
-            ),
-            Paragraph(
-                "<br/><br/><br/>"
-                "Nom et signature :<br/>"
-                "____________________________",
-                style_valeur
-            ),
-        ],
-    ]
-
-    signature_table = Table(
-        signature_data,
-        colWidths=[86.5 * mm, 86.5 * mm],
-        rowHeights=[10 * mm, 35 * mm],
+    elements.append(
+        section_header("3. VALIDATION ET SIGNATURES")
     )
 
-    signature_table.setStyle(
+    elements.append(Spacer(1, 2 * mm))
+
+    signature_style = ParagraphStyle(
+        "SignaturePermission",
+        parent=styles["Normal"],
+        fontName="Helvetica",
+        fontSize=7.5,
+        leading=9,
+        textColor=NOIR,
+        alignment=TA_CENTER,
+    )
+
+    signatures = Table(
+        [
+            [
+                Paragraph(
+                    "<b>SUPÉRIEUR HIÉRARCHIQUE</b>",
+                    signature_style
+                ),
+                Paragraph(
+                    "<b>RESPONSABLE RH</b>",
+                    signature_style
+                ),
+                Paragraph(
+                    "<b>CACHET DE L'ENTREPRISE</b>",
+                    signature_style
+                ),
+            ],
+            [
+                Paragraph(
+                    f"{superieur}<br/><br/>"
+                    "Signature : __________________",
+                    signature_style
+                ),
+                Paragraph(
+                    "Responsable des Ressources Humaines"
+                    "<br/><br/>"
+                    "Signature : __________________",
+                    signature_style
+                ),
+                Paragraph(
+                    "<br/><br/>"
+                    "Cachet",
+                    signature_style
+                ),
+            ],
+        ],
+        colWidths=[
+            59 * mm,
+            59 * mm,
+            60 * mm,
+        ],
+        rowHeights=[
+            7 * mm,
+            24 * mm,
+        ],
+    )
+
+    signatures.setStyle(
         TableStyle(
             [
-                ("BACKGROUND", (0, 0), (-1, 0), GRIS_FOND),
-                ("BOX", (0, 0), (-1, -1), 0.5, GRIS_CLAIR),
-                ("INNERGRID", (0, 0), (-1, -1), 0.5, GRIS_CLAIR),
-                ("VALIGN", (0, 0), (-1, -1), "MIDDLE"),
-                ("ALIGN", (0, 0), (-1, -1), "CENTER"),
-                ("LEFTPADDING", (0, 0), (-1, -1), 6),
-                ("RIGHTPADDING", (0, 0), (-1, -1), 6),
+                (
+                    "BOX",
+                    (0, 0),
+                    (-1, -1),
+                    0.7,
+                    GRIS_BORDURE,
+                ),
+                (
+                    "INNERGRID",
+                    (0, 0),
+                    (-1, -1),
+                    0.5,
+                    GRIS_BORDURE,
+                ),
+                (
+                    "BACKGROUND",
+                    (0, 0),
+                    (-1, 0),
+                    GRIS_FOND,
+                ),
+                (
+                    "VALIGN",
+                    (0, 0),
+                    (-1, -1),
+                    "MIDDLE",
+                ),
             ]
         )
     )
 
-    elements.append(signature_table)
-    elements.append(Spacer(1, 18))
-
-    # ==========================================================
-    # MENTION
-    # ==========================================================
-
-    elements.append(
-        Paragraph(
-            "Document généré automatiquement par le système "
-            "de gestion des ressources humaines. "
-            "Ce document constitue une pièce administrative "
-            "relative à la demande de permission enregistrée.",
-            style_footer
-        )
-    )
+    elements.append(signatures)
 
     # ==========================================================
     # PIED DE PAGE
@@ -673,35 +870,39 @@ def generer_pdf_permission(permission):
 
         width, height = A4
 
-        canvas.setStrokeColor(BLEU)
-        canvas.setLineWidth(0.7)
+        canvas.setStrokeColor(GRIS_BORDURE)
+        canvas.setLineWidth(0.5)
 
         canvas.line(
-            18 * mm,
-            14 * mm,
-            width - 18 * mm,
-            14 * mm
+            15 * mm,
+            8 * mm,
+            width - 15 * mm,
+            8 * mm,
         )
 
-        canvas.setFont("Helvetica", 7)
-        canvas.setFillColor(GRIS)
+        canvas.setFont(
+            "Helvetica",
+            6.5
+        )
+
+        canvas.setFillColor(GRIS_TEXTE)
 
         canvas.drawString(
-            18 * mm,
-            9 * mm,
+            15 * mm,
+            4 * mm,
             "Service des Ressources Humaines"
         )
 
         canvas.drawCentredString(
             width / 2,
-            9 * mm,
-            f"Référence : {reference}"
+            4 * mm,
+            f"Référence PERM-{permission.id:05d}"
         )
 
         canvas.drawRightString(
-            width - 18 * mm,
-            9 * mm,
-            f"Page {doc.page}"
+            width - 15 * mm,
+            4 * mm,
+            "Page 1 / 1"
         )
 
         canvas.restoreState()
