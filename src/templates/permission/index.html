@@ -196,13 +196,17 @@ Permissions
 
                                 <!-- PDF (design conservé) -->
 
-                                <a href="#"
+                                {% if permission.statut == 'accepte' %}
+
+                                <a href="{% url 'permission_pdf' permission.id %}"
                                    class="btn btn-light border rounded-3"
                                    title="Exporter PDF">
 
                                     <i class="bi bi-file-earmark-pdf"></i>
 
                                 </a>
+
+                                {% endif %}
 
                                 <!-- EMPLOYE -->
 
