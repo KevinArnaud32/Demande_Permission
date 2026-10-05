@@ -36,7 +36,8 @@ urlpatterns = [
     path('auth/',include('authentification.urls')),
     path('utilisateur/', include('employe.urls.utilisateur_url')),
     path('departement/', include('employe.urls.departement_url')),
-    path('envoi_pdf/<int:pk>/', traiter_conge, name='traiter_conge'),
+    path('pdf/', include('demande.urls.pdf_url')),
+    path('notification/', include('demande.urls.notification_url')),
 ]
 
 urlpatterns += static(
