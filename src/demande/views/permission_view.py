@@ -5,6 +5,7 @@ from core.decorators import role_required
 from demande.models.permission_model import Permission
 from demande.forms.permission_form import PermissionForm
 from demande.models.validation_model import Validation
+from demande.services.service_notification import creer_notification
 from utils.email import *
 
 
@@ -48,6 +49,20 @@ def permission_create(request):
             permission.employe = user.employe
             permission.save()
             notifier_manager(permission)
+
+            if request.user.employe.superieur:
+                creer_notification(
+                    destinataire=request.user.employe.superieur.utilisateur,
+                    titre="Nouvelle demande de permission",
+                    message=(
+                        f"{request.user.employe.prenom} {request.user.employe.nom} "
+                        f"a soumis une nouvelle demande de permission."
+                    ),
+                    type_notification="nouvelle_demande",
+                    demande_id=permission.id,
+                    type_demande="permission"
+                )
+
             messages.success(request, "Demande de permission envoyée avec succès.")
             return redirect('permission_list')
 
@@ -153,6 +168,18 @@ def valider_permission(request, pk):
 
     envoyer_mail_permission(permission)
 
+    creer_notification(
+        destinataire=permission.employe.utilisateur,
+        titre="Demande de permission acceptée",
+        message=(
+            "Votre demande de permission a été acceptée "
+            "par votre responsable."
+        ),
+        type_notification="demande_acceptee",
+        demande_id=permission.id,
+        type_demande="permission"
+    )
+
 
     # Historique
     Validation.objects.create(
@@ -200,6 +227,18 @@ def refuser_permission(request, pk):
     permission.statut = "refuse"
     permission.save()
     envoyer_mail_refus_manager(permission)
+
+    creer_notification(
+        destinataire=permission.employe.utilisateur,
+        titre="Demande de permission refusée",
+        message=(
+            "Votre demande de permission a été refusée "
+            "par votre responsable."
+        ),
+        type_notification="demande_refusee",
+        demande_id=permission.id,
+        type_demande="permission"
+    )
 
     # Historique
     Validation.objects.create(

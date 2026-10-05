@@ -5,6 +5,7 @@ from pyexpat.errors import messages
 from demande.models.repos_maladie_model import ReposMaladie
 from demande.forms.repos_maladie_form import ReposMaladieForm
 from demande.models.validation_model import Validation
+from demande.services.service_notification import creer_notification
 from utils.email import notifier_manager, envoyer_mail_repos_maladie
 
 
@@ -18,7 +19,7 @@ def repos_maladie_list(request):
     repos_maladies = None
 
     if user.role == 'employe':
-        repos_maladies = ReposMaladie.objects.filter(statut='en attente', employe=employe).order_by('-date_creation')
+        repos_maladies = ReposMaladie.objects.filter(employe=employe).order_by('-date_creation')
     elif user.role == 'admin':
         repos_maladies = ReposMaladie.objects.all().order_by('-date_creation')
     elif user.role in ['manager', 'rh']:
@@ -48,6 +49,19 @@ def repos_maladie_create(request):
             repos.save()
             notifier_manager(repos)
 
+            if employe.superieur:
+                creer_notification(
+                    destinataire=employe.superieur.utilisateur,
+                    titre="Nouvelle demande de repos maladie",
+                    message=(
+                        f"{employe.prenom} {employe.nom} "
+                        f"a soumis une nouvelle demande de repos maladie."
+                    ),
+                    type_notification="nouvelle_demande",
+                    demande_id=repos.id,
+                    type_demande="repos_maladie"
+                )
+
             return redirect('repos_maladie_list')
 
 
@@ -69,7 +83,7 @@ def repos_maladie_detail(request, pk):
     )
 
     context = {
-        'repos_maladie': repos_maladie
+        'repos': repos_maladie
     }
 
     return render(
@@ -155,6 +169,18 @@ def valider_repos_maladie(request, pk):
     # Notifier le responsable RH si cette fonction existe
     # notifier_rh_repos_maladie(repos_maladie)
 
+    creer_notification(
+        destinataire=repos_maladie.employe.utilisateur,
+        titre="Demande de repos maladie acceptée",
+        message=(
+            "Votre demande de repos maladie a été acceptée "
+            "par votre responsable."
+        ),
+        type_notification="demande_acceptee",
+        demande_id=repos_maladie.id,
+        type_demande="repos_maladie"
+    )
+
     # Historique de la validation
     Validation.objects.create(
         demande_id=repos_maladie.id,
@@ -198,6 +224,18 @@ def refuser_repos_maladie(request, pk):
 
     # Envoyer l'email de refus
     # envoyer_mail_refus_repos_maladie(repos_maladie)
+
+    creer_notification(
+        destinataire=repos_maladie.employe.utilisateur,
+        titre="Demande de repos maladie refusée",
+        message=(
+            "Votre demande de repos maladie a été refusée "
+            "par votre responsable."
+        ),
+        type_notification="demande_refusee",
+        demande_id=repos_maladie.id,
+        type_demande="repos_maladie"
+    )
 
     # Historique du refus
     Validation.objects.create(
