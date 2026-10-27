@@ -1,81 +1,156 @@
 {% extends 'base/base.html' %}
 
 {% block title %}
-Modifier une demande de congé
+Modifier ma demande de congé
 {% endblock %}
 
 {% block content %}
 
-<div class="container-fluid">
+<div class="container-fluid py-4">
 
     <div class="row justify-content-center">
-
-        <div class="col-lg-8">
+        <div class="col-12 col-xl-9">
 
             <div class="card border-0 shadow-sm rounded-4">
 
-                <div class="card-body p-5">
+                <!-- EN-TÊTE -->
+                <div class="card-header bg-white border-0 p-4 pb-0">
 
-                    <!-- HEADER -->
-                    <div class="text-center mb-5">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
 
-                        <div
-                            class="mx-auto mb-3 d-flex justify-content-center align-items-center rounded-circle bg-warning text-white"
-                            style="
-                                width:80px;
-                                height:80px;
-                                font-size:30px;
-                            "
-                        >
-                            <i class="bi bi-pencil-square"></i>
+                        <div>
+                            <h3 class="fw-bold mb-1">
+                                <i class="bi bi-pencil-square text-warning me-2"></i>
+                                Modifier ma demande de congé
+                            </h3>
+
+                            <p class="text-muted mb-0">
+                                Modifiez les informations de votre demande de congé.
+                            </p>
                         </div>
 
-                        <h2 class="fw-bold">
-                            Modifier la demande de congé
-                        </h2>
-
-                        <p class="text-muted">
-                            Mettez à jour les informations de votre demande.
-                        </p>
+                        <a href="{% url 'conge_list' %}"
+                           class="btn btn-outline-secondary rounded-3">
+                            <i class="bi bi-arrow-left me-1"></i>
+                            Retour
+                        </a>
 
                     </div>
 
-                    <!-- FORMULAIRE -->
-                    <form method="POST">
+                </div>
 
+                <!-- CORPS -->
+                <div class="card-body p-4">
+
+                    <!-- MESSAGES -->
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show rounded-3"
+                                 role="alert">
+
+                                {{ message }}
+
+                                <button type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="alert"
+                                        aria-label="Fermer">
+                                </button>
+
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    <!-- FORMULAIRE -->
+                    <form method="POST" id="formModificationConge">
                         {% csrf_token %}
+
+                        <!-- ERREURS GÉNÉRALES -->
+                        {% if conges_form.errors %}
+                            <div class="alert alert-danger rounded-3">
+
+                                <strong>
+                                    <i class="bi bi-exclamation-triangle me-2"></i>
+                                    Impossible d'enregistrer les modifications.
+                                </strong>
+
+                                {% if conges_form.non_field_errors %}
+                                    <div class="mt-2">
+                                        {{ conges_form.non_field_errors }}
+                                    </div>
+                                {% endif %}
+
+                                {% for field in conges_form %}
+                                    {% for error in field.errors %}
+                                        <div class="mt-2">
+                                            <strong>{{ field.label }} :</strong>
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                {% endfor %}
+
+                            </div>
+                        {% endif %}
+
+                        <!-- TYPE DE CONGÉ -->
+                        <div class="mb-4">
+
+                            <label for="{{ conges_form.type_conge.id_for_label }}"
+                                   class="form-label fw-semibold">
+                                Type de congé
+                                {% if conges_form.type_conge.field.required %}
+                                    <span class="text-danger">*</span>
+                                {% endif %}
+                            </label>
+
+                            {{ conges_form.type_conge }}
+
+                            {% for error in conges_form.type_conge.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
+                                </div>
+                            {% endfor %}
+
+                        </div>
 
                         <!-- DATE DE DÉBUT -->
                         <div class="mb-4">
 
-                            <label class="form-label fw-semibold">
+                            <label for="{{ conges_form.date_debut.id_for_label }}"
+                                   class="form-label fw-semibold">
                                 Date de début
+                                {% if conges_form.date_debut.field.required %}
+                                    <span class="text-danger">*</span>
+                                {% endif %}
                             </label>
 
                             {{ conges_form.date_debut }}
 
-                            {% if conges_form.date_debut.errors %}
-                                <div class="text-danger mt-1">
-                                    {{ conges_form.date_debut.errors }}
+                            {% for error in conges_form.date_debut.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
                                 </div>
-                            {% endif %}
+                            {% endfor %}
 
                         </div>
 
                         <!-- NOMBRE DE JOURS -->
                         <div class="mb-4">
 
-                            <label class="form-label fw-semibold">
+                            <label for="{{ conges_form.nombre_jours.id_for_label }}"
+                                   class="form-label fw-semibold">
                                 Nombre de jours
+                                {% if conges_form.nombre_jours.field.required %}
+                                    <span class="text-danger">*</span>
+                                {% endif %}
                             </label>
 
                             {{ conges_form.nombre_jours }}
 
-                            {% if conges_form.nombre_jours.errors %}
-                                <div class="text-danger mt-1">
-                                    {{ conges_form.nombre_jours.errors }}
+                            {% for error in conges_form.nombre_jours.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ error }}
                                 </div>
-                            {% endif %}
+                            {% endfor %}
 
                         </div>
 
@@ -88,30 +163,108 @@ Modifier une demande de congé
 
                             <input
                                 type="text"
-                                class="form-control"
+                                class="form-control bg-light"
                                 value="{{ conge.date_fin|default:'Calculée automatiquement lors de l’enregistrement' }}"
                                 disabled
                             >
 
+                            <div class="form-text">
+                                La date de fin est calculée automatiquement à partir de la date de début et du nombre de jours.
+                            </div>
+
                         </div>
 
                         <!-- BOUTONS -->
-                        <div class="d-flex justify-content-end gap-3">
+                        <div class="d-flex flex-wrap justify-content-end gap-2 pt-3 border-top">
 
-                            <a
-                                href="{% url 'conge_list' %}"
-                                class="btn btn-light border px-4 py-2 rounded-3"
-                            >
+                            <a href="{% url 'conge_list' %}"
+                               class="btn btn-light border rounded-3 px-4">
                                 Annuler
                             </a>
 
-                            <button
-                                type="submit"
-                                class="btn btn-warning px-4 py-2 rounded-3"
-                            >
-                                <i class="bi bi-check-circle"></i>
+                            <button type="button"
+                                    class="btn btn-warning rounded-3 px-4 fw-semibold"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#confirmationModificationConge">
+                                <i class="bi bi-check-circle me-1"></i>
                                 Enregistrer les modifications
                             </button>
+
+                        </div>
+
+                        <!-- MODALE DE CONFIRMATION -->
+                        <div class="modal fade"
+                             id="confirmationModificationConge"
+                             tabindex="-1"
+                             aria-labelledby="titreConfirmationModificationConge"
+                             aria-hidden="true">
+
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content border-0 shadow rounded-4">
+
+                                    <!-- EN-TÊTE DE LA MODALE -->
+                                    <div class="modal-header border-0 pb-0">
+                                        <div class="d-flex align-items-center gap-3">
+
+                                            <div class="rounded-circle bg-warning bg-opacity-25 p-3">
+                                                <i class="bi bi-pencil-square text-warning fs-4"></i>
+                                            </div>
+
+                                            <div>
+                                                <h5 class="modal-title fw-bold"
+                                                    id="titreConfirmationModificationConge">
+                                                    Confirmer la modification
+                                                </h5>
+
+                                                <p class="text-muted small mb-0">
+                                                    Vérification avant enregistrement
+                                                </p>
+                                            </div>
+
+                                        </div>
+
+                                        <button type="button"
+                                                class="btn-close"
+                                                data-bs-dismiss="modal"
+                                                aria-label="Fermer">
+                                        </button>
+                                    </div>
+
+                                    <!-- CONTENU -->
+                                    <div class="modal-body py-4">
+
+                                        <p class="mb-2">
+                                            Voulez-vous vraiment enregistrer les modifications de votre demande de congé ?
+                                        </p>
+
+                                        <div class="alert alert-light border rounded-3 mb-0">
+                                            <i class="bi bi-info-circle text-primary me-2"></i>
+                                            Vérifiez les informations saisies avant de confirmer.
+                                        </div>
+
+                                    </div>
+
+                                    <!-- ACTIONS -->
+                                    <div class="modal-footer border-0 pt-0">
+
+                                        <button type="button"
+                                                class="btn btn-light border rounded-3 px-3"
+                                                data-bs-dismiss="modal">
+                                            <i class="bi bi-x-circle me-1"></i>
+                                            Annuler
+                                        </button>
+
+                                        <button type="submit"
+                                                form="formModificationConge"
+                                                class="btn btn-warning rounded-3 px-3 fw-semibold">
+                                            <i class="bi bi-check-circle me-1"></i>
+                                            Oui, enregistrer
+                                        </button>
+
+                                    </div>
+
+                                </div>
+                            </div>
 
                         </div>
 
@@ -121,8 +274,13 @@ Modifier une demande de congé
 
             </div>
 
-        </div>
+            <!-- INFORMATION -->
+            <div class="alert alert-info border-0 rounded-3 mt-4">
+                <i class="bi bi-info-circle me-2"></i>
+                Vérifiez le type de congé, les dates et le nombre de jours avant d’enregistrer vos modifications.
+            </div>
 
+        </div>
     </div>
 
 </div>

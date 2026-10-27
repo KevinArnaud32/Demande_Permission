@@ -1,78 +1,202 @@
 {% extends 'base/base.html' %}
 
 {% block title %}
-Modifier permission
+Modifier ma permission
 {% endblock %}
 
 {% block content %}
 
-<div class="container-fluid">
+<div class="container-fluid py-4">
 
-    <div class="card border-0 shadow-sm rounded-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-xl-9">
 
-        <div class="card-body p-4">
+            <div class="card border-0 shadow-sm rounded-4">
 
-            <div class="d-flex justify-content-between mb-4">
+                <div class="card-header bg-white border-0 p-4 pb-0">
+                    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
 
-                <h3>
-                    Modifier permission
-                </h3>
+                        <div>
+                            <h3 class="fw-bold mb-1">
+                                <i class="bi bi-pencil-square text-warning me-2"></i>
+                                Modifier ma permission
+                            </h3>
 
-                <a
-                    href="{% url 'permission_list' %}"
-                    class="btn btn-secondary"
-                >
+                            <p class="text-muted mb-0">
+                                Modifiez les informations de votre demande en attente.
+                            </p>
+                        </div>
 
-                    Retour
+                        <a href="{% url 'permission_detail' permission.pk %}"
+                           class="btn btn-outline-secondary rounded-3">
+                            <i class="bi bi-arrow-left me-1"></i>
+                            Retour
+                        </a>
 
-                </a>
+                    </div>
+                </div>
 
+                <div class="card-body p-4">
+
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show rounded-3"
+                                 role="alert">
+                                {{ message }}
+                                <button type="button"
+                                        class="btn-close"
+                                        data-bs-dismiss="alert"
+                                        aria-label="Fermer">
+                                </button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if permission_form.non_field_errors %}
+                        <div class="alert alert-danger rounded-3">
+                            {{ permission_form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <!-- FORMULAIRE -->
+                    <form method="POST" id="formModificationPermission">
+                        {% csrf_token %}
+
+                        {% for field in permission_form %}
+                            <div class="mb-4">
+
+                                <label for="{{ field.id_for_label }}"
+                                       class="form-label fw-semibold">
+                                    {{ field.label }}
+                                    {% if field.field.required %}
+                                        <span class="text-danger">*</span>
+                                    {% endif %}
+                                </label>
+
+                                {{ field }}
+
+                                {% if field.help_text %}
+                                    <div class="form-text">
+                                        {{ field.help_text }}
+                                    </div>
+                                {% endif %}
+
+                                {% for error in field.errors %}
+                                    <div class="text-danger small mt-1">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+
+                            </div>
+                        {% endfor %}
+
+                        <!-- BOUTONS -->
+                        <div class="d-flex flex-wrap justify-content-end gap-2 pt-3 border-top">
+
+                            <a href="{% url 'permission_detail' permission.pk %}"
+                               class="btn btn-light border rounded-3 px-4">
+                                Annuler
+                            </a>
+
+                            <button type="button"
+                                    class="btn btn-warning rounded-3 px-4 fw-semibold"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#confirmationModificationPermission">
+                                <i class="bi bi-check-circle me-1"></i>
+                                Enregistrer les modifications
+                            </button>
+
+                        </div>
+
+                    </form>
+
+                    <!-- MODALE DE CONFIRMATION -->
+                    <div class="modal fade"
+                         id="confirmationModificationPermission"
+                         tabindex="-1"
+                         aria-labelledby="titreConfirmationModificationPermission"
+                         aria-hidden="true">
+
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0 shadow rounded-4">
+
+                                <!-- EN-TÊTE -->
+                                <div class="modal-header border-0 pb-0">
+
+                                    <div class="d-flex align-items-center gap-3">
+
+                                        <div class="rounded-circle bg-warning bg-opacity-25 p-3">
+                                            <i class="bi bi-pencil-square text-warning fs-4"></i>
+                                        </div>
+
+                                        <div>
+                                            <h5 class="modal-title fw-bold"
+                                                id="titreConfirmationModificationPermission">
+                                                Confirmer la modification
+                                            </h5>
+
+                                            <p class="text-muted small mb-0">
+                                                Vérification avant enregistrement
+                                            </p>
+                                        </div>
+
+                                    </div>
+
+                                    <button type="button"
+                                            class="btn-close"
+                                            data-bs-dismiss="modal"
+                                            aria-label="Fermer">
+                                    </button>
+
+                                </div>
+
+                                <!-- CONTENU -->
+                                <div class="modal-body py-4">
+
+                                    <p class="mb-2">
+                                        Voulez-vous vraiment enregistrer les modifications de votre demande de permission ?
+                                    </p>
+
+                                    <div class="alert alert-light border rounded-3 mb-0">
+                                        <i class="bi bi-info-circle text-primary me-2"></i>
+                                        Vérifiez les informations saisies avant de confirmer.
+                                    </div>
+
+                                </div>
+
+                                <!-- ACTIONS -->
+                                <div class="modal-footer border-0 pt-0">
+
+                                    <button type="button"
+                                            class="btn btn-light border rounded-3 px-3"
+                                            data-bs-dismiss="modal">
+                                        <i class="bi bi-x-circle me-1"></i>
+                                        Annuler
+                                    </button>
+
+                                    <button type="submit"
+                                            form="formModificationPermission"
+                                            class="btn btn-warning rounded-3 px-3 fw-semibold">
+                                        <i class="bi bi-check-circle me-1"></i>
+                                        Oui, enregistrer
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
             </div>
 
-            <form method="POST">
-
-                {% csrf_token %}
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-                        Motif
-                    </label>
-
-                    {{ form.motif }}
-
-                </div>
-
-                <div class="mb-3">
-
-                    <label class="form-label">
-                        Heure sortie
-                    </label>
-
-                    {{ form.heure_sortie }}
-
-                </div>
-
-                <div class="mb-4">
-
-                    <label class="form-label">
-                        Nombre minutes
-                    </label>
-
-                    {{ form.nombre_minute }}
-
-                </div>
-
-                <button class="btn btn-warning">
-
-                    Modifier
-
-                </button>
-
-            </form>
+            <div class="alert alert-info border-0 rounded-3 mt-4">
+                <i class="bi bi-info-circle me-2"></i>
+                La modification est disponible uniquement tant que votre demande est en attente.
+            </div>
 
         </div>
-
     </div>
 
 </div>
