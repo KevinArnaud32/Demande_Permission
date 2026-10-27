@@ -184,46 +184,68 @@ def conge_detail(request, pk):
     return render(request,'conge/detail.html',context)
 
 
+
 @login_required
 def conge_update(request, pk):
 
     conge = get_object_or_404(Conges, pk=pk)
 
-
-    if request.user.role == "employe" and conge.employe.utilisateur != request.user:
-
+    # Vérifier que l'employé modifie sa propre demande
+    if (
+        request.user.role == "employe"
+        and conge.employe.utilisateur != request.user
+    ):
         messages.error(
             request,
             "Vous n'êtes pas autorisé à modifier cette demande."
         )
         return redirect("conge_list")
 
-
-    # Empêcher la modification si la demande n'est plus en attente
+    # Empêcher la modification si la demande a déjà été traitée
     if conge.statut != "en attente":
-        messages.warning(request,"Cette demande ne peut plus être modifiée car elle a déjà été traitée.")
-        return redirect("conges_list")
-
+        messages.warning(
+            request,
+            "Cette demande ne peut plus être modifiée car elle a déjà été traitée."
+        )
+        return redirect("conge_list")
 
     if request.method == "POST":
-        conges_form = CongesForm(request.POST, instance=conge)
+        conges_form = CongesForm(
+            request.POST,
+            instance=conge
+        )
 
         if conges_form.is_valid():
             conges_form.save()
 
-            messages.success(request,"La demande de congé a été modifiée avec succès.")
+            messages.success(
+                request,
+                "La demande de congé a été modifiée avec succès."
+            )
 
             return redirect("conge_list")
+
+        for champ, erreurs in conges_form.errors.items():
+            for erreur in erreurs:
+                messages.error(
+                    request,
+                    f"{champ} : {erreur}"
+                )
 
     else:
         conges_form = CongesForm(instance=conge)
 
     context = {
-        'conges_form': conges_form,
-        'conge': conge,
+        "conges_form": conges_form,
+        "conge": conge,
     }
 
-    return render(request,"conge/update.html", context)
+    return render(
+        request,
+        "conge/update.html",
+        context
+    )
+
 
 
 

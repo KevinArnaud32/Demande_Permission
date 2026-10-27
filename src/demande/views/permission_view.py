@@ -95,27 +95,51 @@ def permission_detail(request, pk):
 
 
 
+
 @login_required
+@role_required('employe')
 def permission_update(request, pk):
 
+    # Récupérer uniquement la demande de l'employé connecté
     permission = get_object_or_404(
         Permission,
-        pk=pk
+        pk=pk,
+        employe=request.user.employe
     )
 
-    permission_form = PermissionForm(instance=permission)
+    # Une demande déjà traitée ne peut plus être modifiée
+    if permission.statut != "en attente":
+        messages.warning(
+            request,
+            "Vous ne pouvez modifier que les demandes en attente."
+        )
+        return redirect('permission_detail', pk=permission.pk)
 
     if request.method == 'POST':
-
-        permission_form = PermissionForm(request.POST, instance=permission)
+        permission_form = PermissionForm(
+            request.POST,
+            instance=permission
+        )
 
         if permission_form.is_valid():
             permission_form.save()
 
-            return redirect('permission_list')
+            messages.success(
+                request,
+                "Votre demande de permission a été modifiée avec succès."
+            )
+            return redirect('permission_detail', pk=permission.pk)
+
+        messages.error(
+            request,
+            "Veuillez corriger les erreurs du formulaire."
+        )
+    else:
+        permission_form = PermissionForm(instance=permission)
 
     context = {
-        'permission_form': permission_form
+        'permission_form': permission_form,
+        'permission': permission,
     }
 
     return render(
@@ -123,6 +147,7 @@ def permission_update(request, pk):
         'permission/update.html',
         context
     )
+
 
 
 @login_required
