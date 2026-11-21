@@ -215,7 +215,7 @@ Service RH
 
     email.attach(
         f"Repos_Maladie_{repos.id}.pdf",
-        pdf.getvalue(),
+        pdf,
         "application/pdf"
     )
 
